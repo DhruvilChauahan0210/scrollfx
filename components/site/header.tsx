@@ -8,8 +8,11 @@ export function Header() {
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-8 px-6 font-mono text-[12px] sm:px-10">
         <Link href="/" className="flex items-center gap-2 tracking-tight">
-          <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
-            <path d="M3 17C6 6 10 6 12 12S18 18 21 7" />
+          {/* scrollfx's mark: three plotted rings (the wave is svg-scroll-draw's). */}
+          <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+            <circle cx="12" cy="12" r="9.5" />
+            <circle cx="12" cy="12" r="6.25" />
+            <circle cx="12" cy="12" r="3" />
           </svg>
           scrollfx
         </Link>
