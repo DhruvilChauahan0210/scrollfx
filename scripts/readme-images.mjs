@@ -58,7 +58,7 @@ for (const slug of slugs) {
   await page.goto(`${BASE}/preview/${slug}?theme=light`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   const clip = await page.evaluate(() => {
-    const r = document.querySelector('section').getBoundingClientRect();
+    const r = document.querySelector('section, footer').getBoundingClientRect();
     return { x: 0, y: r.top + scrollY, width: innerWidth, height: Math.min(r.height, 900) };
   });
   await page.screenshot({ path: join(OUT, 'plates', `${slug}.jpg`), type: 'jpeg', quality: 84, clip, fullPage: true });
