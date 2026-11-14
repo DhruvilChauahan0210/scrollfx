@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
+import { Fraunces } from 'next/font/google';
 import './globals.css';
+
+const serif = Fraunces({ style: ['normal', 'italic'], axes: ['opsz', 'SOFT'], subsets: ['latin'], variable: '--font-fraunces' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://scrollfx.vercel.app'),
-  title: { default: 'scrollfx — scroll-driven sections for React', template: '%s · scrollfx' },
-  description: 'Production-ready scroll-driven sections for React and Tailwind: heroes, timelines, pricing, product tours. Install with the shadcn CLI. Built on svg-scroll-draw.',
+  title: { default: 'scrollfx — plotted sections for React', template: '%s · scrollfx' },
+  description: 'Generative, scroll-drawn sections for React and Tailwind: flow fields, contour maps, hatched charts and more, plotted stroke by stroke as the reader scrolls. Install with the shadcn CLI. Built on svg-scroll-draw.',
 };
 
 // The theme follows the system until the page says otherwise (?theme=dark|light).
@@ -20,7 +23,7 @@ const THEME = `(() => { try {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME }} />
       </head>

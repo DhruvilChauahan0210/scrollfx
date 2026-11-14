@@ -1,11 +1,17 @@
 import type { ComponentType } from 'react';
-import { HeroTilt } from './blocks/hero-tilt';
-import { ChangelogTimeline } from './blocks/changelog-timeline';
-import { PricingCount } from './blocks/pricing-count';
+import { HeroFlowField } from './blocks/hero-flow-field';
+import { HatchHighlight } from './blocks/hatch-highlight';
+import { PlottedChart } from './blocks/plotted-chart';
+import { FeaturePlates } from './blocks/feature-plates';
+import { ChangelogPlotted } from './blocks/changelog-plotted';
+import { PricingPlotted } from './blocks/pricing-plotted';
 
 /** Each block with its default props, as the previews render it. */
 export const PREVIEWS: Record<string, ComponentType> = {
-  'hero-tilt': HeroTilt,
-  'changelog-timeline': ChangelogTimeline,
-  'pricing-count': PricingCount,
+  'hero-flow-field': HeroFlowField,
+  'hatch-highlight': HatchHighlight,
+  'plotted-chart': PlottedChart,
+  'feature-plates': FeaturePlates,
+  'changelog-plotted': ChangelogPlotted,
+  'pricing-plotted': PricingPlotted,
 };

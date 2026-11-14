@@ -1,39 +1,40 @@
 # scrollfx
 
-**Scroll-driven sections for React and Tailwind. Add one with the shadcn CLI, and it takes on your theme.**
+**A folio of generative sections for React and Tailwind, plotted stroke by stroke as the reader scrolls.**
 
-Heroes, timelines, pricing, product tours: the sections a product site actually ships, with motion that follows
-the reader's scroll. Every block uses only shadcn/ui's theme tokens (`bg-background`, `text-muted-foreground`,
-`border-border`, `bg-primary`), so in your project it looks like the rest of your project.
+Every section carries a line drawing made the way a pen plotter makes one: a flow field of several hundred
+strokes, a contour map, a wireframe globe, hatching under a chart. As the reader arrives, a pen inks it in.
+Add a section with the shadcn CLI and it takes on your theme: the blocks use only shadcn/ui's tokens
+(`bg-background`, `bg-card`, `text-muted-foreground`, `border-border`), plus one accent colour you pass in.
 
 ```bash
-npx shadcn@latest add https://scrollfx.vercel.app/r/hero-tilt.json
+npx shadcn@latest add https://scrollfx.vercel.app/r/hero-flow-field.json
 ```
 
-The motion runs on [svg-scroll-draw](https://github.com/DhruvilChauahan0210/ink-scroll), a zero-dependency
-library that drives the browser's native CSS scroll timeline where it can and falls back to JavaScript where it
-can't. The CLI installs it for you.
+The drawing runs on [svg-scroll-draw](https://github.com/DhruvilChauahan0210/ink-scroll), a scroll animation
+library with no dependencies. The CLI installs it, and `lib/plotter.ts`, the generators every block draws with.
 
-## Blocks
+## Plates
 
-| Block | What moves | Install |
-|---|---|---|
-| **Hero, tilted screenshot** | The key phrase underlines itself; the product screenshot starts tilted back and straightens as you scroll. | `npx shadcn@latest add https://scrollfx.vercel.app/r/hero-tilt.json` |
-| **Changelog timeline** | The rail draws down as you read, its tip held at 60% of the screen, and each release lights up as the line reaches it. | `npx shadcn@latest add https://scrollfx.vercel.app/r/changelog-timeline.json` |
-| **Pricing, counted in** | Prices count up as the section arrives; every checkmark draws itself in, row after row. | `npx shadcn@latest add https://scrollfx.vercel.app/r/pricing-count.json` |
-
-More are on the way: a pinned product tour, a horizontal case-study strip, a product turnaround, a stats band
-and a testimonial wall.
+| Plate | Block | What the pen draws | Install |
+|---|---|---|---|
+| I | **Hero, flow field** | A round flow field, plotted top to bottom on arrival, with a live stroke count. | `npx shadcn@latest add https://scrollfx.vercel.app/r/hero-flow-field.json` |
+| II | **Hatched highlight** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx.vercel.app/r/hatch-highlight.json` |
+| III | **Plotted chart** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/plotted-chart.json` |
+| IV | **Feature plates** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx.vercel.app/r/feature-plates.json` |
+| V | **Plotted changelog** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx.vercel.app/r/changelog-plotted.json` |
+| VI | **Plotted pricing** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/pricing-plotted.json` |
 
 ## What every block does
 
-- **Takes props.** Copy, prices, releases and links are props with sensible defaults; replace the defaults and
-  ship.
-- **Reads without the motion.** Content is in the server HTML (prices and counters included) and nothing starts
-  hidden, so search engines and readers without JavaScript get the page.
-- **Respects reduced motion.** With `prefers-reduced-motion`, every block shows its finished state.
-- **Is checked in a real browser.** `npm run check` builds the site, scrolls every block in Chromium, and fails on
-  any console error, any hydration warning, or an animation that never finishes.
+- **Takes props.** Copy, data, plans, releases, the seed and the accent colour are props with defaults.
+- **Draws the same thing for everyone.** Drawings come from fixed seeds. They are generated in the browser, so a
+  few hundred strokes never bloat the server HTML; the text is in the server HTML.
+- **Finishes where it can be seen.** Every drawing is fully drawn by the time its top reaches the middle of the
+  screen, on desktop and on a phone. `npm run check` measures it.
+- **Respects reduced motion.** With `prefers-reduced-motion`, every drawing is shown finished.
+- **Is checked in a real browser.** `npm run check` serves the production build, scrolls every block in
+  Chromium, and fails on any console error, any hydration warning, or a drawing that never finishes.
 
 ## Develop
 
@@ -44,8 +45,8 @@ npm run build   # the shadcn registry (public/r) and the site
 npm run check   # every block, scrolled in Chromium
 ```
 
-A block is a file in `registry/blocks/`, an entry in `registry.json` and `lib/blocks.ts`, and a line in
-`registry/previews.ts`.
+A block is a file in `registry/blocks/`, an entry in `registry.json`, and a line in `registry/previews.ts`.
+Generators live in `lib/plotter.ts`, published as the `plotter` registry item that every block depends on.
 
 ## License
 

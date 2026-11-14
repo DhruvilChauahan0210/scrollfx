@@ -18,9 +18,10 @@ export default async function Preview({ params }: { params: Promise<{ slug: stri
   if (!block || !Component) notFound();
   return (
     <main>
-      {slug !== 'hero-tilt' && <div className="flex h-[60vh] items-end justify-center pb-10 text-sm text-muted-foreground">{block.motion}</div>}
+      {!slug.startsWith('hero-') && <div className="flex h-[60vh] items-end justify-center pb-10 text-sm text-muted-foreground">{block.motion}</div>}
       <Component />
-      <div className="h-[80vh]" />
+      {/* Room to scroll every block fully past, as the rest of a real page would. */}
+      <div className="h-[120vh]" />
     </main>
   );
 }

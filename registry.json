@@ -4,49 +4,148 @@
   "homepage": "https://scrollfx.vercel.app",
   "items": [
     {
-      "name": "hero-tilt",
-      "type": "registry:block",
-      "title": "Hero, tilted screenshot",
-      "description": "A hero whose key phrase underlines itself, over a product screenshot that tilts back and straightens as you scroll.",
-      "dependencies": [
-        "svg-scroll-draw"
-      ],
+      "name": "plotter",
+      "type": "registry:lib",
+      "title": "Plotter",
+      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, hatching) that every scrollfx block draws with.",
       "files": [
         {
-          "path": "registry/blocks/hero-tilt.tsx",
-          "type": "registry:component"
+          "path": "lib/plotter.ts",
+          "type": "registry:lib"
         }
       ]
     },
     {
-      "name": "changelog-timeline",
+      "name": "hero-flow-field",
       "type": "registry:block",
-      "title": "Changelog timeline",
-      "description": "Releases on a vertical rail. The rail draws down as you read, and each release lights up when the line reaches it.",
+      "title": "Hero, flow field",
+      "description": "A hero beside a print: a round flow field of several hundred strokes, plotted top to bottom on arrival, with a live stroke count.",
       "dependencies": [
         "svg-scroll-draw"
       ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
       "files": [
         {
-          "path": "registry/blocks/changelog-timeline.tsx",
+          "path": "registry/blocks/hero-flow-field.tsx",
           "type": "registry:component"
         }
-      ]
+      ],
+      "meta": {
+        "motion": "Watch it arrive: the pen plots the print, top to bottom.",
+        "tall": false
+      }
     },
     {
-      "name": "pricing-count",
+      "name": "hatch-highlight",
       "type": "registry:block",
-      "title": "Pricing, counted in",
-      "description": "Three plans. Prices count up as the section arrives and every checkmark draws itself in, row after row.",
+      "title": "Hatched highlight",
+      "description": "A large statement whose key phrases a pen hatches over as they are read, like a proof marked up by hand.",
       "dependencies": [
         "svg-scroll-draw"
       ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
       "files": [
         {
-          "path": "registry/blocks/pricing-count.tsx",
+          "path": "registry/blocks/hatch-highlight.tsx",
           "type": "registry:component"
         }
-      ]
+      ],
+      "meta": {
+        "motion": "Scroll to it: the marked phrases are hatched in.",
+        "tall": false
+      }
+    },
+    {
+      "name": "plotted-chart",
+      "type": "registry:block",
+      "title": "Plotted chart",
+      "description": "Figures that count up beside an area chart a pen plots as you scroll: hatched in from left to right, the curve drawn over it.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/plotted-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll through it: the hatching and the curve plot left to right.",
+        "tall": true
+      }
+    },
+    {
+      "name": "feature-plates",
+      "type": "registry:block",
+      "title": "Feature plates",
+      "description": "Features beside plates a pen draws as you reach them: a topographic map, a wireframe globe, a tunnel of turning squares.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/feature-plates.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll down: each plate is drawn as it arrives.",
+        "tall": true
+      }
+    },
+    {
+      "name": "changelog-plotted",
+      "type": "registry:block",
+      "title": "Plotted changelog",
+      "description": "Releases down a rail that inks itself as you read, each stamped with a rosette drawn from its version number.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/changelog-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Read down: the rail inks, each stamp is drawn.",
+        "tall": true
+      }
+    },
+    {
+      "name": "pricing-plotted",
+      "type": "registry:block",
+      "title": "Plotted pricing",
+      "description": "Plans headed by marks that grow denser with the plan, the recommended one framed by a pen that goes round it twice, and prices that count.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/pricing-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: the marks and the frame are drawn.",
+        "tall": true
+      }
     }
   ]
 }

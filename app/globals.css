@@ -4,52 +4,57 @@
 
 /* shadcn/ui's default (neutral) theme. The blocks use only these tokens, so in
    a shadcn project they take on that project's own theme. */
+/* The site's own theme: uncoated paper and ink, set as shadcn/ui tokens. The
+   blocks use only these tokens, so in a shadcn project they take on that
+   project's theme instead. `card` is the brighter sheet a print sits on. */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --background: #efebe3;
+  --foreground: #1a1813;
+  --card: #f8f6f1;
+  --card-foreground: #1a1813;
+  --popover: #f8f6f1;
+  --popover-foreground: #1a1813;
+  --primary: #1a1813;
+  --primary-foreground: #f8f6f1;
+  --secondary: #e6e1d7;
+  --secondary-foreground: #1a1813;
+  --muted: #e6e1d7;
+  --muted-foreground: #6f695f;
+  --accent: #e6e1d7;
+  --accent-foreground: #1a1813;
+  --destructive: #c23a22;
+  --border: #d6d0c4;
+  --input: #d6d0c4;
+  --ring: #8d887e;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #0d0d0c;
+  --foreground: #ece8df;
+  --card: #151513;
+  --card-foreground: #ece8df;
+  --popover: #151513;
+  --popover-foreground: #ece8df;
+  --primary: #ece8df;
+  --primary-foreground: #151513;
+  --secondary: #1e1e1b;
+  --secondary-foreground: #ece8df;
+  --muted: #1e1e1b;
+  --muted-foreground: #8d887e;
+  --accent: #1e1e1b;
+  --accent-foreground: #ece8df;
+  --destructive: #ff6440;
+  --border: #2a2925;
+  --input: #2a2925;
+  --ring: #5a5750;
 }
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-fraunces), Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -76,7 +81,9 @@
 
 @layer base {
   * { @apply border-border; }
-  body { @apply bg-background text-foreground antialiased; }
+  body { @apply bg-background text-foreground antialiased; background-image: var(--grain); }
+  .font-serif { font-variation-settings: 'opsz' 144, 'SOFT' 30; font-weight: 380; }
+  ::selection { background: #e0482a; color: #f8f6f1; }
 }
 
 /* shiki's dual theme: light by default, the dark tokens under .dark */

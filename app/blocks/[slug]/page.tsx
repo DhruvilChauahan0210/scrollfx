@@ -31,19 +31,19 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
   return (
     <>
       <Header />
-      <main className="mx-auto max-w-6xl px-6 py-12">
-        <Link href="/#blocks" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="size-4" /> All blocks
+      <main className="mx-auto max-w-7xl px-6 py-12 sm:px-10">
+        <Link href="/#plates" className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="size-3.5" /> All plates
         </Link>
-        <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">{block.name}</h1>
-        <p className="mt-3 max-w-2xl text-pretty text-muted-foreground">{block.description}</p>
+        <h1 className="mt-8 font-serif text-[clamp(2.6rem,5vw,4.2rem)] leading-none tracking-[-0.03em]">{block.name}</h1>
+        <p className="mt-5 max-w-2xl text-pretty text-lg text-muted-foreground">{block.description}</p>
 
         <div className="mt-8 flex max-w-2xl items-center gap-2 rounded-lg border bg-muted/40 py-1.5 pl-4 pr-1.5 font-mono text-sm">
           <span className="select-none text-muted-foreground">$</span>
           <span className="truncate">{install}</span>
           <CopyButton text={install} className="ml-auto shrink-0" />
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">Adds the component and installs svg-scroll-draw. Works in any shadcn/ui project with Tailwind.</p>
+        <p className="mt-2 text-xs text-muted-foreground">Adds the component and lib/plotter, and installs svg-scroll-draw. Works in any shadcn/ui project with Tailwind.</p>
 
         <div className="mt-10">
           <BlockTabs

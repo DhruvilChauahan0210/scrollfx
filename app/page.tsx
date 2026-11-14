@@ -1,50 +1,58 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { Header, Footer } from '@/components/site/header';
 import { BLOCKS } from '@/lib/blocks';
-import { LIB } from '@/lib/site';
+import { installCommand } from '@/lib/site';
+import { PREVIEWS } from '@/registry/previews';
+import { HeroFlowField } from '@/registry/blocks/hero-flow-field';
 
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+
+/**
+ * The home page is a folio: the sections themselves, live and full width, one
+ * plate after another as they would sit on a site. A plate line before each
+ * names it and links to its code.
+ */
 export default function Home() {
+  const rest = BLOCKS.filter((b) => b.slug !== 'hero-flow-field');
   return (
     <>
       <Header />
       <main>
-        <section className="mx-auto max-w-6xl px-6 pb-16 pt-20 sm:pt-28">
-          <p className="text-sm font-medium text-muted-foreground">For React, Tailwind and shadcn/ui</p>
-          <h1 className="mt-3 max-w-3xl text-balance text-5xl font-semibold tracking-tight sm:text-6xl">Sections that move with the reader.</h1>
-          <p className="mt-5 max-w-2xl text-pretty text-lg text-muted-foreground">
-            Production-ready, scroll-driven sections: heroes, timelines, pricing, product tours. Add one with the shadcn CLI and it takes on your theme.
-            The motion runs on the browser&apos;s own scroll timeline where it can, through <a href={LIB} className="font-medium text-foreground underline underline-offset-4">svg-scroll-draw</a>.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#blocks" className="inline-flex h-10 items-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground hover:opacity-90">Browse blocks</a>
-            <a href={`${LIB}/docs`} className="inline-flex h-10 items-center rounded-md border px-5 text-sm font-medium hover:bg-accent">Library docs</a>
-          </div>
-        </section>
+        <HeroFlowField
+          eyebrow="scrollfx · a folio of sections for React"
+          heading="Pages, *plotted* as you read."
+          description="Generative sections for React and Tailwind whose drawings ink themselves in, stroke by stroke, as the reader scrolls. Add one with the shadcn CLI; it takes on your theme."
+          primary={{ label: 'Browse the plates', href: '#plates' }}
+          aside={installCommand('hero-flow-field').replace('https://', '')}
+        />
+        <PlateLine n={0} slug="hero-flow-field" name="The hero above" />
 
-        <section id="blocks" className="mx-auto max-w-6xl scroll-mt-20 px-6 pb-24">
-          <div className="grid gap-10">
-            {BLOCKS.map((b) => (
-              <article key={b.slug} className="group">
-                <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-                  <div>
-                    <h2 className="text-xl font-semibold">{b.name}</h2>
-                    <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{b.description}</p>
-                  </div>
-                  <Link href={`/blocks/${b.slug}`} className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline">
-                    Code and install <ArrowRight className="size-4" />
-                  </Link>
-                </div>
-                <div className="h-[560px] overflow-hidden rounded-xl border bg-background">
-                  <iframe src={`/preview/${b.slug}`} title={`${b.name} preview`} className="size-full" loading="lazy" />
-                </div>
-                <p className="mt-2 text-xs text-muted-foreground">{b.motion} Scroll inside the preview.</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <div id="plates" className="scroll-mt-16">
+          {rest.map((b, i) => {
+            const Section = PREVIEWS[b.slug];
+            return (
+              <div key={b.slug} className="pt-16">
+                <PlateLine n={i + 1} slug={b.slug} name={b.name} />
+                <Section />
+              </div>
+            );
+          })}
+        </div>
       </main>
       <Footer />
     </>
+  );
+}
+
+function PlateLine({ n, slug, name }: { n: number; slug: string; name: string }) {
+  return (
+    <div className="mx-auto flex max-w-7xl items-baseline gap-4 px-6 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:px-10">
+      <span className="text-foreground">Pl. {ROMAN[n]}</span>
+      <span className="hidden sm:inline">{name}</span>
+      <span className="h-px flex-1 translate-y-[-3px] bg-border" />
+      <Link href={`/blocks/${slug}`} className="group whitespace-nowrap transition-colors hover:text-foreground">
+        Code &amp; install <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+      </Link>
+    </div>
   );
 }
