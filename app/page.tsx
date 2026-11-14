@@ -23,7 +23,7 @@ export default function Home() {
           heading="Pages, *plotted* as you read."
           description="Generative sections for React and Tailwind whose drawings ink themselves in, stroke by stroke, as the reader scrolls. Add one with the shadcn CLI; it takes on your theme."
           primary={{ label: 'Browse the plates', href: '#plates' }}
-          aside={installCommand('hero-flow-field').replace('https://', '')}
+          aside={installCommand('hero-flow-field')}
         />
         <PlateLine n={0} slug="hero-flow-field" name="The hero above" />
 

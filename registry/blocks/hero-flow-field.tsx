@@ -93,7 +93,8 @@ export function HeroFlowField({
           <a href={primary.href} className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-[15px] font-medium text-background transition-transform hover:-translate-y-px">
             {primary.label}
           </a>
-          {aside && <code className="inline-flex h-12 max-w-full items-center truncate rounded-full border px-5 font-mono text-[13px] text-muted-foreground">{aside}</code>}
+          {/* Long commands wrap at their space rather than being cut off. */}
+          {aside && <code className="max-w-full rounded-2xl border px-5 py-3 font-mono text-[12.5px] leading-relaxed text-muted-foreground [overflow-wrap:anywhere]">{aside}</code>}
         </div>
       </div>
 
