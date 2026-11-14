@@ -5,6 +5,7 @@
  *   docs/hero-light.jpg, docs/hero-dark.jpg   the first screen, both themes
  *   docs/plates/<slug>.jpg                    each plate's preview, at most a screen tall
  *   docs/plotting.gif                         the hero's print being plotted
+ *   app/opengraph-image.jpg, twitter-image.jpg the link-preview card
  *
  * Stills load with reduced motion, which shows every drawing finished, so no
  * capture catches a plate half drawn. The GIF records the real plot and needs
@@ -33,6 +34,23 @@ for (const theme of ['light', 'dark']) {
   await page.waitForTimeout(1500);
   await page.screenshot({ path: join(OUT, `hero-${theme}.jpg`), type: 'jpeg', quality: 86 });
   await page.close();
+}
+
+// The link-preview card (app/opengraph-image.jpg and twitter-image.jpg): the
+// hero at 1200 × 630, without the header bar.
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 756 }, reducedMotion: 'reduce', colorScheme: 'light' });
+  await page.goto(`${BASE}/?theme=light`, { waitUntil: 'networkidle' });
+  await page.addStyleTag({ content: 'header{display:none!important} main>section:first-child{padding-top:44px!important}' });
+  await page.waitForTimeout(1500);
+  const png = join(tmpdir(), 'scrollfx-og.png');
+  await page.screenshot({ path: png });
+  await page.close();
+  const app = new URL('../app/', import.meta.url).pathname;
+  for (const name of ['opengraph-image.jpg', 'twitter-image.jpg']) {
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', png, '-vf', 'scale=1200:630:flags=lanczos', '-q:v', '3', join(app, name)]);
+  }
+  console.log('✓ app/opengraph-image.jpg, app/twitter-image.jpg');
 }
 
 for (const slug of slugs) {

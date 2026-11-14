@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://scrollfx-ui.vercel.app'),
   title: { default: 'scrollfx — plotted sections for React', template: '%s · scrollfx' },
   description: 'Generative, scroll-drawn sections for React and Tailwind: flow fields, contour maps, hatched charts and more, plotted stroke by stroke as the reader scrolls. Install with the shadcn CLI. Built on svg-scroll-draw.',
+  // The preview image is app/opengraph-image.jpg (and twitter-image.jpg), the
+  // hero as it looks, retaken by `npm run readme:images`; a large card shows
+  // the drawing rather than a thumbnail.
+  openGraph: { type: 'website', siteName: 'scrollfx' },
+  twitter: { card: 'summary_large_image' },
 };
 
 // The theme follows the system until the page says otherwise (?theme=dark|light).
