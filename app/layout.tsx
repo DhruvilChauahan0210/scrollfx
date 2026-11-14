@@ -7,7 +7,7 @@ import './globals.css';
 const serif = Fraunces({ style: ['normal', 'italic'], axes: ['opsz', 'SOFT'], subsets: ['latin'], variable: '--font-fraunces' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://scrollfx.vercel.app'),
+  metadataBase: new URL('https://scrollfx-ui.vercel.app'),
   title: { default: 'scrollfx — plotted sections for React', template: '%s · scrollfx' },
   description: 'Generative, scroll-drawn sections for React and Tailwind: flow fields, contour maps, hatched charts and more, plotted stroke by stroke as the reader scrolls. Install with the shadcn CLI. Built on svg-scroll-draw.',
 };

@@ -7,7 +7,7 @@
     "svg-scroll-draw"
   ],
   "registryDependencies": [
-    "https://scrollfx.vercel.app/r/plotter.json"
+    "https://scrollfx-ui.vercel.app/r/plotter.json"
   ],
   "files": [
     {

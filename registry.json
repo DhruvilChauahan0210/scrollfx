@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "scrollfx",
-  "homepage": "https://scrollfx.vercel.app",
+  "homepage": "https://scrollfx-ui.vercel.app",
   "items": [
     {
       "name": "plotter",
@@ -24,7 +24,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -46,7 +46,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -68,7 +68,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -90,7 +90,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -112,7 +112,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -134,7 +134,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -156,7 +156,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {
@@ -178,7 +178,7 @@
         "svg-scroll-draw"
       ],
       "registryDependencies": [
-        "https://scrollfx.vercel.app/r/plotter.json"
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
       ],
       "files": [
         {

@@ -8,7 +8,7 @@ Add a section with the shadcn CLI and it takes on your theme: the blocks use onl
 (`bg-background`, `bg-card`, `text-muted-foreground`, `border-border`), plus one accent colour you pass in.
 
 ```bash
-npx shadcn@latest add https://scrollfx.vercel.app/r/hero-flow-field.json
+npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hero-flow-field.json
 ```
 
 The drawing runs on [svg-scroll-draw](https://github.com/DhruvilChauahan0210/ink-scroll), a scroll animation
@@ -18,14 +18,14 @@ library with no dependencies. The CLI installs it, and `lib/plotter.ts`, the gen
 
 | Plate | Block | What the pen draws | Install |
 |---|---|---|---|
-| I | **Hero, flow field** | A round flow field, plotted top to bottom on arrival, with a live stroke count. | `npx shadcn@latest add https://scrollfx.vercel.app/r/hero-flow-field.json` |
-| II | **Hatched highlight** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx.vercel.app/r/hatch-highlight.json` |
-| III | **Plotted chart** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/plotted-chart.json` |
-| IV | **Feature plates** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx.vercel.app/r/feature-plates.json` |
-| V | **Steps on a route** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx.vercel.app/r/steps-route.json` |
-| VI | **Plotted changelog** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx.vercel.app/r/changelog-plotted.json` |
-| VII | **Plotted pricing** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/pricing-plotted.json` |
-| VIII | **Harmonograph call to action** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx.vercel.app/r/cta-harmonograph.json` |
+| I | **Hero, flow field** | A round flow field, plotted top to bottom on arrival, with a live stroke count. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hero-flow-field.json` |
+| II | **Hatched highlight** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hatch-highlight.json` |
+| III | **Plotted chart** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/plotted-chart.json` |
+| IV | **Feature plates** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/feature-plates.json` |
+| V | **Steps on a route** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/steps-route.json` |
+| VI | **Plotted changelog** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/changelog-plotted.json` |
+| VII | **Plotted pricing** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/pricing-plotted.json` |
+| VIII | **Harmonograph call to action** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` |
 
 ## What every block does
 
