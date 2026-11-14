@@ -38,7 +38,7 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
         <h1 className="mt-8 font-serif text-[clamp(2.6rem,5vw,4.2rem)] leading-none tracking-[-0.03em]">{block.name}</h1>
         <p className="mt-5 max-w-2xl text-pretty text-lg text-muted-foreground">{block.description}</p>
 
-        <div className="mt-8 flex max-w-2xl items-center gap-2 rounded-lg border bg-muted/40 py-1.5 pl-4 pr-1.5 font-mono text-sm">
+        <div className="mt-10 flex max-w-2xl items-center gap-3 rounded-full border bg-card py-1.5 pl-5 pr-1.5 font-mono text-[13px]">
           <span className="select-none text-muted-foreground">$</span>
           <span className="truncate">{install}</span>
           <CopyButton text={install} className="ml-auto shrink-0" />
@@ -51,7 +51,7 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
             tall={block.tall}
             preview={<iframe src={`/preview/${slug}`} title={`${block.name} preview`} className="size-full" loading="lazy" />}
             code={
-              <div className="relative overflow-hidden rounded-xl border bg-muted/30">
+              <div className="relative overflow-hidden rounded-[3px] border bg-card">
                 <CopyButton text={source} className="absolute right-2 top-2 bg-background" />
                 <div className="max-h-[640px] overflow-auto p-4 text-[13px] leading-relaxed [&_pre]:!m-0" dangerouslySetInnerHTML={{ __html: html }} />
               </div>

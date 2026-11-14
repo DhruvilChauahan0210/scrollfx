@@ -7,7 +7,7 @@
       "name": "plotter",
       "type": "registry:lib",
       "title": "Plotter",
-      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, hatching) that every scrollfx block draws with.",
+      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, harmonographs, routes, hatching) and scrollWindow(), the trigger that finishes a drawing as it reaches the middle of the screen. Every scrollfx block draws with it.",
       "files": [
         {
           "path": "lib/plotter.ts",
@@ -104,6 +104,28 @@
       }
     },
     {
+      "name": "steps-route",
+      "type": "registry:block",
+      "title": "Steps on a route",
+      "description": "How it works as a route on a map: numbered stops a pen rings in turn, joined by a line that wanders from one to the next and ends on a cross.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/steps-route.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: the pen rings each stop and travels on.",
+        "tall": false
+      }
+    },
+    {
       "name": "changelog-plotted",
       "type": "registry:block",
       "title": "Plotted changelog",
@@ -145,6 +167,28 @@
       "meta": {
         "motion": "Scroll to it: the marks and the frame are drawn.",
         "tall": true
+      }
+    },
+    {
+      "name": "cta-harmonograph",
+      "type": "registry:block",
+      "title": "Harmonograph call to action",
+      "description": "The closing call to action beside a harmonograph: one unbroken line, the trace of two pendulums, drawn as the section arrives.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/cta-harmonograph.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: one line spirals in as the swing dies away.",
+        "tall": false
       }
     }
   ]

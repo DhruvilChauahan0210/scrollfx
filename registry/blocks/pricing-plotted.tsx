@@ -16,7 +16,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ScrollCounter, ScrollDraw } from 'svg-scroll-draw/react';
-import { sketchRect, type Stroke } from '@/lib/plotter';
+import { scrollWindow, sketchRect, staggerFor, type Stroke } from '@/lib/plotter';
 
 export interface Plan {
   name: string;
@@ -51,7 +51,7 @@ function Heading({ text }: { text: string }) {
 /** A mark of concentric rings: more rings for a bigger plan. */
 function Mark({ rings, accent }: { rings: number; accent?: string }) {
   return (
-    <ScrollDraw stagger={0.4 / rings} easing="ease-out" trigger={{ start: 'top 95%', end: 'top 75%' }} className="size-14" aria-hidden>
+    <ScrollDraw stagger={staggerFor(rings, 0.6)} easing="linear" trigger={scrollWindow(0.6)} className="size-14" aria-hidden>
       <svg viewBox="0 0 56 56" className="size-full" fill="none" stroke={accent ?? 'currentColor'} strokeWidth="0.9">
         {Array.from({ length: rings }, (_, i) => <circle key={i} cx="28" cy="28" r={26 - i * (22 / rings)} />)}
       </svg>
@@ -78,8 +78,9 @@ function Frame({ accent }: { accent: string }) {
   return (
     <div ref={ref} className="pointer-events-none absolute inset-0">
       {frame && (
-        // Both passes are round before the card's top reaches the middle.
-        <ScrollDraw key={`${frame.w}x${frame.h}`} stagger={0.4} easing="ease-in-out" trigger={{ start: 'top 95%', end: 'top 72%' }} className="size-full" aria-hidden>
+        // The second pass follows the first, both round as the card reaches
+        // the middle of the screen.
+        <ScrollDraw key={`${frame.w}x${frame.h}`} stagger={0.5} easing="linear" trigger={scrollWindow(0.5)} className="size-full" aria-hidden>
           <svg width={frame.w} height={frame.h} viewBox={`0 0 ${frame.w} ${frame.h}`} className="block overflow-visible" fill="none" strokeWidth="1.3" strokeLinecap="round">
             {frame.strokes.map((s, i) => <path key={i} d={s.d} stroke={s.pen ? accent : 'currentColor'} />)}
           </svg>
@@ -134,7 +135,7 @@ export function PricingPlotted({
                 <span className="font-serif text-6xl tracking-[-0.03em] tabular-nums">
                   {currency}
                   {/* A new key per period: the counter starts again from the new number. */}
-                  <ScrollCounter key={`${plan.name}-${yearly}`} to={price} trigger={{ start: 'top 95%', end: 'top 70%' }} />
+                  <ScrollCounter key={`${plan.name}-${yearly}`} to={price} trigger={scrollWindow()} />
                 </span>
                 <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">/ month</span>
               </p>

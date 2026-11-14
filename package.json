@@ -19,7 +19,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "shiki": "^3.0.0",
-    "svg-scroll-draw": "^2.27.2",
+    "svg-scroll-draw": "^2.27.3",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {

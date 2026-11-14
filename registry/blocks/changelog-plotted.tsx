@@ -16,7 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollAnimate, ScrollDraw } from 'svg-scroll-draw/react';
-import { rosette, seedOf } from '@/lib/plotter';
+import { rosette, scrollWindow, seedOf } from '@/lib/plotter';
 
 export interface Release {
   version: string;
@@ -51,7 +51,7 @@ function Stamp({ version, accent, latest }: { version: string; accent: string; l
   return (
     <div className="relative size-16 rounded-full bg-background p-0.5">
       {d && (
-        <ScrollDraw easing="ease-in-out" trigger={{ start: 'top 92%', end: 'top 68%' }} className="size-full" aria-hidden>
+        <ScrollDraw easing="linear" trigger={scrollWindow()} className="size-full" aria-hidden>
           <svg viewBox="0 0 100 100" className="size-full" fill="none" stroke={latest ? accent : 'currentColor'} strokeWidth="1.25" strokeLinejoin="round">
             <path d={d} />
           </svg>

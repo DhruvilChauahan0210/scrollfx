@@ -3,8 +3,8 @@
  * Every block, served from the production build and scrolled in Chromium. A
  * block passes when its page logs no error or warning (hydration included)
  * and every svg-scroll-draw engine in it ran to the end. The home page and each
- * block's docs page must load clean too, and every drawing on the home page
- * must be finished by the time its top reaches the middle of the screen.
+ * block's docs page must load clean too, and every scroll-drawn picture on the
+ * home page must finish as it reaches the middle of the screen, not before.
  *
  *   npm run build && npm run check
  */
@@ -52,7 +52,9 @@ for (const slug of slugs) {
   await page.waitForTimeout(1500);
   const engines = await page.evaluate(() => {
     const m = globalThis[Symbol.for('svg-scroll-draw.registry')];
-    return m ? [...m.values()].map((e) => ({ type: e.type, p: e.getProgress() })) : [];
+    // An element hidden at this width (a phone-only rail on a desktop) has
+    // nothing to scroll through, so its engine is not expected to move.
+    return m ? [...m.entries()].filter(([el]) => el.getClientRects().length > 0).map(([, e]) => ({ type: e.type, p: e.getProgress() })) : [];
   });
   await page.close();
   const problems = [...errors];
@@ -64,36 +66,51 @@ for (const slug of slugs) {
   if (problems.length) failures.push(slug);
 }
 
-// Every drawing on the home page must be finished, last stroke included, by the
-// time its top reaches the middle of the screen: a draw that completes up by
-// the header has played to nobody. Checked at desktop and phone sizes.
+// Every scroll-drawn picture on the home page must finish as it reaches the
+// middle of the screen: still drawing when its centre is at 65% of the screen
+// (finished earlier, it played before the reader got there), and done by the
+// time its centre is at 45% (later, it is still drawing up by the header). The
+// hero plots on arrival, not on scroll, and is left out. Desktop and phone.
 for (const [width, height] of [[1440, 900], [390, 844]]) {
   const page = await browser.newPage({ viewport: { width, height } });
   await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.waitForTimeout(6000);
   const count = await page.evaluate(() => document.querySelectorAll('section svg').length);
-  const late = [];
+  const wrong = [];
+  let checked = 0;
   for (let i = 0; i < count; i++) {
     const r = await page.evaluate(async (i) => {
       const svg = document.querySelectorAll('section svg')[i];
+      if (svg.closest('section').querySelector('h1') || svg.getClientRects().length === 0) return null;
       const paths = [...svg.querySelectorAll('path, circle')].filter((p) => getComputedStyle(p).strokeDasharray !== 'none');
       if (!paths.length) return null;
-      const top = svg.getBoundingClientRect().top + scrollY;
-      for (let y = Math.max(0, top - innerHeight); y <= top - innerHeight / 2; y += 80) {
-        scrollTo(0, y);
-        await new Promise((ok) => requestAnimationFrame(() => setTimeout(ok, 16)));
-      }
-      scrollTo(0, top - innerHeight / 2);
-      await new Promise((ok) => setTimeout(ok, 250));
-      const undrawn = Math.max(...paths.map((p) => { const cs = getComputedStyle(p); return Math.abs(parseFloat(cs.strokeDashoffset)) / parseFloat(cs.strokeDasharray); }));
-      return { name: svg.closest('section').querySelector('h1,h2')?.textContent ?? `svg ${i}`, undrawn };
+      const undrawn = () => Math.max(...paths.map((p) => { const cs = getComputedStyle(p); return Math.abs(parseFloat(cs.strokeDashoffset)) / parseFloat(cs.strokeDasharray); }));
+      const box = svg.getBoundingClientRect();
+      const centre = box.top + scrollY + box.height / 2;
+      // Scroll down as a reader would until the centre sits at `at` of the screen.
+      const settle = async (at) => {
+        const target = centre - innerHeight * at;
+        for (let y = Math.max(0, target - innerHeight); y < target; y += 60) {
+          scrollTo(0, y);
+          await new Promise((ok) => requestAnimationFrame(() => setTimeout(ok, 16)));
+        }
+        scrollTo(0, target);
+        await new Promise((ok) => setTimeout(ok, 250));
+        return undrawn();
+      };
+      const early = await settle(0.65);
+      const late = await settle(0.45);
+      return { name: svg.closest('section').querySelector('h2')?.textContent ?? `svg ${i}`, early, late };
     }, i);
-    if (r && r.undrawn > 0.02) late.push(`${r.name}: ${(r.undrawn * 100).toFixed(0)}% undrawn`);
+    if (!r) continue;
+    checked++;
+    if (r.early < 0.02) wrong.push(`${r.name}: already finished with its centre at 65% of the screen`);
+    if (r.late > 0.02) wrong.push(`${r.name}: ${(r.late * 100).toFixed(0)}% undrawn with its centre at 45%`);
   }
   await page.close();
-  console.log(`${late.length ? '✗' : '✓'} / at ${width}px: ${count} drawings finished by mid-screen`);
-  late.forEach((l) => console.log(`    ${l}`));
-  if (late.length) failures.push(`/ at ${width}px`);
+  console.log(`${wrong.length ? '✗' : '✓'} / at ${width}px: ${checked} drawings finish as they reach mid-screen`);
+  wrong.forEach((l) => console.log(`    ${l}`));
+  if (wrong.length) failures.push(`/ at ${width}px`);
 }
 
 for (const path of ['/', ...slugs.map((s) => `/blocks/${s}`)]) {

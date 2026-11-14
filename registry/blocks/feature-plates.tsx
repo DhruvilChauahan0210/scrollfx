@@ -16,7 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollDraw } from 'svg-scroll-draw/react';
-import { contours, globe, tunnel, type Stroke } from '@/lib/plotter';
+import { contours, globe, scrollWindow, staggerFor, tunnel, type Stroke } from '@/lib/plotter';
 
 type Art = 'contours' | 'globe' | 'tunnel';
 
@@ -57,10 +57,9 @@ function Plate({ art, accent }: { art: Art; accent: string }) {
   return (
     <div className="aspect-[4/3] w-full rounded-[3px] bg-card p-[7%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-20px_rgba(40,30,10,.28)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05),0_24px_60px_-24px_rgba(0,0,0,.8)]">
       {strokes && (
-        // Each stroke draws across the whole trigger and the stagger spreads
-        // their starts over 0.6 of it more, so the last lands as the plate's
-        // top reaches the middle of the screen, with all of it in view.
-        <ScrollDraw stagger={0.6 / strokes.length} easing="ease-out" trigger={{ start: 'top 95%', end: 'top 67%' }} className="size-full" aria-hidden>
+        // Drawn as the plate rises, the last stroke landing as it reaches the
+        // middle of the screen.
+        <ScrollDraw stagger={staggerFor(strokes.length, 1)} easing="linear" trigger={scrollWindow(1)} className="size-full" aria-hidden>
           <svg viewBox="0 0 400 300" className="size-full" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round">
             {strokes.map((s, i) => (s.pen ? <path key={i} d={s.d} stroke={accent} strokeWidth="1.4" /> : <path key={i} d={s.d} />))}
           </svg>

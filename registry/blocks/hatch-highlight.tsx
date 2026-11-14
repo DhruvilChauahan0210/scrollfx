@@ -16,7 +16,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ScrollDraw } from 'svg-scroll-draw/react';
-import { hatch, type Stroke } from '@/lib/plotter';
+import { hatch, scrollWindow, staggerFor, type Stroke } from '@/lib/plotter';
 
 export interface HatchHighlightProps {
   eyebrow?: string;
@@ -48,9 +48,9 @@ function Mark({ children, accent }: { children: string; accent: string }) {
   return (
     <span ref={ref} className="relative isolate inline-block whitespace-nowrap">
       {box && (
-        // The last stroke lands while the phrase is still in the lower half of
-        // the screen: the stagger spreads half a range, the range ends at 75%.
-        <ScrollDraw key={`${box.w}x${box.h}`} stagger={0.5 / box.lines.length} easing="linear" trigger={{ start: 'top 92%', end: 'top 75%' }} className="absolute -left-1.5 top-[30%] -z-10" aria-hidden>
+        // Hatched as the phrase rises, the last stroke landing as it reaches
+        // the middle of the screen.
+        <ScrollDraw key={`${box.w}x${box.h}`} stagger={staggerFor(box.lines.length, 1)} easing="linear" trigger={scrollWindow(1)} className="absolute -left-1.5 top-[30%] -z-10" aria-hidden>
           <svg width={box.w} height={box.h} viewBox={`0 0 ${box.w} ${box.h}`} fill="none" stroke={accent} strokeWidth="1.6" strokeLinecap="round" className="block opacity-80">
             {box.lines.map((l, i) => <path key={i} d={l.d} />)}
           </svg>

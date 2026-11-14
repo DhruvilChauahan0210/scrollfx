@@ -22,16 +22,19 @@ library with no dependencies. The CLI installs it, and `lib/plotter.ts`, the gen
 | II | **Hatched highlight** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx.vercel.app/r/hatch-highlight.json` |
 | III | **Plotted chart** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/plotted-chart.json` |
 | IV | **Feature plates** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx.vercel.app/r/feature-plates.json` |
-| V | **Plotted changelog** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx.vercel.app/r/changelog-plotted.json` |
-| VI | **Plotted pricing** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/pricing-plotted.json` |
+| V | **Steps on a route** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx.vercel.app/r/steps-route.json` |
+| VI | **Plotted changelog** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx.vercel.app/r/changelog-plotted.json` |
+| VII | **Plotted pricing** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx.vercel.app/r/pricing-plotted.json` |
+| VIII | **Harmonograph call to action** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx.vercel.app/r/cta-harmonograph.json` |
 
 ## What every block does
 
 - **Takes props.** Copy, data, plans, releases, the seed and the accent colour are props with defaults.
 - **Draws the same thing for everyone.** Drawings come from fixed seeds. They are generated in the browser, so a
   few hundred strokes never bloat the server HTML; the text is in the server HTML.
-- **Finishes where it can be seen.** Every drawing is fully drawn by the time its top reaches the middle of the
-  screen, on desktop and on a phone. `npm run check` measures it.
+- **Finishes where it is read.** Every scroll-drawn picture draws as it rises and finishes as it reaches the
+  middle of the screen: not before, not after. `scrollWindow()` in `lib/plotter.ts` solves the trigger for it,
+  and `npm run check` measures it on desktop and on a phone.
 - **Respects reduced motion.** With `prefers-reduced-motion`, every drawing is shown finished.
 - **Is checked in a real browser.** `npm run check` serves the production build, scrolls every block in
   Chromium, and fails on any console error, any hydration warning, or a drawing that never finishes.

@@ -16,7 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollCounter, ScrollDraw } from 'svg-scroll-draw/react';
-import { curveY, smooth } from '@/lib/plotter';
+import { curveY, scrollWindow, smooth, staggerFor } from '@/lib/plotter';
 
 export interface Stat {
   value: number;
@@ -76,9 +76,9 @@ export function PlottedChart({
     setDrawing({ curve: smooth(pts), hatch });
   }, [data]);
 
-  // Plotted while the chart is in the lower half of the screen: the hatching's
-  // stagger spreads 0.6 of the range past its end, so it is done by top 50%.
-  const trigger = { start: 'top 95%', end: 'top 68%' };
+  // The hatching sweeps left to right and the curve keeps pace with it; both
+  // finish as the chart reaches the middle of the screen.
+  const SPREAD = 1.2;
 
   return (
     <section className={`mx-auto max-w-7xl px-6 py-28 sm:px-10 ${className}`}>
@@ -95,7 +95,7 @@ export function PlottedChart({
                 <dt className="max-w-[12rem] text-sm text-muted-foreground">{s.label}</dt>
                 <dd className="font-serif text-4xl tracking-[-0.02em] tabular-nums">
                   {s.prefix}
-                  <ScrollCounter to={s.value} decimals={s.decimals ?? 0} trigger={{ start: 'top 95%', end: 'top 70%' }} />
+                  <ScrollCounter to={s.value} decimals={s.decimals ?? 0} trigger={scrollWindow()} />
                   {s.suffix}
                 </dd>
               </div>
@@ -107,12 +107,12 @@ export function PlottedChart({
           <div className="relative aspect-[1000/420] w-full">
             {drawing ? (
               <>
-                <ScrollDraw stagger={0.6 / drawing.hatch.length} easing="linear" trigger={trigger} className="absolute inset-0" aria-hidden>
+                <ScrollDraw stagger={staggerFor(drawing.hatch.length, SPREAD)} easing="linear" trigger={scrollWindow(SPREAD)} className="absolute inset-0" aria-hidden>
                   <svg viewBox={`0 0 ${W} ${H}`} className="size-full" fill="none" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" opacity={0.75}>
                     {drawing.hatch.map((d, i) => <path key={i} d={d} />)}
                   </svg>
                 </ScrollDraw>
-                <ScrollDraw easing="linear" trigger={{ start: 'top 95%', end: 'top 52%' }} className="absolute inset-0" aria-hidden>
+                <ScrollDraw easing="linear" trigger={scrollWindow()} className="absolute inset-0" aria-hidden>
                   <svg viewBox={`0 0 ${W} ${H}`} className="size-full overflow-visible" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d={drawing.curve} />
                   </svg>

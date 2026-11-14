@@ -356,3 +356,73 @@ export function sketchRect({ w, h, seed = 1, wobble = 2.2, r = 18 }: { w: number
   };
   return [{ d: pass(1), pen: 0 }, { d: pass(3), pen: 1 }];
 }
+
+/**
+ * A harmonograph in a size × size box: the trace of two damped pendulums, one
+ * long line that spirals in as the swing dies away. Shaped by the seed.
+ */
+export function harmonograph(seed: number, size = 1000): Stroke[] {
+  const rand = random(seed);
+  // Near-whole frequency ratios give the slow, braided precession plotters are known for.
+  const f = [2 + rand() * 0.02, 3 + rand() * 0.02, 3 + rand() * 0.02, 2 + rand() * 0.02];
+  const p = [rand() * Math.PI, rand() * Math.PI, rand() * Math.PI, rand() * Math.PI];
+  const damp = 0.0042 + rand() * 0.0015;
+  const R = size * 0.23;
+  const pts: Pt[] = [];
+  // Fine steps keep the wide outer loops round; stopping once the swing is a
+  // fifth of its start keeps the centre from filling in solid.
+  for (let t = 0; ; t += 0.05) {
+    const e = Math.exp(-damp * t);
+    if (e < 0.2) break;
+    pts.push([
+      size / 2 + R * e * (Math.sin(f[0] * t + p[0]) + Math.sin(f[1] * t + p[1])),
+      size / 2 + R * e * (Math.sin(f[2] * t + p[2]) + Math.sin(f[3] * t + p[3])),
+    ]);
+  }
+  return [{ d: toPath(pts), pen: 0 }];
+}
+
+/**
+ * A route through points, the way a pen wanders between them on a map: each
+ * leg bows to one side by a seeded amount, so the line never runs straight.
+ */
+export function route(stops: Pt[], seed = 1, bow = 0.22): string {
+  const rand = random(seed);
+  let d = `M${f(stops[0][0])} ${f(stops[0][1])}`;
+  for (let i = 0; i < stops.length - 1; i++) {
+    const [ax, ay] = stops[i], [bx, by] = stops[i + 1];
+    const dx = bx - ax, dy = by - ay;
+    const len = Math.hypot(dx, dy) || 1;
+    // A perpendicular nudge for each control point, opposite signs for an S.
+    const nx = -dy / len, ny = dx / len;
+    const k1 = (rand() * 0.6 + 0.4) * bow * len * (i % 2 ? 1 : -1);
+    const k2 = (rand() * 0.6 + 0.4) * bow * len * (i % 2 ? -1 : 1);
+    d += `C${f(ax + dx / 3 + nx * k1)} ${f(ay + dy / 3 + ny * k1)} ${f(ax + (2 * dx) / 3 + nx * k2)} ${f(ay + (2 * dy) / 3 + ny * k2)} ${f(bx)} ${f(by)}`;
+  }
+  return d;
+}
+
+/**
+ * The scroll window for a drawing that should finish exactly as it reaches the
+ * middle of the screen: not before (it played while nobody looked), not after
+ * (it is still drawing up by the header).
+ *
+ * In svg-scroll-draw each path draws across the whole trigger, and `stagger`
+ * starts each one later than the last, so the last path ends `spread` ranges
+ * after `trigger.end` (spread = stagger × (paths − 1)). Measuring both ends
+ * from the element's centre makes the range a fixed share of the screen at
+ * any element height, so the end can be solved for:
+ *
+ *   start: centre at `from`        finish: centre at `to`
+ *   end = (to + spread × from) / (1 + spread)
+ *
+ * Pass the same spread you give the drawing: `stagger = spread / (paths - 1)`.
+ */
+export function scrollWindow(spread = 0, { from = 1.15, to = 0.5 } = {}) {
+  const end = (to + spread * from) / (1 + spread);
+  const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+  return { start: `center ${pct(from)}`, end: `center ${pct(end)}` };
+}
+
+/** The stagger that spreads `paths` over `spread` ranges (see scrollWindow). */
+export const staggerFor = (paths: number, spread: number) => (paths > 1 ? spread / (paths - 1) : 0);

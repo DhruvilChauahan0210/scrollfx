@@ -18,7 +18,13 @@ export default async function Preview({ params }: { params: Promise<{ slug: stri
   if (!block || !Component) notFound();
   return (
     <main>
-      {!slug.startsWith('hero-') && <div className="flex h-[60vh] items-end justify-center pb-10 text-sm text-muted-foreground">{block.motion}</div>}
+      {/* Enough room above for the block to scroll in, not so much that the
+          preview opens on blank paper. */}
+      {!slug.startsWith('hero-') && (
+        <div className="flex h-[38vh] items-end justify-center pb-8 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          ↓ {block.motion}
+        </div>
+      )}
       <Component />
       {/* Room to scroll every block fully past, as the rest of a real page would. */}
       <div className="h-[120vh]" />
