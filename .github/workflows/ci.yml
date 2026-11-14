@@ -1,0 +1,48 @@
+# Every push to main deploys to scrollfx-ui.vercel.app, so this runs on every
+# push and pull request: a block that breaks, a registry file that was not
+# rebuilt, or a drawing that finishes off screen fails here first.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Types
+        run: npx tsc --noEmit
+
+      - name: Build the registry and the site
+        run: npm run build
+
+      # The CLI installs from the committed public/r files (Vercel serves them
+      # as built, but a pull request is reviewed as committed).
+      - name: The committed registry matches the blocks
+        run: git diff --exit-code -- public/r || (echo "::error::public/r is stale; run npm run registry and commit it" && exit 1)
+
+      - name: Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Every block scrolled to the end with no console errors or warnings,
+      # every page loads clean, and every drawing on the home page finishes as
+      # it reaches the middle of the screen, at desktop and phone sizes.
+      - name: Every block, in a real browser
+        timeout-minutes: 10
+        run: npm run check
