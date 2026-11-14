@@ -1,15 +1,35 @@
 {
   "name": "scrollfx",
   "private": true,
-  "description": "Copy-paste scroll effects, each one HTML file, built on svg-scroll-draw.",
+  "description": "Scroll-driven sections for React and Tailwind, installed with the shadcn CLI. Built on svg-scroll-draw.",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "generate": "python3 scripts/generate.py",
-    "build": "node scripts/build.mjs",
+    "dev": "next dev -p 4400",
+    "build": "npm run registry && next build",
+    "start": "next start -p 4400",
+    "registry": "shadcn build",
     "check": "node scripts/check.mjs"
   },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "geist": "^1.9.2",
+    "lucide-react": "^1.73.0",
+    "next": "16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "shiki": "^3.0.0",
+    "svg-scroll-draw": "^2.27.2",
+    "tailwind-merge": "^3.7.0"
+  },
   "devDependencies": {
-    "playwright": "1.65.0"
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "playwright": "1.65.0",
+    "shadcn": "^4.23.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^5.9.0"
   }
 }

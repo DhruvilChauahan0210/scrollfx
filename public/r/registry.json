@@ -1,0 +1,52 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "scrollfx",
+  "homepage": "https://scrollfx.vercel.app",
+  "items": [
+    {
+      "name": "hero-tilt",
+      "type": "registry:block",
+      "title": "Hero, tilted screenshot",
+      "description": "A hero whose key phrase underlines itself, over a product screenshot that tilts back and straightens as you scroll.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/hero-tilt.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "changelog-timeline",
+      "type": "registry:block",
+      "title": "Changelog timeline",
+      "description": "Releases on a vertical rail. The rail draws down as you read, and each release lights up when the line reaches it.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/changelog-timeline.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "pricing-count",
+      "type": "registry:block",
+      "title": "Pricing, counted in",
+      "description": "Three plans. Prices count up as the section arrives and every checkmark draws itself in, row after row.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/pricing-count.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

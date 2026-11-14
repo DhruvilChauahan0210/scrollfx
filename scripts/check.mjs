@@ -1,75 +1,69 @@
 #!/usr/bin/env node
 /**
- * Every effect, opened in Chromium and scrolled to the end: it passes when
- * nothing logs an error and at least one svg-scroll-draw engine ran to the end
- * (read from the library's instance registry). Run after `npm run build`.
+ * Every block, served from the production build and scrolled in Chromium. A
+ * block passes when its page logs no error or warning (hydration included)
+ * and every svg-scroll-draw engine in it ran to the end. The home page and each
+ * block's docs page must load clean too.
  *
- *   node scripts/check.mjs
+ *   npm run build && npm run check
  */
-import { createServer } from 'node:http';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join, dirname, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
+import { createServer } from 'node:net';
+import { readFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const site = join(root, 'site');
-if (!existsSync(join(site, 'index.html'))) {
-  console.error('✗ no site/ — run `npm run build` first');
-  process.exit(1);
-}
+const slugs = JSON.parse(readFileSync(new URL('../registry.json', import.meta.url))).items.map((i) => i.name);
+const port = await new Promise((ok) => { const s = createServer().listen(0, () => { const { port } = s.address(); s.close(() => ok(port)); }); });
+const server = spawn('npx', ['next', 'start', '-p', String(port)], { stdio: 'ignore', detached: true });
+const base = `http://localhost:${port}`;
+for (let i = 0; i < 60 && !(await fetch(base).then(() => true, () => false)); i++) await new Promise((r) => setTimeout(r, 500));
 
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
-const server = createServer((req, res) => {
-  const path = join(site, decodeURIComponent(new URL(req.url, 'http://x').pathname));
-  const file = path.endsWith('/') ? join(path, 'index.html') : path;
-  if (!existsSync(file)) { res.writeHead(404).end(); return; }
-  res.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream' }).end(readFileSync(file));
-}).listen(0);
-const base = `http://localhost:${server.address().port}`;
-
-const files = readdirSync(join(site, 'e')).filter((f) => f.endsWith('.html')).sort();
 const browser = await chromium.launch();
 const failures = [];
 
-for (const file of files) {
-  const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
+async function open(path) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text().slice(0, 200)}`); });
-  await page.goto(`${base}/e/${file}`, { waitUntil: 'networkidle' });
+  await page.goto(base + path, { waitUntil: 'networkidle' });
+  return { page, errors };
+}
+
+for (const slug of slugs) {
+  const { page, errors } = await open(`/preview/${slug}`);
+  // A reader takes in the first screen before scrolling: the hero's underline
+  // plays on arrival and pauses while it is off screen.
+  await page.waitForTimeout(2000);
   const height = await page.evaluate(() => document.documentElement.scrollHeight);
-  let max = 0;
-  const read = () => page.evaluate(() => {
+  for (let y = 0; y <= height; y += 150) {
+    await page.evaluate((v) => window.scrollTo(0, v), y);
+    await page.waitForTimeout(30);
+  }
+  await page.waitForTimeout(1500);
+  const engines = await page.evaluate(() => {
     const m = globalThis[Symbol.for('svg-scroll-draw.registry')];
     return m ? [...m.values()].map((e) => ({ type: e.type, p: e.getProgress() })) : [];
   });
-  // A snapping page moves one section per gesture, so it is read a screen at a
-  // time with a pause for each glide, as a reader would scroll it.
-  const snaps = readFileSync(join(site, 'e', file), 'utf8').includes('scrollSnap');
-  const step = snaps ? await page.evaluate(() => window.innerHeight) : 200;
-  for (let y = 0; y <= height; y += step) {
-    await page.evaluate((v) => window.scrollTo(0, v), y);
-    await page.waitForTimeout(snaps ? 1200 : 40);
-    for (const e of await read()) max = Math.max(max, e.p);
-  }
-  await page.waitForTimeout(800);
-  const engines = await read();
-  for (const e of engines) max = Math.max(max, e.p);
   await page.close();
-
   const problems = [...errors];
   if (!engines.length) problems.push('no svg-scroll-draw engine registered');
-  else if (max < 0.9) problems.push(`never ran to the end (${engines.map((e) => `${e.type} ${e.p.toFixed(2)}`).join(', ')})`);
-  console.log(`${problems.length ? '✗' : '✓'} ${file}${engines.length ? `  [${[...new Set(engines.map((e) => e.type))].join(', ')}]` : ''}`);
-  for (const p of problems) console.log(`    ${p}`);
-  if (problems.length) failures.push(file);
+  const short = engines.filter((e) => e.p < 0.99);
+  if (short.length) problems.push(`${short.length} of ${engines.length} engines never finished (${short.map((e) => `${e.type} ${e.p.toFixed(2)}`).join(', ')})`);
+  console.log(`${problems.length ? '✗' : '✓'} ${slug}  ${engines.length} engines`);
+  problems.forEach((p) => console.log(`    ${p}`));
+  if (problems.length) failures.push(slug);
+}
+
+for (const path of ['/', ...slugs.map((s) => `/blocks/${s}`)]) {
+  const { page, errors } = await open(path);
+  await page.close();
+  console.log(`${errors.length ? '✗' : '✓'} ${path}`);
+  errors.forEach((e) => console.log(`    ${e}`));
+  if (errors.length) failures.push(path);
 }
 
 await browser.close();
-server.close();
-if (failures.length) {
-  console.error(`\n✗ ${failures.length} of ${files.length} effects failed`);
-  process.exit(1);
-}
-console.log(`\n✓ all ${files.length} effects run`);
+try { process.kill(-server.pid); } catch {}
+if (failures.length) { console.error(`\n✗ ${failures.length} failed`); process.exit(1); }
+console.log(`\n✓ ${slugs.length} blocks run to the end, and every page loads clean`);
