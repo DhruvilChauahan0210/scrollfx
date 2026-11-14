@@ -13,7 +13,7 @@
  * the same one, and the server HTML stays small. Reduced motion shows it whole.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { scrollDraw } from 'svg-scroll-draw';
 import { flowField, type Stroke } from '@/lib/plotter';
 
@@ -93,8 +93,17 @@ export function HeroFlowField({
           <a href={primary.href} className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-[15px] font-medium text-background transition-transform hover:-translate-y-px">
             {primary.label}
           </a>
-          {/* Long commands wrap at their space rather than being cut off. */}
-          {aside && <code className="max-w-full rounded-2xl border px-5 py-3 font-mono text-[12px] leading-relaxed text-muted-foreground [overflow-wrap:anywhere]">{aside}</code>}
+          {/* Each word is one unit, so a long command wraps at a space, never
+              at a hyphen inside a URL; a word wider than the box still wraps. */}
+          {aside && (
+            <code className="max-w-full rounded-2xl border px-5 py-3 font-mono text-[12px] leading-relaxed text-muted-foreground">
+              {aside.split(' ').map((word, i) => (
+                // A plain space between words: dropped at a line break, so a
+                // wrapped line starts flush.
+                <Fragment key={i}>{i > 0 && ' '}<span className="inline-block max-w-full [overflow-wrap:anywhere]">{word}</span></Fragment>
+              ))}
+            </code>
+          )}
         </div>
       </div>
 
