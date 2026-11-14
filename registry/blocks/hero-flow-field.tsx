@@ -94,7 +94,7 @@ export function HeroFlowField({
             {primary.label}
           </a>
           {/* Long commands wrap at their space rather than being cut off. */}
-          {aside && <code className="max-w-full rounded-2xl border px-5 py-3 font-mono text-[12.5px] leading-relaxed text-muted-foreground [overflow-wrap:anywhere]">{aside}</code>}
+          {aside && <code className="max-w-full rounded-2xl border px-5 py-3 font-mono text-[12px] leading-relaxed text-muted-foreground [overflow-wrap:anywhere]">{aside}</code>}
         </div>
       </div>
 
