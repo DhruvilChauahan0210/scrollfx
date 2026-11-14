@@ -7,6 +7,9 @@ import { ChangelogPlotted } from './blocks/changelog-plotted';
 import { PricingPlotted } from './blocks/pricing-plotted';
 import { StepsRoute } from './blocks/steps-route';
 import { CtaHarmonograph } from './blocks/cta-harmonograph';
+import { TestimonialsPlotted } from './blocks/testimonials-plotted';
+import { FaqPlotted } from './blocks/faq-plotted';
+import { FooterPlotted } from './blocks/footer-plotted';
 
 /** Each block with its default props, as the previews render it. */
 export const PREVIEWS: Record<string, ComponentType> = {
@@ -18,4 +21,7 @@ export const PREVIEWS: Record<string, ComponentType> = {
   'pricing-plotted': PricingPlotted,
   'steps-route': StepsRoute,
   'cta-harmonograph': CtaHarmonograph,
+  'testimonials-plotted': TestimonialsPlotted,
+  'faq-plotted': FaqPlotted,
+  'footer-plotted': FooterPlotted,
 };

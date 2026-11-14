@@ -7,7 +7,7 @@
       "name": "plotter",
       "type": "registry:lib",
       "title": "Plotter",
-      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, harmonographs, routes, hatching) and scrollWindow(), the trigger that finishes a drawing as it reaches the middle of the screen. Every scrollfx block draws with it.",
+      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, harmonographs, spirals, Lissajous knots, ridgelines, routes, hatching) and scrollWindow(), the trigger that finishes a drawing as it reaches the middle of the screen. Every scrollfx block draws with it.",
       "files": [
         {
           "path": "lib/plotter.ts",
@@ -170,6 +170,50 @@
       }
     },
     {
+      "name": "testimonials-plotted",
+      "type": "registry:block",
+      "title": "Plotted testimonials",
+      "description": "Quotes on sheets, each stamped with a spiral a pen winds from the rim inward, seeded from the person's name, with their initials in its eye.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/testimonials-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to them: each spiral winds in as its card arrives.",
+        "tall": false
+      }
+    },
+    {
+      "name": "faq-plotted",
+      "type": "registry:block",
+      "title": "Plotted FAQ",
+      "description": "Questions that open in place with the browser's own disclosure, beside a plate where a pen draws a Lissajous knot.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/faq-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: the knot is traced, four times over.",
+        "tall": false
+      }
+    },
+    {
       "name": "cta-harmonograph",
       "type": "registry:block",
       "title": "Harmonograph call to action",
@@ -188,6 +232,28 @@
       ],
       "meta": {
         "motion": "Scroll to it: one line spirals in as the swing dies away.",
+        "tall": false
+      }
+    },
+    {
+      "name": "footer-plotted",
+      "type": "registry:block",
+      "title": "Plotted footer",
+      "description": "A footer under a horizon of ridgelines a pen plots back to front as it comes into view, with link columns and a closing line below.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/footer-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to the end: the horizon is plotted, back to front.",
         "tall": false
       }
     }

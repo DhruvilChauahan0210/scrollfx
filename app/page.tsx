@@ -5,7 +5,7 @@ import { installCommand } from '@/lib/site';
 import { PREVIEWS } from '@/registry/previews';
 import { HeroFlowField } from '@/registry/blocks/hero-flow-field';
 
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'];
 
 /**
  * The home page is a folio: the sections themselves, live and full width, one
@@ -13,7 +13,9 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
  * names it and links to its code.
  */
 export default function Home() {
-  const rest = BLOCKS.filter((b) => b.slug !== 'hero-flow-field');
+  // The hero opens the page and the footer closes it, as on a real site; the
+  // plates in between are the rest.
+  const rest = BLOCKS.filter((b) => b.slug !== 'hero-flow-field' && b.slug !== 'footer-plotted');
   return (
     <>
       <Header />
@@ -37,6 +39,9 @@ export default function Home() {
               </div>
             );
           })}
+        </div>
+        <div className="pt-16">
+          <PlateLine n={rest.length + 1} slug="footer-plotted" name="The footer below" />
         </div>
       </main>
       <Footer />

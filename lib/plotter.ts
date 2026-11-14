@@ -426,3 +426,83 @@ export function scrollWindow(spread = 0, { from = 1.15, to = 0.5 } = {}) {
 
 /** The stagger that spreads `paths` over `spread` ranges (see scrollWindow). */
 export const staggerFor = (paths: number, spread: number) => (paths > 1 ? spread / (paths - 1) : 0);
+
+/**
+ * A spiral medallion in a size × size box: one line wound from the rim inward,
+ * its radius breathing a little as a hand-drawn spiral does. Shaped by the
+ * seed, so a name always gets the same mark.
+ */
+export function spiral(seed: number, size = 100, { turns = 9, inner = 0.42 } = {}): Stroke[] {
+  const noise = noise2(seed);
+  const c = size / 2;
+  const outer = size * 0.47;
+  const steps = turns * 90;
+  const pts: Pt[] = [];
+  for (let k = 0; k <= steps; k++) {
+    const t = k / steps;
+    const a = t * turns * Math.PI * 2 + (seed % 360) * (Math.PI / 180);
+    const r = (outer - (outer - outer * inner) * t) * (1 + 0.045 * noise(Math.cos(a) * 1.3 + t * 4, Math.sin(a) * 1.3));
+    pts.push([c + Math.cos(a) * r, c + Math.sin(a) * r]);
+  }
+  return [{ d: toPath(pts), pen: 0 }];
+}
+
+/**
+ * A Lissajous knot in a w × h box: one closed figure drawn four times, each a
+ * little smaller, the way a plotter builds weight by repeating a line. The
+ * seed picks one of four ratios; a quarter-turn phase closes each of them (at
+ * other phases some retrace themselves into an open curve).
+ */
+export function lissajous(seed: number, w = 400, h = 400): Stroke[] {
+  const shapes: [number, number, number][] = [[3, 2, Math.PI / 2], [5, 4, Math.PI / 2], [3, 4, Math.PI / 2], [5, 6, Math.PI / 2]];
+  const [a, b, delta] = shapes[seed % shapes.length];
+  const n = 1400;
+  return [0, 1, 2, 3].map((k) => {
+    const s = 0.44 * Math.pow(0.9, k);
+    const pts: Pt[] = [];
+    for (let i = 0; i <= n; i++) {
+      const t = (i / n) * Math.PI * 2;
+      pts.push([w / 2 + Math.sin(a * t + delta) * w * s, h / 2 + Math.sin(b * t) * h * s]);
+    }
+    return { d: toPath(pts), pen: k === 0 ? 1 : 0 } as Stroke;
+  });
+}
+
+/**
+ * Ridgelines in a w × h box: evenly spaced rows, flat at the edges and rising
+ * toward the middle in peaks of their own, the nearer rows hiding the ones
+ * behind, as a plotter draws a landscape with hidden lines removed. The accent
+ * pen takes the nearest ridge. Strokes come back to front, as they are read.
+ */
+export function ridgelines({ seed = 9, w = 1200, h = 260, rows = 18, step = 5 } = {}): Stroke[] {
+  const noise = noise2(seed);
+  const rand = random(seed);
+  const cols = Math.ceil(w / step) + 1;
+  // Each row's own peaks: two or three bumps inside the middle half.
+  const peaks = Array.from({ length: rows }, () =>
+    Array.from({ length: 2 + Math.floor(rand() * 2) }, () => ({ at: w * (0.3 + rand() * 0.4), width: w * (0.04 + rand() * 0.07), height: 0.4 + rand() * 0.6 })),
+  );
+  const horizon = new Array<number>(cols).fill(Infinity);
+  const out: Stroke[] = [];
+  const amp = h * 0.34;
+  // Front to back, keeping the highest point drawn so far in each column: a
+  // ridge behind is drawn only where it rises above everything in front.
+  for (let r = rows - 1; r >= 0; r--) {
+    const base = h * 0.5 + (r / (rows - 1)) * h * 0.46;
+    let run: Pt[] = [];
+    const flush = () => { if (run.length > 1) out.push({ d: toPath(run), pen: r === rows - 1 ? 1 : 0 }); run = []; };
+    for (let i = 0; i < cols; i++) {
+      const x = i * step;
+      const middle = Math.exp(-(((x - w / 2) / (w * 0.24)) ** 4));
+      // The tallest bump, not their sum: overlapping bumps would add up past the box.
+      const bumps = Math.max(...peaks[r].map((p) => p.height * Math.exp(-(((x - p.at) / p.width) ** 2))));
+      const y = base - amp * middle * (bumps + 0.15 * (noise(x / 60, r * 0.8) + 0.5)) - 2.5 * noise(x / 25, r * 3.1);
+      if (y < horizon[i] - 0.5) {
+        run.push([x, y]);
+        horizon[i] = y;
+      } else flush();
+    }
+    flush();
+  }
+  return out.reverse();
+}

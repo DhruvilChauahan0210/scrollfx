@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { REPO, LIB } from '@/lib/site';
 import { ThemeToggle } from './theme-toggle';
+import { FooterPlotted } from '@/registry/blocks/footer-plotted';
 
 export function Header() {
   return (
@@ -27,26 +28,27 @@ export function Header() {
   );
 }
 
-/** The colophon: what the plates are set in and drawn with. */
+/**
+ * The site's footer is the footer-plotted block itself, carrying the colophon:
+ * what the plates are drawn with, and where everything lives.
+ */
 export function Footer() {
   return (
-    <footer className="mt-24 border-t">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 sm:px-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Colophon</p>
-          <p className="mt-6 max-w-2xl text-balance font-serif text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] tracking-[-0.02em]">
-            Every plate in this folio is drawn by <a href={LIB} className="italic underline decoration-1 underline-offset-[6px] hover:decoration-2">svg-scroll-draw</a>, a scroll animation library with no dependencies.
-          </p>
-          <div className="mt-8 inline-flex h-11 items-center rounded-full border px-5 font-mono text-[13px] text-muted-foreground">npm i svg-scroll-draw</div>
-        </div>
-        <div className="flex flex-col justify-end gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground md:items-end">
-          <p>Set in Fraunces and Geist</p>
-          <p>Drawings generated from fixed seeds</p>
-          <p>
-            MIT · <a href={REPO} className="hover:text-foreground">Source on GitHub</a>
-          </p>
-        </div>
-      </div>
-    </footer>
+    <FooterPlotted
+      className="mt-24"
+      brand="scrollfx"
+      note={
+        <>
+          Every plate in this folio is drawn by <a href={LIB} className="text-foreground underline underline-offset-4">svg-scroll-draw</a>, a
+          scroll animation library with no dependencies: <code className="whitespace-nowrap font-mono text-[13px]">npm i svg-scroll-draw</code>
+        </>
+      }
+      columns={[
+        { title: 'Folio', links: [{ label: 'Plates', href: '/#plates' }, { label: 'Registry', href: '/r/registry.json' }, { label: 'Source', href: REPO }] },
+        { title: 'Library', links: [{ label: 'svg-scroll-draw', href: LIB }, { label: 'Docs', href: `${LIB}/docs` }, { label: 'npm', href: 'https://www.npmjs.com/package/svg-scroll-draw' }] },
+        { title: 'Colophon', links: [{ label: 'Set in Fraunces', href: 'https://fonts.google.com/specimen/Fraunces' }, { label: 'and Geist', href: 'https://vercel.com/font' }, { label: 'MIT licence', href: `${REPO}/blob/main/LICENSE` }] },
+      ]}
+      legal="MIT · Drawings generated from fixed seeds"
+    />
   );
 }
