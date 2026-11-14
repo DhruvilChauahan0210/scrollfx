@@ -1,0 +1,61 @@
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Slide from the sides · scrollfx</title>
+    <meta name="description" content="Alternating rows slide in from the left and the right.">
+    <meta name="fx:number" content="14">
+    <meta name="fx:category" content="Reveal">
+    <meta name="fx:api" content="scrollReveal">
+    <style>
+:root { --bg: #f6f4ef; --ink: #16171b; --muted: #5d5f66; --accent: #2d55d8; --hot: #ff5c39; --line: #d9d5cc; }
+* { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.fx-intro { min-height: 92vh; display: grid; place-content: center; text-align: center; padding: 0 20px; }
+.fx-kicker { font: 600 12px/1 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+.fx-intro h1 { font-size: clamp(34px, 7vw, 72px); line-height: 1.02; margin: 0 0 14px; letter-spacing: -.02em; }
+.fx-intro p { max-width: 46ch; margin: 0 auto; color: var(--muted); }
+.fx-hint { margin-top: 28px !important; font: 600 13px/1 ui-monospace, monospace; color: var(--accent) !important; }
+.fx-stage { min-height: 100vh; display: grid; place-items: center; padding: 40px 20px; }
+.fx-end { min-height: 70vh; display: grid; place-content: center; text-align: center; color: var(--muted); padding: 0 20px; }
+.fx-credit { padding: 28px 20px 40px; text-align: center; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+.fx-credit a { color: var(--ink); }
+svg { max-width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) { .fx-hint { display: none; } }
+.rows { width: min(760px, 100%); display: grid; gap: 22px; }
+.row { margin: 0; font-size: clamp(28px, 5vw, 48px); font-weight: 700; }
+.row.r { text-align: right; color: var(--accent); }</style>
+    </head>
+    <body>
+    <header class="fx-intro">
+      <p class="fx-kicker">scrollfx · 14 · Reveal</p>
+      <h1>Slide from the sides</h1>
+      <p>Alternating rows slide in from the left and the right.</p>
+      <p class="fx-hint">Scroll ↓</p>
+    </header>
+
+    <section class="fx-stage">
+  <div class="rows">
+    <p class="row l">Plan the page.</p>
+    <p class="row r">Draw the lines.</p>
+    <p class="row l">Ship it.</p>
+    <p class="row r">Watch it move.</p>
+  </div>
+</section>
+
+    <section class="fx-end"><p>The end. Scroll back up to see it again.</p></section>
+
+    <footer class="fx-credit">
+      Built with <a href="https://svg-scroll-draw.vercel.app">svg-scroll-draw</a>, the zero-dependency scroll animation library ·
+      <a href="https://github.com/DhruvilChauahan0210/scrollfx">more effects on scrollfx</a>
+    </footer>
+
+    <script type="module">
+    import { scrollReveal } from 'https://cdn.jsdelivr.net/npm/svg-scroll-draw@2.27.2/dist/reveal/index.mjs';
+scrollReveal('.row.l', { preset: 'fadeLeft', stagger: 0.12 });
+scrollReveal('.row.r', { preset: 'fadeRight', stagger: 0.12 });
+    </script>
+    </body>
+    </html>

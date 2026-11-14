@@ -1,0 +1,60 @@
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clip reveal · scrollfx</title>
+    <meta name="description" content="Not just lines: a whole card wipes in from the left, on any content.">
+    <meta name="fx:number" content="08">
+    <meta name="fx:category" content="Line drawing">
+    <meta name="fx:api" content="scrollDraw">
+    <style>
+:root { --bg: #f6f4ef; --ink: #16171b; --muted: #5d5f66; --accent: #2d55d8; --hot: #ff5c39; --line: #d9d5cc; }
+* { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.fx-intro { min-height: 92vh; display: grid; place-content: center; text-align: center; padding: 0 20px; }
+.fx-kicker { font: 600 12px/1 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+.fx-intro h1 { font-size: clamp(34px, 7vw, 72px); line-height: 1.02; margin: 0 0 14px; letter-spacing: -.02em; }
+.fx-intro p { max-width: 46ch; margin: 0 auto; color: var(--muted); }
+.fx-hint { margin-top: 28px !important; font: 600 13px/1 ui-monospace, monospace; color: var(--accent) !important; }
+.fx-stage { min-height: 100vh; display: grid; place-items: center; padding: 40px 20px; }
+.fx-end { min-height: 70vh; display: grid; place-content: center; text-align: center; color: var(--muted); padding: 0 20px; }
+.fx-credit { padding: 28px 20px 40px; text-align: center; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+.fx-credit a { color: var(--ink); }
+svg { max-width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) { .fx-hint { display: none; } }
+.card { width: min(560px, 100%); padding: 36px; border-radius: 18px; color: #fff; background: linear-gradient(135deg, #2d55d8, #7a3bd8 60%, #ff5c39); }
+.card-k { font: 600 12px/1 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; opacity: .8; margin: 0 0 10px; }
+.card h2 { margin: 0 0 10px; font-size: 30px; line-height: 1.1; }
+.card p { margin: 0; }</style>
+    </head>
+    <body>
+    <header class="fx-intro">
+      <p class="fx-kicker">scrollfx · 08 · Line drawing</p>
+      <h1>Clip reveal</h1>
+      <p>Not just lines: a whole card wipes in from the left, on any content.</p>
+      <p class="fx-hint">Scroll ↓</p>
+    </header>
+
+    <section class="fx-stage">
+  <div id="card" class="card">
+    <p class="card-k">Case study</p>
+    <h2>Wipes in from the left, as you scroll</h2>
+    <p>Any element: images, text, a gradient. The clip follows the scroll, back and forth.</p>
+  </div>
+</section>
+
+    <section class="fx-end"><p>The end. Scroll back up to see it again.</p></section>
+
+    <footer class="fx-credit">
+      Built with <a href="https://svg-scroll-draw.vercel.app">svg-scroll-draw</a>, the zero-dependency scroll animation library ·
+      <a href="https://github.com/DhruvilChauahan0210/scrollfx">more effects on scrollfx</a>
+    </footer>
+
+    <script type="module">
+    import { scrollDraw } from 'https://cdn.jsdelivr.net/npm/svg-scroll-draw@2.27.2/dist/index.mjs';
+scrollDraw('#card', { clip: 'left', easing: 'ease-out', trigger: { start: 'top 85%', end: 'center 45%' } });
+    </script>
+    </body>
+    </html>
