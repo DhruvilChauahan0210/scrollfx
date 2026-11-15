@@ -99,8 +99,9 @@ library with no dependencies. The CLI installs it, and `lib/plotter.ts`, the gen
 ## What every block does
 
 - **Takes props.** Copy, data, plans, releases, the seed and the accent colour are props with defaults.
-- **Draws the same thing for everyone.** Drawings come from fixed seeds. They are generated in the browser, so a
-  few hundred strokes never bloat the server HTML; the text is in the server HTML.
+- **Stays put.** Drawings come from fixed seeds, so a page draws the same thing on every visit. Browsers may
+  differ by a stroke or two (engines round `Math.sin` differently, and a flow field magnifies it). Drawings are
+  generated in the browser, so a few hundred strokes never bloat the server HTML; the text is in the server HTML.
 - **Finishes where it is read.** Every scroll-drawn picture draws as it rises and finishes as it reaches the
   middle of the screen: not before, not after. `scrollWindow()` in `lib/plotter.ts` solves the trigger for it,
   and `npm run check` measures it on desktop and on a phone.

@@ -9,8 +9,9 @@
  * Needs: react, svg-scroll-draw, and lib/plotter (installed with it).
  * Styling: Tailwind CSS with shadcn/ui tokens. The print is a `bg-card` sheet.
  *
- * The drawing is generated in the browser from `seed`, so every visitor sees
- * the same one, and the server HTML stays small. Reduced motion shows it whole.
+ * The drawing is generated in the browser from `seed`, so it is the same on
+ * every visit (browsers may differ by a stroke or two: engines round Math.sin
+ * differently), and the server HTML stays small. Reduced motion shows it whole.
  */
 
 import { Fragment, useEffect, useRef, useState } from 'react';

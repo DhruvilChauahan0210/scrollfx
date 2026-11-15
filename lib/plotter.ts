@@ -1,7 +1,8 @@
 /**
  * plotter — line drawings the way a pen plotter makes them: flow fields,
  * contour maps, globes, tunnels, rosettes and hatching. Every generator is
- * seeded, so a seed always gives the same drawing, and returns plain SVG path
+ * seeded, so a seed gives the same drawing on every visit (engines may round
+ * Math.sin differently and differ by a stroke or two), and returns plain SVG path
  * strings for svg-scroll-draw to ink in.
  *
  * Part of scrollfx (MIT): https://github.com/DhruvilChauahan0210/scrollfx
