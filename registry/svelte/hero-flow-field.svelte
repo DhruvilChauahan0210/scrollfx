@@ -113,7 +113,8 @@
     </div>
     <figcaption class="mt-4 flex items-baseline justify-between gap-4 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
       <span>{caption}</span>
-      <span>{plotted} / {String(strokes.length).padStart(3, '0')} strokes<span class="hidden sm:inline"> · seed {seed}</span></span>
+      <!-- The separator is an expression: a leading space in the markup would be trimmed. -->
+      <span>{plotted} / {String(strokes.length).padStart(3, '0')} strokes<span class="hidden sm:inline">{` · seed ${seed}`}</span></span>
     </figcaption>
   </figure>
 </section>
