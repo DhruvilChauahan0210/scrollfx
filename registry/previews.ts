@@ -10,6 +10,8 @@ import { CtaHarmonograph } from './blocks/cta-harmonograph';
 import { TestimonialsPlotted } from './blocks/testimonials-plotted';
 import { FaqPlotted } from './blocks/faq-plotted';
 import { FooterPlotted } from './blocks/footer-plotted';
+import { TeamPlotted } from './blocks/team-plotted';
+import { NewsletterPlotted } from './blocks/newsletter-plotted';
 
 /** Each block with its default props, as the previews render it. */
 export const PREVIEWS: Record<string, ComponentType> = {
@@ -23,5 +25,7 @@ export const PREVIEWS: Record<string, ComponentType> = {
   'cta-harmonograph': CtaHarmonograph,
   'testimonials-plotted': TestimonialsPlotted,
   'faq-plotted': FaqPlotted,
+  'team-plotted': TeamPlotted,
+  'newsletter-plotted': NewsletterPlotted,
   'footer-plotted': FooterPlotted,
 };

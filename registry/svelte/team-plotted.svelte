@@ -73,7 +73,7 @@
         <div class="relative aspect-square w-full">
           {#if prints}
             <div use:scrollDraw={{ stagger: staggerFor(prints[i].length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="absolute inset-0" aria-hidden="true">
-              <svg viewBox="0 0 100 100" class="size-full" fill="none" stroke={i === 0 ? accent : 'currentColor'} stroke-width="0.55" stroke-linecap="round">
+              <svg viewBox="0 0 100 100" class="size-full" fill="none" stroke={i === 0 ? accent : 'currentColor'} stroke-width="0.7" stroke-linecap="round">
                 {#each prints[i] as r, k (k)}<path d={r.d} />{/each}
               </svg>
             </div>

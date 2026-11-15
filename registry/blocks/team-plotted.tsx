@@ -56,7 +56,7 @@ function Print({ name, stroke }: { name: string; stroke: string }) {
   if (!rings) return null;
   return (
     <ScrollDraw stagger={staggerFor(rings.length, SPREAD)} easing="linear" trigger={scrollWindow(SPREAD)} className="absolute inset-0" aria-hidden>
-      <svg viewBox="0 0 100 100" className="size-full" fill="none" stroke={stroke} strokeWidth="0.55" strokeLinecap="round">
+      <svg viewBox="0 0 100 100" className="size-full" fill="none" stroke={stroke} strokeWidth="0.7" strokeLinecap="round">
         {rings.map((r, i) => <path key={i} d={r.d} />)}
       </svg>
     </ScrollDraw>
