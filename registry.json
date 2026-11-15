@@ -238,7 +238,7 @@
     {
       "name": "newsletter-plotted",
       "type": "registry:block",
-      "title": "Starburst newsletter sign-up",
+      "title": "Starburst sign-up",
       "description": "A newsletter sign-up beside a starburst a pen draws ray by ray, clockwise from the top, with every twelfth ray in the accent colour.",
       "dependencies": [
         "svg-scroll-draw"
