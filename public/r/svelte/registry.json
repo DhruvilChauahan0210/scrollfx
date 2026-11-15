@@ -11,7 +11,7 @@
       "files": [
         {
           "type": "registry:lib",
-          "target": "src/lib/plotter.ts"
+          "target": "plotter.ts"
         }
       ]
     },
@@ -29,7 +29,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/HeroFlowField.svelte"
+          "target": "scrollfx/HeroFlowField.svelte"
         }
       ]
     },
@@ -47,7 +47,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/HatchHighlight.svelte"
+          "target": "scrollfx/HatchHighlight.svelte"
         }
       ]
     },
@@ -65,7 +65,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/PlottedChart.svelte"
+          "target": "scrollfx/PlottedChart.svelte"
         }
       ]
     },
@@ -83,7 +83,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/FeaturePlates.svelte"
+          "target": "scrollfx/FeaturePlates.svelte"
         }
       ]
     },
@@ -101,7 +101,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/StepsRoute.svelte"
+          "target": "scrollfx/StepsRoute.svelte"
         }
       ]
     },
@@ -119,7 +119,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/ChangelogPlotted.svelte"
+          "target": "scrollfx/ChangelogPlotted.svelte"
         }
       ]
     },
@@ -137,7 +137,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/PricingPlotted.svelte"
+          "target": "scrollfx/PricingPlotted.svelte"
         }
       ]
     },
@@ -155,7 +155,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/TestimonialsPlotted.svelte"
+          "target": "scrollfx/TestimonialsPlotted.svelte"
         }
       ]
     },
@@ -173,7 +173,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/FaqPlotted.svelte"
+          "target": "scrollfx/FaqPlotted.svelte"
         }
       ]
     },
@@ -191,7 +191,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/CtaHarmonograph.svelte"
+          "target": "scrollfx/CtaHarmonograph.svelte"
         }
       ]
     },
@@ -209,7 +209,7 @@
       "files": [
         {
           "type": "registry:component",
-          "target": "src/lib/components/scrollfx/FooterPlotted.svelte"
+          "target": "scrollfx/FooterPlotted.svelte"
         }
       ]
     }

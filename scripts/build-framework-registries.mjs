@@ -15,8 +15,9 @@
  *   npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/<name>.json
  *
  * shadcn-svelte wants `content`, `type` and `target` on every file and rejects
- * `path`, so Svelte files carry a target under src/lib/ (where `$lib/plotter`
- * resolves) and no path.
+ * `path`. Its targets are relative to the alias folder for the file's type, so
+ * the generators target `plotter.ts` (landing at $lib/plotter.ts, where the
+ * blocks import it) and the blocks `scrollfx/<Name>.svelte`.
  *
  * Run by `npm run registry`; `--check` fails if the committed files are stale.
  */
@@ -43,8 +44,11 @@ const FRAMEWORKS = [
     dir: 'svelte',
     ext: '.svelte',
     schema: 'https://shadcn-svelte.com',
-    lib: { content: plotter, type: 'registry:lib', target: 'src/lib/plotter.ts' },
-    file: (name, content) => ({ content, type: 'registry:component', target: `src/lib/components/scrollfx/${pascal(name)}.svelte` }),
+    // Targets are relative to the alias folder for the file's type ($lib for
+    // a lib, $lib/components for a component), not to the project root: a
+    // full src/lib/... path installs at src/lib/src/lib/...
+    lib: { content: plotter, type: 'registry:lib', target: 'plotter.ts' },
+    file: (name, content) => ({ content, type: 'registry:component', target: `scrollfx/${pascal(name)}.svelte` }),
   },
 ];
 
