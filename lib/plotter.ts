@@ -507,3 +507,59 @@ export function ridgelines({ seed = 9, w = 1200, h = 260, rows = 18, step = 5 } 
   }
   return out.reverse();
 }
+
+/**
+ * A fingerprint in a size × size box: open rings around a slightly off-centre
+ * core, pushed about by noise as ridges are. The push is read from one field at
+ * each point's place, so neighbouring rings bend together and never cross.
+ * Shaped by the seed, so a name always gets the same print. Inside out.
+ */
+export function fingerprint(seed: number, size = 100, { rings = 13 } = {}): Stroke[] {
+  const noise = noise2(seed);
+  const rand = random(seed);
+  const cx = size * (0.47 + rand() * 0.06);
+  const cy = size * (0.45 + rand() * 0.08);
+  const gap = (size * 0.43) / rings;
+  const out: Stroke[] = [];
+  for (let k = 1; k <= rings; k++) {
+    const r = k * gap;
+    // Each ridge breaks off somewhere, as real ones do; the outer ones more.
+    const start = rand() * Math.PI * 2;
+    const sweep = Math.PI * 2 * (k < 3 ? 0.97 : 0.78 + rand() * 0.18);
+    const n = Math.max(24, Math.round(r * 2.4));
+    const pts: Pt[] = [];
+    for (let i = 0; i <= n; i++) {
+      const a = start + (i / n) * sweep;
+      const x = cx + Math.cos(a) * r * 1.08;
+      const y = cy + Math.sin(a) * r * 0.92;
+      // Displace along the radius by the field at this place: under one gap, so no crossings.
+      const push = gap * 0.85 * noise(x / (size * 0.22), y / (size * 0.22));
+      pts.push([x + Math.cos(a) * push, y + Math.sin(a) * push]);
+    }
+    out.push({ d: toPath(pts), pen: 0 });
+  }
+  return out;
+}
+
+/**
+ * A starburst in a size × size box: rays from a small ring outward, their
+ * lengths rising and falling with noise round the circle, drawn clockwise from
+ * the top as a plotter sweeps. Every `every`-th ray is the accent pen's.
+ */
+export function starburst(seed: number, size = 400, { rays = 144, every = 12 } = {}): Stroke[] {
+  const noise = noise2(seed);
+  const c = size / 2;
+  const inner = size * 0.08;
+  const outer = size * 0.48;
+  const out: Stroke[] = [];
+  for (let i = 0; i < rays; i++) {
+    const a = -Math.PI / 2 + (i / rays) * Math.PI * 2;
+    const swell = 0.5 + 0.5 * Math.min(1, Math.max(0, (noise(Math.cos(a) * 1.8, Math.sin(a) * 1.8) + 0.7) / 1.4));
+    const len = inner + (outer - inner) * (i % every === 0 ? 1 : swell * 0.92);
+    out.push({
+      d: `M${f(c + Math.cos(a) * inner)} ${f(c + Math.sin(a) * inner)}L${f(c + Math.cos(a) * len)} ${f(c + Math.sin(a) * len)}`,
+      pen: i % every === 0 ? 1 : 0,
+    });
+  }
+  return out;
+}
