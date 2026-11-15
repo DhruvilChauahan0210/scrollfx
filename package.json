@@ -8,9 +8,10 @@
     "dev": "next dev -p 4400",
     "build": "npm run registry && next build",
     "start": "next start -p 4400",
-    "registry": "shadcn build",
+    "registry": "shadcn build && node scripts/build-vue-registry.mjs",
     "check": "node scripts/check.mjs",
-    "readme:images": "node scripts/readme-images.mjs"
+    "readme:images": "node scripts/readme-images.mjs",
+    "check:vue": "node scripts/check-vue.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -28,9 +29,12 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vue/compiler-sfc": "^3.5.45",
+    "esbuild": "^0.25.12",
     "playwright": "1.65.0",
     "shadcn": "^4.23.0",
     "tailwindcss": "^4.3.5",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "vue": "^3.5.45"
   }
 }

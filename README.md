@@ -27,6 +27,12 @@ npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hero-flow-field.json
 The drawing runs on [svg-scroll-draw](https://github.com/DhruvilChauahan0210/ink-scroll), a scroll animation
 library with no dependencies. The CLI installs it, and `lib/plotter.ts`, the generators every block draws with.
 
+**Vue 3 too.** Every section has a Vue version, installed with the shadcn-vue CLI:
+
+```bash
+npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/hero-flow-field.json
+```
+
 ## Plates
 
 <table>
@@ -82,19 +88,19 @@ library with no dependencies. The CLI installs it, and `lib/plotter.ts`, the gen
   </tr>
 </table>
 
-| Plate | Block | What the pen draws | Install |
-|---|---|---|---|
-| I | **[Hero, flow field](https://scrollfx-ui.vercel.app/blocks/hero-flow-field)** | A round flow field, plotted top to bottom on arrival, with a live stroke count. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hero-flow-field.json` |
-| II | **[Hatched highlight](https://scrollfx-ui.vercel.app/blocks/hatch-highlight)** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hatch-highlight.json` |
-| III | **[Plotted chart](https://scrollfx-ui.vercel.app/blocks/plotted-chart)** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/plotted-chart.json` |
-| IV | **[Feature plates](https://scrollfx-ui.vercel.app/blocks/feature-plates)** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/feature-plates.json` |
-| V | **[Steps on a route](https://scrollfx-ui.vercel.app/blocks/steps-route)** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/steps-route.json` |
-| VI | **[Plotted changelog](https://scrollfx-ui.vercel.app/blocks/changelog-plotted)** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/changelog-plotted.json` |
-| VII | **[Plotted pricing](https://scrollfx-ui.vercel.app/blocks/pricing-plotted)** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/pricing-plotted.json` |
-| VIII | **[Plotted testimonials](https://scrollfx-ui.vercel.app/blocks/testimonials-plotted)** | Quotes on sheets, each stamped with a spiral seeded from the person's name, wound from the rim inward. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/testimonials-plotted.json` |
-| IX | **[Plotted FAQ](https://scrollfx-ui.vercel.app/blocks/faq-plotted)** | Questions that open in place, beside a Lissajous knot the pen traces four times over. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/faq-plotted.json` |
-| X | **[Harmonograph call to action](https://scrollfx-ui.vercel.app/blocks/cta-harmonograph)** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` |
-| XI | **[Plotted footer](https://scrollfx-ui.vercel.app/blocks/footer-plotted)** | A horizon of ridgelines plotted back to front, hidden lines removed, above the link columns. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/footer-plotted.json` |
+| Plate | Block | What the pen draws | React | Vue |
+|---|---|---|---|---|
+| I | **[Hero, flow field](https://scrollfx-ui.vercel.app/blocks/hero-flow-field)** | A round flow field, plotted top to bottom on arrival, with a live stroke count. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hero-flow-field.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/hero-flow-field.json` |
+| II | **[Hatched highlight](https://scrollfx-ui.vercel.app/blocks/hatch-highlight)** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hatch-highlight.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/hatch-highlight.json` |
+| III | **[Plotted chart](https://scrollfx-ui.vercel.app/blocks/plotted-chart)** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/plotted-chart.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/plotted-chart.json` |
+| IV | **[Feature plates](https://scrollfx-ui.vercel.app/blocks/feature-plates)** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/feature-plates.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/feature-plates.json` |
+| V | **[Steps on a route](https://scrollfx-ui.vercel.app/blocks/steps-route)** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/steps-route.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/steps-route.json` |
+| VI | **[Plotted changelog](https://scrollfx-ui.vercel.app/blocks/changelog-plotted)** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/changelog-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/changelog-plotted.json` |
+| VII | **[Plotted pricing](https://scrollfx-ui.vercel.app/blocks/pricing-plotted)** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/pricing-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/pricing-plotted.json` |
+| VIII | **[Plotted testimonials](https://scrollfx-ui.vercel.app/blocks/testimonials-plotted)** | Quotes on sheets, each stamped with a spiral seeded from the person's name, wound from the rim inward. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/testimonials-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/testimonials-plotted.json` |
+| IX | **[Plotted FAQ](https://scrollfx-ui.vercel.app/blocks/faq-plotted)** | Questions that open in place, beside a Lissajous knot the pen traces four times over. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/faq-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/faq-plotted.json` |
+| X | **[Harmonograph call to action](https://scrollfx-ui.vercel.app/blocks/cta-harmonograph)** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/cta-harmonograph.json` |
+| XI | **[Plotted footer](https://scrollfx-ui.vercel.app/blocks/footer-plotted)** | A horizon of ridgelines plotted back to front, hidden lines removed, above the link columns. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/footer-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/footer-plotted.json` |
 
 ## What every block does
 
@@ -116,10 +122,12 @@ npm install
 npm run dev     # http://localhost:4400
 npm run build   # the shadcn registry (public/r) and the site
 npm run check   # every block, scrolled in Chromium
+npm run check:vue  # every Vue block, compiled and scrolled in Chromium
 npm run readme:images  # the README's screenshots and GIF, from the live site (needs ffmpeg)
 ```
 
-A block is a file in `registry/blocks/`, an entry in `registry.json`, and a line in `registry/previews.ts`.
+A block is a file in `registry/blocks/`, an entry in `registry.json`, and a line in `registry/previews.ts`; its Vue
+version is `registry/vue/<name>.vue`, published to `public/r/vue/` by `npm run registry`.
 Generators live in `lib/plotter.ts`, published as the `plotter` registry item that every block depends on.
 
 ## License

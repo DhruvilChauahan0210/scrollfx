@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -9,7 +9,7 @@ import { CopyButton } from '@/components/site/copy-button';
 import { BlockTabs } from '@/components/site/block-tabs';
 import { BLOCKS, getBlock } from '@/lib/blocks';
 import { highlight } from '@/lib/highlight';
-import { installCommand } from '@/lib/site';
+import { installCommand, vueInstallCommand } from '@/lib/site';
 
 export function generateStaticParams() {
   return BLOCKS.map((b) => ({ slug: b.slug }));
@@ -27,6 +27,10 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
   const source = readFileSync(join(process.cwd(), 'registry/blocks', `${slug}.tsx`), 'utf8');
   const install = installCommand(slug);
   const html = await highlight(source);
+  const vueFile = join(process.cwd(), 'registry/vue', `${slug}.vue`);
+  const vueSource = existsSync(vueFile) ? readFileSync(vueFile, 'utf8') : null;
+  const vueHtml = vueSource ? await highlight(vueSource, 'vue') : null;
+  const vueInstall = vueInstallCommand(slug);
 
   return (
     <>
@@ -55,6 +59,22 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
                 <CopyButton text={source} className="absolute right-2 top-2 bg-background" />
                 <div className="max-h-[640px] overflow-auto p-4 text-[13px] leading-relaxed [&_pre]:!m-0" dangerouslySetInnerHTML={{ __html: html }} />
               </div>
+            }
+            vue={
+              vueSource && vueHtml ? (
+                <div>
+                  {/* The same block for Vue 3, installed with the shadcn-vue CLI. */}
+                  <div className="mb-3 flex max-w-2xl items-center gap-3 rounded-full border bg-card py-1.5 pl-5 pr-1.5 font-mono text-[13px]">
+                    <span className="select-none text-muted-foreground">$</span>
+                    <span className="truncate">{vueInstall}</span>
+                    <CopyButton text={vueInstall} className="ml-auto shrink-0" />
+                  </div>
+                  <div className="relative overflow-hidden rounded-[3px] border bg-card">
+                    <CopyButton text={vueSource} className="absolute right-2 top-2 bg-background" />
+                    <div className="max-h-[640px] overflow-auto p-4 text-[13px] leading-relaxed [&_pre]:!m-0" dangerouslySetInnerHTML={{ __html: vueHtml }} />
+                  </div>
+                </div>
+              ) : undefined
             }
           />
         </div>
