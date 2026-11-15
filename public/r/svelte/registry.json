@@ -1,0 +1,217 @@
+{
+  "$schema": "https://shadcn-svelte.com/schema/registry.json",
+  "name": "scrollfx",
+  "homepage": "https://scrollfx-ui.vercel.app",
+  "items": [
+    {
+      "name": "plotter",
+      "type": "registry:lib",
+      "title": "Plotter",
+      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, harmonographs, spirals, Lissajous knots, ridgelines, routes, hatching) and scrollWindow(), the trigger that finishes a drawing as it reaches the middle of the screen. Every scrollfx block draws with it.",
+      "files": [
+        {
+          "type": "registry:lib",
+          "target": "src/lib/plotter.ts"
+        }
+      ]
+    },
+    {
+      "name": "hero-flow-field",
+      "type": "registry:block",
+      "title": "Hero, flow field",
+      "description": "A hero beside a print: a round flow field of several hundred strokes, plotted top to bottom on arrival, with a live stroke count.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/HeroFlowField.svelte"
+        }
+      ]
+    },
+    {
+      "name": "hatch-highlight",
+      "type": "registry:block",
+      "title": "Hatched highlight",
+      "description": "A large statement whose key phrases a pen hatches over as they are read, like a proof marked up by hand.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/HatchHighlight.svelte"
+        }
+      ]
+    },
+    {
+      "name": "plotted-chart",
+      "type": "registry:block",
+      "title": "Plotted chart",
+      "description": "Figures that count up beside an area chart a pen plots as you scroll: hatched in from left to right, the curve drawn over it.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/PlottedChart.svelte"
+        }
+      ]
+    },
+    {
+      "name": "feature-plates",
+      "type": "registry:block",
+      "title": "Feature plates",
+      "description": "Features beside plates a pen draws as you reach them: a topographic map, a wireframe globe, a tunnel of turning squares.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/FeaturePlates.svelte"
+        }
+      ]
+    },
+    {
+      "name": "steps-route",
+      "type": "registry:block",
+      "title": "Steps on a route",
+      "description": "How it works as a route on a map: numbered stops a pen rings in turn, joined by a line that wanders from one to the next and ends on a cross.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/StepsRoute.svelte"
+        }
+      ]
+    },
+    {
+      "name": "changelog-plotted",
+      "type": "registry:block",
+      "title": "Plotted changelog",
+      "description": "Releases down a rail that inks itself as you read, each stamped with a rosette drawn from its version number.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/ChangelogPlotted.svelte"
+        }
+      ]
+    },
+    {
+      "name": "pricing-plotted",
+      "type": "registry:block",
+      "title": "Plotted pricing",
+      "description": "Plans headed by marks that grow denser with the plan, the recommended one framed by a pen that goes round it twice, and prices that count.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/PricingPlotted.svelte"
+        }
+      ]
+    },
+    {
+      "name": "testimonials-plotted",
+      "type": "registry:block",
+      "title": "Plotted testimonials",
+      "description": "Quotes on sheets, each stamped with a spiral a pen winds from the rim inward, seeded from the person's name, with their initials in its eye.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/TestimonialsPlotted.svelte"
+        }
+      ]
+    },
+    {
+      "name": "faq-plotted",
+      "type": "registry:block",
+      "title": "Plotted FAQ",
+      "description": "Questions that open in place with the browser's own disclosure, beside a plate where a pen draws a Lissajous knot.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/FaqPlotted.svelte"
+        }
+      ]
+    },
+    {
+      "name": "cta-harmonograph",
+      "type": "registry:block",
+      "title": "Harmonograph call to action",
+      "description": "The closing call to action beside a harmonograph: one unbroken line, the trace of two pendulums, drawn as the section arrives.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/CtaHarmonograph.svelte"
+        }
+      ]
+    },
+    {
+      "name": "footer-plotted",
+      "type": "registry:block",
+      "title": "Plotted footer",
+      "description": "A footer under a horizon of ridgelines a pen plots back to front as it comes into view, with link columns and a closing line below.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/svelte/plotter.json"
+      ],
+      "files": [
+        {
+          "type": "registry:component",
+          "target": "src/lib/components/scrollfx/FooterPlotted.svelte"
+        }
+      ]
+    }
+  ]
+}

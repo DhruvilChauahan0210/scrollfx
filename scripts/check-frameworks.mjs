@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 /**
- * Every Vue block (registry/vue/<name>.vue), compiled and run in Chromium.
+ * Every Vue or Svelte block (registry/<framework>/<name>.<ext>), compiled and
+ * run in Chromium.
  *
- * The site renders the React blocks, so nothing else would notice a Vue block
- * that does not compile or never draws. Each SFC is compiled with
- * @vue/compiler-sfc, bundled with esbuild against the installed
- * svg-scroll-draw and lib/plotter, styled with the site's own Tailwind theme,
- * mounted with its default props, and scrolled through. A block passes when
+ * The site renders the React blocks, so nothing else would notice a Vue or
+ * Svelte block that does not compile or never draws. Each component is
+ * compiled (@vue/compiler-sfc, or svelte/compiler for client code), bundled
+ * with esbuild against the installed svg-scroll-draw and lib/plotter, styled
+ * with the site's own Tailwind theme, mounted with its default props, and
+ * scrolled through. A block passes when
  * it logs no error, every engine in a visible element runs to the end, and
  * each scroll-drawn picture finishes as it reaches the middle of the screen:
  * still drawing with its centre at 65% of the screen, done by 45% (the hero
  * and the footer play on arrival and are only checked for finishing).
  *
- *   npm run check:vue
+ *   npm run check:vue      (node scripts/check-frameworks.mjs vue)
+ *   npm run check:svelte   (node scripts/check-frameworks.mjs svelte)
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -20,36 +23,52 @@ import http from 'node:http';
 import { createRequire } from 'node:module';
 import { chromium } from 'playwright';
 
+const FRAMEWORK = process.argv[2];
+if (FRAMEWORK !== 'vue' && FRAMEWORK !== 'svelte') {
+  console.error('usage: node scripts/check-frameworks.mjs vue|svelte');
+  process.exit(2);
+}
+const EXT = FRAMEWORK === 'vue' ? '.vue' : '.svelte';
 const ROOT = new URL('..', import.meta.url).pathname;
-const VUE_DIR = join(ROOT, 'registry/vue');
+const DIR = join(ROOT, 'registry', FRAMEWORK);
 const require = createRequire(join(ROOT, 'package.json'));
-const { parse, compileScript } = require('@vue/compiler-sfc');
 const { build } = require('esbuild');
 const { compile } = await import('@tailwindcss/node');
 
-const files = readdirSync(VUE_DIR).filter((f) => f.endsWith('.vue')).sort();
+const files = readdirSync(DIR).filter((f) => f.endsWith(EXT)).sort();
 const ON_ARRIVAL = new Set(['hero-flow-field', 'footer-plotted']);
 
-/** esbuild: .vue through compiler-sfc, and the `@/` alias to the project root. */
+/**
+ * esbuild: components through their compiler, and the aliases the blocks
+ * import lib/plotter by (`@/lib/plotter` in Vue, `$lib/plotter` in Svelte).
+ */
 const plugin = {
-  name: 'vue-sfc',
+  name: 'components',
   setup(b) {
-    b.onResolve({ filter: /^@\// }, (args) => ({ path: join(ROOT, args.path.slice(2) + (args.path.endsWith('.ts') ? '' : '.ts')) }));
+    b.onResolve({ filter: /^(@|\$lib)\// }, (args) => ({ path: join(ROOT, 'lib', args.path.replace(/^(@\/lib|\$lib)\//, '') + '.ts') }));
     b.onLoad({ filter: /\.vue$/ }, (args) => {
+      const { parse, compileScript } = require('@vue/compiler-sfc');
       const { descriptor, errors } = parse(readFileSync(args.path, 'utf8'), { filename: args.path });
       if (errors.length) throw new Error(errors.map(String).join('\n'));
       const script = compileScript(descriptor, { id: 'v' + args.path.length, inlineTemplate: true });
       return { contents: script.content, loader: 'ts', resolveDir: dirname(args.path) };
     });
+    b.onLoad({ filter: /\.svelte$/ }, (args) => {
+      const { compile: compileSvelte } = require('svelte/compiler');
+      const { js } = compileSvelte(readFileSync(args.path, 'utf8'), { filename: args.path, generate: 'client' });
+      return { contents: js.code, loader: 'js', resolveDir: dirname(args.path) };
+    });
   },
 };
 
 async function bundle(file) {
-  const entry = `import { createApp } from 'vue'; import C from ${JSON.stringify(join(VUE_DIR, file))};
-    createApp(C).mount('#app'); window.__ready = true;`;
+  const component = JSON.stringify(join(DIR, file));
+  const entry = FRAMEWORK === 'vue'
+    ? `import { createApp } from 'vue'; import C from ${component}; createApp(C).mount('#app'); window.__ready = true;`
+    : `import { mount } from 'svelte'; import C from ${component}; mount(C, { target: document.getElementById('app') }); window.__ready = true;`;
   const out = await build({
     stdin: { contents: entry, resolveDir: ROOT, loader: 'js' },
-    bundle: true, write: false, format: 'iife', platform: 'browser', plugins: [plugin],
+    bundle: true, write: false, format: 'iife', platform: 'browser', plugins: [plugin], conditions: ['svelte', 'browser'],
     define: { __VUE_OPTIONS_API__: 'true', __VUE_PROD_DEVTOOLS__: 'false', __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false', 'process.env.NODE_ENV': '"production"' },
     logLevel: 'silent',
   });
@@ -58,7 +77,7 @@ async function bundle(file) {
 
 /** Tailwind 4 CSS for the classes the file uses, with the site's theme tokens. */
 async function css(file) {
-  const src = readFileSync(join(VUE_DIR, file), 'utf8');
+  const src = readFileSync(join(DIR, file), 'utf8');
   const compiler = await compile(readFileSync(join(ROOT, 'app/globals.css'), 'utf8'), { base: join(ROOT, 'app'), onDependency: () => {} });
   return compiler.build(src.split(/[\s"'`]+/).filter(Boolean));
 }
@@ -74,7 +93,7 @@ const check = (ok, msg) => { if (!ok) failures.push(msg); };
 const browser = await chromium.launch();
 
 for (const file of files) {
-  const name = file.replace(/\.vue$/, '');
+  const name = file.slice(0, -EXT.length);
   let js;
   try { js = await bundle(file); } catch (e) { check(false, `${name}: does not compile — ${String(e).slice(0, 300)}`); continue; }
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -143,7 +162,7 @@ for (const file of files) {
 await browser.close();
 server.close();
 if (failures.length) {
-  console.error(`\n✗ ${failures.length} Vue check(s) failed:\n` + failures.map((f) => `  ${f}`).join('\n'));
+  console.error(`\n✗ ${failures.length} ${FRAMEWORK} check(s) failed:\n` + failures.map((f) => `  ${f}`).join('\n'));
   process.exit(1);
 }
-console.log(`\n✓ ${files.length} Vue blocks compile, run to the end, and finish as they reach mid-screen`);
+console.log(`\n✓ ${files.length} ${FRAMEWORK === 'vue' ? 'Vue' : 'Svelte'} blocks compile, run to the end, and finish as they reach mid-screen`);

@@ -3,9 +3,12 @@
 import { useState, type ReactNode } from 'react';
 import { ExternalLink } from 'lucide-react';
 
-export function BlockTabs({ slug, tall, preview, code, vue }: { slug: string; tall?: boolean; preview: ReactNode; code: ReactNode; vue?: ReactNode }) {
-  const [tab, setTab] = useState<'preview' | 'code' | 'vue'>('preview');
-  const tabs = (vue ? ['preview', 'code', 'vue'] : ['preview', 'code']) as ('preview' | 'code' | 'vue')[];
+type Tab = 'preview' | 'code' | 'vue' | 'svelte';
+const LABEL: Record<Tab, string> = { preview: 'Preview', code: 'React', vue: 'Vue', svelte: 'Svelte' };
+
+export function BlockTabs({ slug, tall, preview, code, vue, svelte }: { slug: string; tall?: boolean; preview: ReactNode; code: ReactNode; vue?: ReactNode; svelte?: ReactNode }) {
+  const [tab, setTab] = useState<Tab>('preview');
+  const tabs: Tab[] = ['preview', 'code', ...(vue ? (['vue'] as const) : []), ...(svelte ? (['svelte'] as const) : [])];
   return (
     <div>
       <div className="mb-3 flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.18em]">
@@ -17,7 +20,7 @@ export function BlockTabs({ slug, tall, preview, code, vue }: { slug: string; ta
             aria-pressed={tab === t}
             className={`rounded-full px-4 py-2 ${tab === t ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            {t === 'code' ? 'React' : t === 'vue' ? 'Vue' : 'Preview'}
+            {LABEL[t]}
           </button>
         ))}
         <a href={`/preview/${slug}`} target="_blank" rel="noopener" className="ml-auto inline-flex items-center gap-1.5 px-3 py-2 text-muted-foreground hover:text-foreground">
@@ -30,6 +33,7 @@ export function BlockTabs({ slug, tall, preview, code, vue }: { slug: string; ta
       </div>
       <div className={tab === 'code' ? '' : 'hidden'}>{code}</div>
       {vue ? <div className={tab === 'vue' ? '' : 'hidden'}>{vue}</div> : null}
+      {svelte ? <div className={tab === 'svelte' ? '' : 'hidden'}>{svelte}</div> : null}
     </div>
   );
 }

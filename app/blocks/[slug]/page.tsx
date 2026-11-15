@@ -9,7 +9,7 @@ import { CopyButton } from '@/components/site/copy-button';
 import { BlockTabs } from '@/components/site/block-tabs';
 import { BLOCKS, getBlock } from '@/lib/blocks';
 import { highlight } from '@/lib/highlight';
-import { installCommand, vueInstallCommand } from '@/lib/site';
+import { installCommand, svelteInstallCommand, vueInstallCommand } from '@/lib/site';
 
 export function generateStaticParams() {
   return BLOCKS.map((b) => ({ slug: b.slug }));
@@ -31,6 +31,10 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
   const vueSource = existsSync(vueFile) ? readFileSync(vueFile, 'utf8') : null;
   const vueHtml = vueSource ? await highlight(vueSource, 'vue') : null;
   const vueInstall = vueInstallCommand(slug);
+  const svelteFile = join(process.cwd(), 'registry/svelte', `${slug}.svelte`);
+  const svelteSource = existsSync(svelteFile) ? readFileSync(svelteFile, 'utf8') : null;
+  const svelteHtml = svelteSource ? await highlight(svelteSource, 'svelte') : null;
+  const svelteInstall = svelteInstallCommand(slug);
 
   return (
     <>
@@ -72,6 +76,22 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
                   <div className="relative overflow-hidden rounded-[3px] border bg-card">
                     <CopyButton text={vueSource} className="absolute right-2 top-2 bg-background" />
                     <div className="max-h-[640px] overflow-auto p-4 text-[13px] leading-relaxed [&_pre]:!m-0" dangerouslySetInnerHTML={{ __html: vueHtml }} />
+                  </div>
+                </div>
+              ) : undefined
+            }
+            svelte={
+              svelteSource && svelteHtml ? (
+                <div>
+                  {/* The same block for Svelte 5, installed with the shadcn-svelte CLI. */}
+                  <div className="mb-3 flex max-w-2xl items-center gap-3 rounded-full border bg-card py-1.5 pl-5 pr-1.5 font-mono text-[13px]">
+                    <span className="select-none text-muted-foreground">$</span>
+                    <span className="truncate">{svelteInstall}</span>
+                    <CopyButton text={svelteInstall} className="ml-auto shrink-0" />
+                  </div>
+                  <div className="relative overflow-hidden rounded-[3px] border bg-card">
+                    <CopyButton text={svelteSource} className="absolute right-2 top-2 bg-background" />
+                    <div className="max-h-[640px] overflow-auto p-4 text-[13px] leading-relaxed [&_pre]:!m-0" dangerouslySetInnerHTML={{ __html: svelteHtml }} />
                   </div>
                 </div>
               ) : undefined

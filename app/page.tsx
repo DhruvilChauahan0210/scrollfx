@@ -21,9 +21,9 @@ export default function Home() {
       <Header />
       <main>
         <HeroFlowField
-          eyebrow="scrollfx · a folio of sections for React and Vue"
+          eyebrow="scrollfx · sections for React, Vue and Svelte"
           heading="Pages, *plotted* as you read."
-          description="Generative sections for React, Vue and Tailwind whose drawings ink themselves in, stroke by stroke, as the reader scrolls. Add one with the shadcn or shadcn-vue CLI; it takes on your theme."
+          description="Generative sections for React, Vue and Svelte whose drawings ink themselves in, stroke by stroke, as the reader scrolls. Add one with the shadcn CLI for your framework; it takes on your theme."
           primary={{ label: 'Browse the plates', href: '#plates' }}
           aside={installCommand('hero-flow-field')}
         />

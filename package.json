@@ -8,10 +8,11 @@
     "dev": "next dev -p 4400",
     "build": "npm run registry && next build",
     "start": "next start -p 4400",
-    "registry": "shadcn build && node scripts/build-vue-registry.mjs",
+    "registry": "shadcn build && node scripts/build-framework-registries.mjs",
     "check": "node scripts/check.mjs",
     "readme:images": "node scripts/readme-images.mjs",
-    "check:vue": "node scripts/check-vue.mjs"
+    "check:vue": "node scripts/check-frameworks.mjs vue",
+    "check:svelte": "node scripts/check-frameworks.mjs svelte"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -33,6 +34,7 @@
     "esbuild": "^0.25.12",
     "playwright": "1.65.0",
     "shadcn": "^4.23.0",
+    "svelte": "^5.57.3",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.0",
     "vue": "^3.5.45"

@@ -47,8 +47,13 @@ jobs:
         timeout-minutes: 10
         run: npm run check
 
-      # The Vue versions: each SFC compiled and run in Chromium, with the same
-      # rules (no errors, every engine finishes, every drawing at mid-screen).
+      # The Vue and Svelte versions: each component compiled and run in
+      # Chromium, with the same rules (no errors, every engine finishes, every
+      # drawing at mid-screen).
       - name: Every Vue block, in a real browser
         timeout-minutes: 10
         run: npm run check:vue
+
+      - name: Every Svelte block, in a real browser
+        timeout-minutes: 10
+        run: npm run check:svelte
