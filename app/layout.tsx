@@ -8,6 +8,8 @@ const serif = Fraunces({ style: ['normal', 'italic'], axes: ['opsz', 'SOFT'], su
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://scrollfx-ui.vercel.app'),
+  // Search Console ownership (URL-prefix property for this domain).
+  verification: { google: '_gjiEQcyzOVxCA4cQYjh0LyzP3xbTKfosgqaodMGgXA' },
   title: { default: 'scrollfx — plotted sections for React, Vue and Svelte', template: '%s · scrollfx' },
   description: 'Generative, scroll-drawn sections for React, Vue, Svelte and Tailwind: flow fields, contour maps, hatched charts and more, plotted stroke by stroke as the reader scrolls. Install with the shadcn, shadcn-vue or shadcn-svelte CLI. Built on svg-scroll-draw.',
   // The preview image is app/opengraph-image.jpg (and twitter-image.jpg), the
