@@ -16,6 +16,7 @@
 
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { scrollDraw } from 'svg-scroll-draw';
+import 'svg-scroll-draw/no-flash.css';
 import { flowField, type Stroke } from '@/lib/plotter';
 
 export interface HeroFlowFieldProps {
@@ -111,7 +112,7 @@ export function HeroFlowField({
       {/* The print: a sheet, the drawing, and its plate caption. On a phone it comes first. */}
       <figure className="order-first lg:order-none">
         <div className="aspect-square w-full rounded-[3px] bg-card p-[6%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-18px_rgba(40,30,10,.3),0_2px_6px_-2px_rgba(40,30,10,.12)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05),0_24px_60px_-20px_rgba(0,0,0,.8)]">
-          <svg ref={svgRef} viewBox="0 0 1000 1000" className="size-full" fill="none" stroke="currentColor" strokeWidth="1.15" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="A flow field plotted in ink">
+          <svg ref={svgRef} data-scroll-draw-pending="" viewBox="0 0 1000 1000" className="size-full" fill="none" stroke="currentColor" strokeWidth="1.15" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="A flow field plotted in ink">
             {strokes.map((s, i) => (s.pen ? <path key={i} d={s.d} stroke={accent} strokeWidth="1.9" /> : <path key={i} d={s.d} />))}
           </svg>
         </div>

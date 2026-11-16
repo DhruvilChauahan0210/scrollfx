@@ -39,6 +39,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { ridgelines, staggerFor, type Stroke } from '$lib/plotter';
 
   let {
@@ -66,7 +67,7 @@
     <!-- On a phone the full range would be a thin strip: show its middle, larger. -->
     <div class="relative -mx-6 aspect-[3/1] sm:-mx-10 sm:aspect-[1200/260]">
       {#if strokes}
-        <div use:scrollDraw={{ autoplay: true, duration: STROKE_MS, stagger: staggerFor(strokes.length, TOTAL_MS / STROKE_MS - 1), easing: 'ease-out' }} class="absolute inset-0" aria-hidden="true">
+        <div data-scroll-draw-pending="" use:scrollDraw={{ autoplay: true, duration: STROKE_MS, stagger: staggerFor(strokes.length, TOTAL_MS / STROKE_MS - 1), easing: 'ease-out' }} class="absolute inset-0" aria-hidden="true">
           <svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMax slice" class="size-full" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
             {#each strokes as s, i (i)}
               {#if s.pen}<path d={s.d} stroke={accent} stroke-width="1.6" />{:else}<path d={s.d} />{/if}

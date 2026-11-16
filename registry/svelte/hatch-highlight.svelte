@@ -25,6 +25,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { hatch, scrollWindow, staggerFor, type Stroke } from '$lib/plotter';
 
   let {
@@ -72,7 +73,7 @@
             {@const box = boxes[p.mark]}
             {#key `${box.w}x${box.h}`}
               <!-- Hatched as the phrase rises, the last stroke landing as it reaches the middle of the screen. -->
-              <span use:scrollDraw={{ stagger: staggerFor(box.lines.length, 1), easing: 'linear', trigger: scrollWindow(1) }} class="absolute -left-1.5 top-[30%] -z-10 block" aria-hidden="true">
+              <span data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(box.lines.length, 1), easing: 'linear', trigger: scrollWindow(1) }} class="absolute -left-1.5 top-[30%] -z-10 block" aria-hidden="true">
                 <svg width={box.w} height={box.h} viewBox="0 0 {box.w} {box.h}" fill="none" stroke={accent} stroke-width="1.6" stroke-linecap="round" class="block opacity-80">
                   {#each box.lines as l, k (k)}<path d={l.d} />{/each}
                 </svg>

@@ -36,6 +36,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { scrollWindow, seedOf, spiral } from '$lib/plotter';
 
   let {
@@ -70,7 +71,7 @@
       <figure class="flex flex-col rounded-[3px] bg-card p-8 shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-24px_rgba(40,30,10,.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05)]">
         <div class="relative size-20 shrink-0">
           {#if spirals}
-            <div use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="absolute inset-0" aria-hidden="true">
+            <div data-scroll-draw-pending="" use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="absolute inset-0" aria-hidden="true">
               <svg viewBox="0 0 100 100" class="size-full" fill="none" stroke={i === 0 ? accent : 'currentColor'} stroke-width="0.8" stroke-linecap="round">
                 <path d={spirals[i]} />
               </svg>

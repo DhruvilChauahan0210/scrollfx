@@ -36,6 +36,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { contours, globe, scrollWindow, staggerFor, tunnel, type Stroke } from '$lib/plotter';
 
   let {
@@ -79,7 +80,7 @@
           <div class="aspect-[4/3] w-full rounded-[3px] bg-card p-[7%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-20px_rgba(40,30,10,.28)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05),0_24px_60px_-24px_rgba(0,0,0,.8)]">
             {#if plates}
               <!-- Drawn as the plate rises, the last stroke landing as it reaches the middle of the screen. -->
-              <div use:scrollDraw={{ stagger: staggerFor(plates[i].length, 1), easing: 'linear', trigger: scrollWindow(1) }} class="size-full" aria-hidden="true">
+              <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(plates[i].length, 1), easing: 'linear', trigger: scrollWindow(1) }} class="size-full" aria-hidden="true">
                 <svg viewBox="0 0 400 300" class="size-full" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
                   {#each plates[i] as s, k (k)}
                     {#if s.pen}<path d={s.d} stroke={accent} stroke-width="1.4" />{:else}<path d={s.d} />{/if}

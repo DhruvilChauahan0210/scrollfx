@@ -15,6 +15,7 @@
  */
 import { computed, onMounted, ref } from 'vue';
 import { ScrollDraw } from 'svg-scroll-draw/vue';
+import 'svg-scroll-draw/no-flash.css';
 import { lissajous, scrollWindow, staggerFor, type Stroke } from '@/lib/plotter';
 
 export interface Question {

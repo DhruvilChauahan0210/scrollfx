@@ -17,6 +17,7 @@
 
 import { useEffect, useState, type CSSProperties } from 'react';
 import { ScrollAnimate, ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { route, scrollWindow, staggerFor } from '@/lib/plotter';
 
 export interface Step {

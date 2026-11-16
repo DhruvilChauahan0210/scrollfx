@@ -16,6 +16,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { hatch, scrollWindow, staggerFor, type Stroke } from '@/lib/plotter';
 
 export interface HatchHighlightProps {

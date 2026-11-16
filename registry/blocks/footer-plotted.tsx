@@ -16,6 +16,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 import { ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { ridgelines, staggerFor, type Stroke } from '@/lib/plotter';
 
 export interface FooterColumn {

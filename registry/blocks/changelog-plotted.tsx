@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollAnimate, ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { rosette, scrollWindow, seedOf } from '@/lib/plotter';
 
 export interface Release {

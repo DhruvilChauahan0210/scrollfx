@@ -37,6 +37,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { fingerprint, scrollWindow, seedOf, staggerFor, type Stroke } from '$lib/plotter';
 
   let {
@@ -72,7 +73,7 @@
       <li class="flex flex-col rounded-[3px] bg-card p-6 shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-24px_rgba(40,30,10,.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05)]">
         <div class="relative aspect-square w-full">
           {#if prints}
-            <div use:scrollDraw={{ stagger: staggerFor(prints[i].length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="absolute inset-0" aria-hidden="true">
+            <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(prints[i].length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="absolute inset-0" aria-hidden="true">
               <svg viewBox="0 0 100 100" class="size-full" fill="none" stroke={i === 0 ? accent : 'currentColor'} stroke-width="0.7" stroke-linecap="round">
                 {#each prints[i] as r, k (k)}<path d={r.d} />{/each}
               </svg>

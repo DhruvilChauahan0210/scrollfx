@@ -15,6 +15,7 @@
  */
 import { computed, onMounted, ref } from 'vue';
 import { ScrollAnimate, ScrollDraw } from 'svg-scroll-draw/vue';
+import 'svg-scroll-draw/no-flash.css';
 import { route, scrollWindow, staggerFor } from '@/lib/plotter';
 
 export interface Step {

@@ -38,6 +38,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { scrollWindow, staggerFor, starburst, type Stroke } from '$lib/plotter';
 
   let {
@@ -71,7 +72,7 @@
   <figure class="mx-auto w-full max-w-md lg:max-w-none">
     <div class="aspect-square w-full rounded-[3px] bg-card p-[7%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-18px_rgba(40,30,10,.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05),0_24px_60px_-20px_rgba(0,0,0,.8)]">
       {#if rays}
-        <div use:scrollDraw={{ stagger: staggerFor(rays.length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="size-full" aria-hidden="true">
+        <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(rays.length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="size-full" aria-hidden="true">
           <svg viewBox="0 0 400 400" class="size-full" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
             {#each rays as r, i (i)}
               {#if r.pen}<path d={r.d} stroke={accent} stroke-width="1.4" />{:else}<path d={r.d} />{/if}

@@ -67,7 +67,7 @@ for (const fw of FRAMEWORKS) {
       type: 'registry:block',
       title: item.title,
       description: item.description,
-      dependencies: ['svg-scroll-draw'],
+      dependencies: ['svg-scroll-draw@^2.29.0'],
       registryDependencies: [`${SITE}/r/${fw.dir}/plotter.json`],
       files: [fw.file(item.name, readFileSync(src, 'utf8'))],
     });

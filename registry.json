@@ -21,7 +21,7 @@
       "title": "Hero, flow field",
       "description": "A hero beside a print: a round flow field of several hundred strokes, plotted top to bottom on arrival, with a live stroke count.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -43,7 +43,7 @@
       "title": "Hatched highlight",
       "description": "A large statement whose key phrases a pen hatches over as they are read, like a proof marked up by hand.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -65,7 +65,7 @@
       "title": "Plotted chart",
       "description": "Figures that count up beside an area chart a pen plots as you scroll: hatched in from left to right, the curve drawn over it.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -87,7 +87,7 @@
       "title": "Feature plates",
       "description": "Features beside plates a pen draws as you reach them: a topographic map, a wireframe globe, a tunnel of turning squares.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -109,7 +109,7 @@
       "title": "Steps on a route",
       "description": "How it works as a route on a map: numbered stops a pen rings in turn, joined by a line that wanders from one to the next and ends on a cross.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -131,7 +131,7 @@
       "title": "Plotted changelog",
       "description": "Releases down a rail that inks itself as you read, each stamped with a rosette drawn from its version number.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -153,7 +153,7 @@
       "title": "Plotted pricing",
       "description": "Plans headed by marks that grow denser with the plan, the recommended one framed by a pen that goes round it twice, and prices that count.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -175,7 +175,7 @@
       "title": "Plotted testimonials",
       "description": "Quotes on sheets, each stamped with a spiral a pen winds from the rim inward, seeded from the person's name, with their initials in its eye.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -197,7 +197,7 @@
       "title": "Team with fingerprints",
       "description": "The people behind the product, each over a fingerprint seeded from their name, drawn ring by ring from the core outward.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -219,7 +219,7 @@
       "title": "Plotted FAQ",
       "description": "Questions that open in place with the browser's own disclosure, beside a plate where a pen draws a Lissajous knot.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -241,7 +241,7 @@
       "title": "Starburst sign-up",
       "description": "A newsletter sign-up beside a starburst a pen draws ray by ray, clockwise from the top, with every twelfth ray in the accent colour.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -263,7 +263,7 @@
       "title": "Harmonograph call to action",
       "description": "The closing call to action beside a harmonograph: one unbroken line, the trace of two pendulums, drawn as the section arrives.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"
@@ -285,7 +285,7 @@
       "title": "Plotted footer",
       "description": "A footer under a horizon of ridgelines a pen plots back to front as it comes into view, with link columns and a closing line below.",
       "dependencies": [
-        "svg-scroll-draw"
+        "svg-scroll-draw@^2.29.0"
       ],
       "registryDependencies": [
         "https://scrollfx-ui.vercel.app/r/plotter.json"

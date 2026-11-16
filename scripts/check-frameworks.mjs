@@ -58,6 +58,12 @@ const plugin = {
       const { js } = compileSvelte(readFileSync(args.path, 'utf8'), { filename: args.path, generate: 'client' });
       return { contents: js.code, loader: 'js', resolveDir: dirname(args.path) };
     });
+    // A stylesheet the blocks import (svg-scroll-draw/no-flash.css) goes in a
+    // <style>, as Vite would put it in the page.
+    b.onLoad({ filter: /\.css$/ }, (args) => ({
+      contents: `document.head.appendChild(Object.assign(document.createElement('style'), { textContent: ${JSON.stringify(readFileSync(args.path, 'utf8'))} }));`,
+      loader: 'js',
+    }));
   },
 };
 

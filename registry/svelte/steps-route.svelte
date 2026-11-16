@@ -35,6 +35,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollAnimate, scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { route, scrollWindow, staggerFor } from '$lib/plotter';
 
   let {
@@ -77,7 +78,7 @@
   <div class="relative mt-20 hidden aspect-[1000/140] md:block">
     {#if legs}
       <!-- The pen reaches the last stop as the route reaches the middle of the screen. -->
-      <div use:scrollDraw={{ stagger: staggerFor(2 * steps.length, 1.5), easing: 'linear', trigger: scrollWindow(1.5) }} class="absolute inset-0" aria-hidden="true">
+      <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(2 * steps.length, 1.5), easing: 'linear', trigger: scrollWindow(1.5) }} class="absolute inset-0" aria-hidden="true">
         <svg viewBox="0 0 {W} {H}" class="size-full overflow-visible" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
           {#each xs as x, i (i)}
             <path d={ring(x, H / 2, R)} />

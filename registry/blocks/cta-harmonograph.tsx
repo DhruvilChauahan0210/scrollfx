@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { harmonograph, scrollWindow } from '@/lib/plotter';
 
 export interface CtaHarmonographProps {

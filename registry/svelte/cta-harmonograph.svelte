@@ -27,6 +27,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { harmonograph, scrollWindow } from '$lib/plotter';
 
   let {
@@ -52,7 +53,7 @@
     <div class="aspect-square w-full rounded-[3px] bg-card p-[5%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-18px_rgba(40,30,10,.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05),0_24px_60px_-20px_rgba(0,0,0,.8)]">
       {#if d}
         <!-- One line, finished as the print reaches the middle of the screen. -->
-        <div use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="size-full" aria-hidden="true">
+        <div data-scroll-draw-pending="" use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="size-full" aria-hidden="true">
           <svg viewBox="0 0 1000 1000" class="size-full" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.85">
             <path {d} />
           </svg>

@@ -14,6 +14,7 @@
  */
 import { onMounted, ref } from 'vue';
 import { ScrollDraw } from 'svg-scroll-draw/vue';
+import 'svg-scroll-draw/no-flash.css';
 import { contours, globe, scrollWindow, staggerFor, tunnel, type Stroke } from '@/lib/plotter';
 
 type Art = 'contours' | 'globe' | 'tunnel';

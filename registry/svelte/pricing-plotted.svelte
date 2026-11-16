@@ -39,6 +39,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollCounterAction, scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { scrollWindow, sketchRect, staggerFor, type Stroke } from '$lib/plotter';
 
   let {
@@ -103,7 +104,7 @@
             {#if frame}
               {#key `${frame.w}x${frame.h}`}
                 <!-- The second pass follows the first, both round as the card reaches the middle of the screen. -->
-                <div use:scrollDraw={{ stagger: 0.5, easing: 'linear', trigger: scrollWindow(0.5) }} class="size-full" aria-hidden="true">
+                <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: 0.5, easing: 'linear', trigger: scrollWindow(0.5) }} class="size-full" aria-hidden="true">
                   <svg width={frame.w} height={frame.h} viewBox="0 0 {frame.w} {frame.h}" class="block overflow-visible" fill="none" stroke-width="1.3" stroke-linecap="round">
                     {#each frame.strokes as s, k (k)}<path d={s.d} stroke={s.pen ? accent : 'currentColor'} />{/each}
                   </svg>
@@ -124,7 +125,7 @@
 
 {#snippet body(plan: Plan, i: number, price: number)}
   <!-- A mark of concentric rings: more rings for a bigger plan. -->
-  <div use:scrollDraw={{ stagger: staggerFor(rings(i), 0.6), easing: 'linear', trigger: scrollWindow(0.6) }} class="size-14" aria-hidden="true">
+  <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(rings(i), 0.6), easing: 'linear', trigger: scrollWindow(0.6) }} class="size-14" aria-hidden="true">
     <svg viewBox="0 0 56 56" class="size-full" fill="none" stroke={plan.featured ? accent : 'currentColor'} stroke-width="0.9">
       {#each Array.from({ length: rings(i) }) as _, k (k)}<circle cx="28" cy="28" r={radius(i, k)} />{/each}
     </svg>

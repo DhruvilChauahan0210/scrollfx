@@ -14,6 +14,7 @@
  */
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { ScrollDraw } from 'svg-scroll-draw/vue';
+import 'svg-scroll-draw/no-flash.css';
 import { hatch, scrollWindow, staggerFor, type Stroke } from '@/lib/plotter';
 
 export interface HatchHighlightProps {

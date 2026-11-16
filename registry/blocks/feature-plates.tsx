@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { contours, globe, scrollWindow, staggerFor, tunnel, type Stroke } from '@/lib/plotter';
 
 type Art = 'contours' | 'globe' | 'tunnel';

@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ScrollCounter, ScrollDraw } from 'svg-scroll-draw/react';
+import 'svg-scroll-draw/no-flash.css';
 import { curveY, scrollWindow, smooth, staggerFor } from '@/lib/plotter';
 
 export interface Stat {

@@ -33,6 +33,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { lissajous, scrollWindow, staggerFor, type Stroke } from '$lib/plotter';
 
   let {
@@ -67,7 +68,7 @@
     <figure class="mt-12 hidden lg:block">
       <div class="aspect-square w-full max-w-sm rounded-[3px] bg-card p-[8%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-22px_rgba(40,30,10,.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05)]">
         {#if strokes}
-          <div use:scrollDraw={{ stagger: staggerFor(strokes.length, 0.6), easing: 'linear', trigger: scrollWindow(0.6) }} class="size-full" aria-hidden="true">
+          <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(strokes.length, 0.6), easing: 'linear', trigger: scrollWindow(0.6) }} class="size-full" aria-hidden="true">
             <svg viewBox="0 0 400 400" class="size-full" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round">
               {#each strokes as s, i (i)}
                 {#if s.pen}<path d={s.d} stroke={accent} />{:else}<path d={s.d} />{/if}

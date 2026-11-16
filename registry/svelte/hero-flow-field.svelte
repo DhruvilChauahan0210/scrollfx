@@ -35,6 +35,7 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
   import { scrollDraw } from 'svg-scroll-draw';
+  import 'svg-scroll-draw/no-flash.css';
   import { flowField, type Stroke } from '$lib/plotter';
 
   let {
@@ -105,7 +106,7 @@
   <!-- The print: a sheet, the drawing, and its plate caption. On a phone it comes first. -->
   <figure class="order-first lg:order-none">
     <div class="aspect-square w-full rounded-[3px] bg-card p-[6%] shadow-[0_1px_0_rgba(0,0,0,.04),0_18px_40px_-18px_rgba(40,30,10,.3),0_2px_6px_-2px_rgba(40,30,10,.12)] dark:shadow-[0_0_0_1px_rgba(255,255,255,.05),0_24px_60px_-20px_rgba(0,0,0,.8)]">
-      <svg bind:this={svg} viewBox="0 0 1000 1000" class="size-full" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="A flow field plotted in ink">
+      <svg bind:this={svg} data-scroll-draw-pending="" viewBox="0 0 1000 1000" class="size-full" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="A flow field plotted in ink">
         {#each strokes as s, i (i)}
           {#if s.pen}<path d={s.d} stroke={accent} stroke-width="1.9" />{:else}<path d={s.d} />{/if}
         {/each}

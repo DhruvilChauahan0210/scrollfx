@@ -14,6 +14,7 @@
  */
 import { computed, onMounted, ref } from 'vue';
 import { ScrollCounter, ScrollDraw } from 'svg-scroll-draw/vue';
+import 'svg-scroll-draw/no-flash.css';
 import { curveY, scrollWindow, smooth, staggerFor } from '@/lib/plotter';
 
 export interface Stat {

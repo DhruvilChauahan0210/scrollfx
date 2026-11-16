@@ -31,6 +31,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollAnimate, scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { rosette, scrollWindow, seedOf } from '$lib/plotter';
 
   let {
@@ -73,7 +74,7 @@
         </div>
         <div class="relative size-16 rounded-full bg-background p-0.5">
           {#if stamps}
-            <div use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="size-full" aria-hidden="true">
+            <div data-scroll-draw-pending="" use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="size-full" aria-hidden="true">
               <svg viewBox="0 0 100 100" class="size-full" fill="none" stroke={i === 0 ? accent : 'currentColor'} stroke-width="1.25" stroke-linejoin="round">
                 <path d={stamps[i]} />
               </svg>

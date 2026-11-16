@@ -42,6 +42,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { scrollCounterAction, scrollDraw } from 'svg-scroll-draw/svelte';
+  import 'svg-scroll-draw/no-flash.css';
   import { curveY, scrollWindow, smooth, staggerFor } from '$lib/plotter';
 
   let {
@@ -97,12 +98,12 @@
     <figure class="self-end">
       <div class="relative aspect-[1000/420] w-full">
         {#if drawing}
-          <div use:scrollDraw={{ stagger: staggerFor(drawing.hatch.length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="absolute inset-0" aria-hidden="true">
+          <div data-scroll-draw-pending="" use:scrollDraw={{ stagger: staggerFor(drawing.hatch.length, SPREAD), easing: 'linear', trigger: scrollWindow(SPREAD) }} class="absolute inset-0" aria-hidden="true">
             <svg viewBox="0 0 {W} {H}" class="size-full" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.75">
               {#each drawing.hatch as d, i (i)}<path {d} />{/each}
             </svg>
           </div>
-          <div use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="absolute inset-0" aria-hidden="true">
+          <div data-scroll-draw-pending="" use:scrollDraw={{ easing: 'linear', trigger: scrollWindow() }} class="absolute inset-0" aria-hidden="true">
             <svg viewBox="0 0 {W} {H}" class="size-full overflow-visible" fill="none" stroke={accent} stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
               <path d={drawing.curve} />
             </svg>
