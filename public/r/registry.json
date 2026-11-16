@@ -192,6 +192,28 @@
       }
     },
     {
+      "name": "team-plotted",
+      "type": "registry:block",
+      "title": "Team with fingerprints",
+      "description": "The people behind the product, each over a fingerprint seeded from their name, drawn ring by ring from the core outward.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/team-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to them: each print grows ring by ring as its card arrives.",
+        "tall": false
+      }
+    },
+    {
       "name": "faq-plotted",
       "type": "registry:block",
       "title": "Plotted FAQ",
@@ -210,6 +232,28 @@
       ],
       "meta": {
         "motion": "Scroll to it: the knot is traced, four times over.",
+        "tall": false
+      }
+    },
+    {
+      "name": "newsletter-plotted",
+      "type": "registry:block",
+      "title": "Starburst sign-up",
+      "description": "A newsletter sign-up beside a starburst a pen draws ray by ray, clockwise from the top, with every twelfth ray in the accent colour.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/newsletter-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: the rays sweep round from the top.",
         "tall": false
       }
     },

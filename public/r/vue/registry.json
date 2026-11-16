@@ -168,6 +168,25 @@
       ]
     },
     {
+      "name": "team-plotted",
+      "type": "registry:block",
+      "title": "Team with fingerprints",
+      "description": "The people behind the product, each over a fingerprint seeded from their name, drawn ring by ring from the core outward.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/team-plotted.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/TeamPlotted.vue"
+        }
+      ]
+    },
+    {
       "name": "faq-plotted",
       "type": "registry:block",
       "title": "Plotted FAQ",
@@ -183,6 +202,25 @@
           "path": "registry/vue/faq-plotted.vue",
           "type": "registry:component",
           "target": "components/scrollfx/FaqPlotted.vue"
+        }
+      ]
+    },
+    {
+      "name": "newsletter-plotted",
+      "type": "registry:block",
+      "title": "Starburst sign-up",
+      "description": "A newsletter sign-up beside a starburst a pen draws ray by ray, clockwise from the top, with every twelfth ray in the accent colour.",
+      "dependencies": [
+        "svg-scroll-draw"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/newsletter-plotted.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/NewsletterPlotted.vue"
         }
       ]
     },
