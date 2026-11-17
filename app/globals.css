@@ -89,3 +89,10 @@
 /* shiki's dual theme: light by default, the dark tokens under .dark */
 .shiki, .shiki span { background-color: transparent !important; }
 .dark .shiki, .dark .shiki span { color: var(--shiki-dark) !important; }
+
+/* The /components index shows each preview finished: the pen draws on the
+   component's own page. Beats the engine's inline dash offset, its native
+   CSS animation (an !important declaration wins over both). */
+.still :is(path, polyline, line, polygon, rect, circle, ellipse) {
+  stroke-dashoffset: 0 !important;
+}

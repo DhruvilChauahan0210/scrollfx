@@ -25,7 +25,7 @@ export default function ComponentsIndex() {
         <p className="mt-5 max-w-2xl text-pretty text-lg text-muted-foreground">
           Smaller pieces than the plates: charts and marks to set inside your own pages. Each takes its data as props, keeps its
           labels in the server HTML, and is inked in by a pen as the reader scrolls, finishing as it reaches the middle of the
-          screen. Add one with the shadcn CLI.
+          screen. Here they are shown finished; open one to watch it draw. Add one with the shadcn CLI.
         </p>
 
         {FAMILIES.map((f) => (
@@ -42,7 +42,7 @@ export default function ComponentsIndex() {
                   <li key={c.slug}>
                     <Link href={`/components/${c.slug}`} className="group flex h-full flex-col justify-between rounded-[3px] bg-background shadow-[0_0_0_1px_var(--border)] transition-shadow hover:shadow-[0_0_0_1px_var(--ring),0_18px_40px_-20px_rgba(40,30,10,.28)]">
                       <div className="pointer-events-none flex min-h-[300px] items-center justify-center overflow-hidden px-6 py-8" inert>
-                        {Preview ? <div className="w-full"><Preview /></div> : <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">No preview</span>}
+                        {Preview ? <div className="still w-full"><Preview /></div> : <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">No preview</span>}
                       </div>
                       <div className="border-t px-6 py-5">
                         <p className="flex items-center justify-between font-serif text-xl tracking-[-0.01em]">
