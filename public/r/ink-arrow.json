@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ink-arrow",
+  "title": "Ink arrow",
+  "description": "A hand-drawn arrow pointing at something: nearly straight, curved, or looped, with a head made in one stroke.",
+  "dependencies": [
+    "svg-scroll-draw@^2.29.0"
+  ],
+  "registryDependencies": [
+    "https://scrollfx-ui.vercel.app/r/plotter.json",
+    "https://scrollfx-ui.vercel.app/r/ink.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/ink-arrow.tsx",
+      "content": "'use client';\n\n/**\n * ink-arrow — an arrow drawn by hand to point at something: nearly straight,\n * curved to one side, or with a loop thrown half way, ending in a head made\n * in one stroke. The pen goes at one speed, shaft first, then the head.\n *\n * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx\n * Needs: react, svg-scroll-draw, lib/plotter and lib/ink (installed with it).\n * Styling: Tailwind CSS. Place it with `className` (absolute, in a flex row,\n * beside a note); `from` and `to` set where it starts and ends in its box.\n *\n * The arrow is made in the browser and hidden from assistive tech: say in\n * text what it points at. Reduced motion shows it drawn.\n */\n\nimport { useEffect, useRef, useState } from 'react';\nimport 'svg-scroll-draw/no-flash.css';\nimport { inkArrow, type ArrowKind, type Stroke } from '@/lib/plotter';\nimport { useInk, type InkTrigger } from '@/lib/ink';\n\nexport type InkArrowVariant = ArrowKind;\n\nexport interface InkArrowProps {\n  variant?: InkArrowVariant;\n  /** The box the arrow is drawn in, in px. */\n  width?: number;\n  height?: number;\n  /** Where the arrow starts, as a share of the box (0 to 1 across, 0 to 1 down). */\n  from?: [number, number];\n  /** Where its head is, likewise. */\n  to?: [number, number];\n  /** How far a curved or looped arrow bends to one side, as a share of its length; negative bends it the other way. */\n  bend?: number;\n  /** The length of the head's barbs, in px. */\n  head?: number;\n  /** The pen's colour: the accent, unless you pass `currentColor` for ink. */\n  accent?: string;\n  strokeWidth?: number;\n  seed?: number;\n  /** `scroll`: drawn as it rises, done at mid-screen. `view`: played once as it comes into view. */\n  trigger?: InkTrigger;\n  /** With `view`, how long the arrow takes, in ms. */\n  duration?: number;\n  className?: string;\n}\n\nexport function InkArrow({\n  variant = 'curved',\n  width = 160,\n  height = 96,\n  from = [0.06, 0.3],\n  to = [0.92, 0.74],\n  bend = 0.3,\n  head = 12,\n  accent = '#e0482a',\n  strokeWidth = 1.6,\n  seed = 1,\n  trigger = 'scroll',\n  duration = 1100,\n  className = '',\n}: InkArrowProps) {\n  const ref = useRef<SVGSVGElement>(null);\n  const [strokes, setStrokes] = useState<Stroke[] | null>(null);\n  const [fx, fy] = from, [tx, ty] = to;\n  useEffect(() => {\n    setStrokes(inkArrow({ w: width, h: height, kind: variant, from: [fx, fy], to: [tx, ty], bend, seed, head }));\n  }, [variant, width, height, fx, fy, tx, ty, bend, seed, head]);\n  const n = strokes?.length ?? 0;\n  // One piece after another: the pen keeps one speed down the shaft and round the head.\n  useInk(ref, { paths: n, spread: Math.max(0, n - 1), trigger, duration, version: strokes });\n  return (\n    <svg\n      ref={ref}\n      key={strokes ? strokes.length + strokes[0]?.d : 'empty'}\n      data-scroll-draw-pending=\"\"\n      data-ink={trigger}\n      aria-hidden\n      width={width}\n      height={height}\n      viewBox={`0 0 ${width} ${height}`}\n      className={`pointer-events-none shrink-0 overflow-visible ${className}`}\n      fill=\"none\"\n      stroke={accent}\n      strokeWidth={strokeWidth}\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n    >\n      {strokes?.map((s, i) => <path key={i} d={s.d} />)}\n    </svg>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/scrollfx/ink-arrow.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

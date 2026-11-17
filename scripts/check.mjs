@@ -149,6 +149,9 @@ async function midScreen(page) {
   const count = await page.evaluate(() => {
     const groups = new Set();
     for (const svg of document.querySelectorAll('main svg')) {
+      // A drawing set to play once on arrival (data-ink="view") is not tied to
+      // the scroll; the engine check below still sees it finish.
+      if (svg.dataset.ink === 'view') continue;
       if (!svg.getClientRects().length || ![...svg.querySelectorAll('path, circle')].some((p) => getComputedStyle(p).strokeDasharray !== 'none')) continue;
       const r = svg.getBoundingClientRect();
       groups.add([r.left, r.top + scrollY, r.width, r.height].map(Math.round).join());
@@ -163,7 +166,7 @@ async function midScreen(page) {
       await new Promise((ok) => setTimeout(ok, 50));
       const groups = new Map();
       for (const svg of document.querySelectorAll('main svg')) {
-        if (!svg.getClientRects().length) continue;
+        if (!svg.getClientRects().length || svg.dataset.ink === 'view') continue;
         const paths = [...svg.querySelectorAll('path, circle')].filter((p) => getComputedStyle(p).strokeDasharray !== 'none');
         if (!paths.length) continue;
         const r = svg.getBoundingClientRect();

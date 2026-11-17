@@ -524,6 +524,164 @@
           "target": "components/scrollfx/sparkline.tsx"
         }
       ]
+    },
+    {
+      "name": "ink",
+      "type": "registry:lib",
+      "title": "Ink",
+      "description": "What the ink components share: useInk(), which hands an svg to svg-scroll-draw on the scroll (finishing at mid-screen) or once in view; useSize(); and Hershey's script, a public-domain single-stroke handwriting font, laid out by script().",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "lib/ink.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "ink-highlight",
+      "type": "registry:ui",
+      "title": "Ink highlight",
+      "description": "A mark a pen makes on words in running text: underline, double underline, circle, box, strike or hatch fill. Inline in a paragraph, one mark per line when the words wrap.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-highlight.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-highlight.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ink-divider",
+      "type": "registry:ui",
+      "title": "Ink divider",
+      "description": "A rule a pen draws across the page: straight, wavy, sketchy (ink then accent), dotted, or two rules drawn outward from a label.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-divider.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-divider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ink-frame",
+      "type": "registry:ui",
+      "title": "Ink frame",
+      "description": "A border a pen draws round any children: rect or rounded (twice round, ink then accent), double, or crop marks at the corners.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-frame.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-frame.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ink-progress",
+      "type": "registry:ui",
+      "title": "Ink progress",
+      "description": "A value plotted as it is reached: a bar hatched in to the value, a ring with an accent band, or a ticked gauge with a needle. role=\"progressbar\".",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-progress.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-progress.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ink-stamp",
+      "type": "registry:ui",
+      "title": "Ink stamp",
+      "description": "A short word or two inside a plotted stamp: a circle with text round its rim, a rectangle ruled twice, or a scalloped seal, set a little askew.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-stamp.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-stamp.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ink-signature",
+      "type": "registry:ui",
+      "title": "Ink signature",
+      "description": "A name written stroke by stroke at one steady speed in Hershey's single-stroke script, underlined with a flourish; or your own signature as SVG paths.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-signature.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-signature.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ink-arrow",
+      "type": "registry:ui",
+      "title": "Ink arrow",
+      "description": "A hand-drawn arrow pointing at something: nearly straight, curved, or looped, with a head made in one stroke.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/ink.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ink-arrow.tsx",
+          "type": "registry:ui",
+          "target": "components/scrollfx/ink-arrow.tsx"
+        }
+      ]
     }
   ]
 }
