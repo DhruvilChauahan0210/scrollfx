@@ -135,6 +135,25 @@ npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-f
 | XV | **[Harmonograph call to action](https://scrollfx-ui.vercel.app/blocks/cta-harmonograph)** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/cta-harmonograph.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/cta-harmonograph.json` |
 | XVI | **[Plotted footer](https://scrollfx-ui.vercel.app/blocks/footer-plotted)** | A horizon of ridgelines plotted back to front, hidden lines removed, above the link columns. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/footer-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/footer-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/footer-plotted.json` |
 
+## Components — ink
+
+Smaller pieces than the plates, for any page: marks a pen makes on and around your own content. Each takes
+`accent` (and most `color`, ink by default), `strokeWidth`, `seed`, and `trigger`: `scroll` (the default,
+finishing as it reaches the middle of the screen) or `view` (played once as it comes into view). Variants are a
+`variant` prop. React for now.
+
+| Component | Variants | Install |
+|---|---|---|
+| **Ink highlight** — a mark on words in running text, one per line when they wrap | `underline` `double-underline` `circle` `box` `strike` `hatch-fill` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-highlight.json` |
+| **Ink divider** — a rule drawn across the page | `straight` `wavy` `sketchy` `dotted` `with-label` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-divider.json` |
+| **Ink frame** — a border drawn round any children | `rect` `rounded` `double` `corner-marks` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-frame.json` |
+| **Ink progress** — a value plotted as it is reached | `bar` `ring` `gauge` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-progress.json` |
+| **Ink stamp** — a plotted stamp round a word or two | `circle` `rectangle` `seal` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-stamp.json` |
+| **Ink signature** — a name written stroke by stroke in Hershey's script, or your own paths | name, or `paths` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-signature.json` |
+| **Ink arrow** — a hand-drawn arrow pointing at something | `straight` `curved` `looped` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-arrow.json` |
+
+The CLI puts each in `components/scrollfx/` and installs `lib/plotter.ts` and `lib/ink.ts` beside it.
+
 ## What every block does
 
 - **Takes props.** Copy, data, plans, releases, people, the seed and the accent colour are props with defaults. The

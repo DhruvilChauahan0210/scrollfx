@@ -690,3 +690,314 @@ export function moire({ seed = 5, size = 400, rings = 18 }: { seed?: number; siz
   }
   return out;
 }
+
+// ── Ink pieces ──────────────────────────────────────────────────────────────
+// The marks the ink components draw (ink-highlight, ink-divider, ink-frame,
+// ink-progress, ink-stamp, ink-signature, ink-arrow): underlines, loops,
+// waves, dots, crop marks, stamp rings, dials and arrows, made the way a hand
+// makes them, never quite straight and never quite closed. Every one is
+// seeded, and draws in a box of the size it is given, in px.
+
+/** A point, in the units of the box a generator draws in. */
+export type Point = Pt;
+
+/** One line of the pen's points, for paced(), and which pen draws it. */
+export interface Line {
+  pts: Pt[];
+  pen?: 0 | 1;
+}
+
+/**
+ * Lines cut into pieces about `step` long, in drawing order. svg-scroll-draw
+ * draws every path over the same range, so a long line and a short one take
+ * the same time; cut into even pieces and given a stagger of 1 (each piece
+ * after the last), the pen moves at one speed, as a hand writing does.
+ */
+export function paced(lines: Line[], step = 8): Stroke[] {
+  const out: Stroke[] = [];
+  for (const { pts, pen = 0 } of lines) {
+    if (pts.length < 2) continue;
+    const pieces: Pt[][] = [];
+    let piece: Pt[] = [pts[0]];
+    let run = 0;
+    for (let i = 1; i < pts.length; i++) {
+      let [ax, ay] = pts[i - 1];
+      const [bx, by] = pts[i];
+      let seg = Math.hypot(bx - ax, by - ay);
+      while (seg > 0 && run + seg >= step) {
+        const t = (step - run) / seg;
+        const cut: Pt = [ax + (bx - ax) * t, ay + (by - ay) * t];
+        piece.push(cut);
+        pieces.push(piece);
+        piece = [cut];
+        seg -= step - run;
+        [ax, ay] = cut;
+        run = 0;
+      }
+      run += seg;
+      piece.push([bx, by]);
+    }
+    // A short tail joins the piece before it rather than taking a beat of its own.
+    if (run > step * 0.4 || !pieces.length) pieces.push(piece);
+    else pieces[pieces.length - 1].push(...piece.slice(1));
+    for (const p of pieces) out.push({ d: toPath(p), pen });
+  }
+  return out;
+}
+
+/**
+ * A line from a to b as a hand rules it: a slight bow to one side and a slow
+ * tremor along it, both seeded. Smooth waves, not jitter, so it never looks
+ * jagged at any length.
+ */
+function handLine(a: Pt, b: Pt, rand: () => number, { bow = 0.012, tremor = 0.4, step = 3 } = {}): Pt[] {
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+  const n = Math.max(2, Math.round(len / step));
+  const nx = -(b[1] - a[1]) / len, ny = (b[0] - a[0]) / len;
+  const k = (rand() - 0.5) * 2 * bow * len;
+  const p1 = rand() * 6, p2 = rand() * 6;
+  return Array.from({ length: n + 1 }, (_, i): Pt => {
+    const t = i / n;
+    // The tremor fades in and out at the ends, where the pen is set down and lifted.
+    const off = k * Math.sin(Math.PI * t) + tremor * Math.sin(Math.PI * t) ** 0.5 * (0.6 * Math.sin((t * len) / 26 + p1) + 0.4 * Math.sin((t * len) / 9 + p2));
+    return [a[0] + (b[0] - a[0]) * t + nx * off, a[1] + (b[1] - a[1]) * t + ny * off];
+  });
+}
+
+/** A circle drawn by hand: a little more than one turn, its radius breathing, from a seeded angle. */
+function handCircle(cx: number, cy: number, r: number, rand: () => number, { turns = 1.04, wobble = 0.018, ry = r } = {}): Pt[] {
+  const a0 = rand() * Math.PI * 2;
+  const p = rand() * 6;
+  const n = Math.max(48, Math.round((r + ry) * turns * 1.6));
+  return Array.from({ length: n + 1 }, (_, i): Pt => {
+    const t = i / n;
+    const a = a0 + t * turns * Math.PI * 2;
+    // Spirals out a touch over the turn, so the end passes just outside the start.
+    const k = 1 + wobble * Math.sin(a * 2 + p) + (t - 0.5) * wobble * 1.2;
+    return [cx + Math.cos(a) * r * k, cy + Math.sin(a) * ry * k];
+  });
+}
+
+/** A circle drawn by hand in a size × size box: a little more than one turn, from a seeded angle. */
+export function sketchCircle({ size, seed = 1, r = size * 0.42, turns = 1.08 }: { size: number; seed?: number; r?: number; turns?: number }): Stroke[] {
+  return [{ d: toPath(handCircle(size / 2, size / 2, r, random(seed), { turns, wobble: 0.03 })), pen: 0 }];
+}
+
+/**
+ * An underline under a w × h box, the pen pressing in from the left and
+ * lifting with a small rise at the end; `double` adds a second, shorter
+ * stroke under it. Accent pen.
+ */
+export function inkUnderline({ w, h = 12, seed = 1, double = false }: { w: number; h?: number; seed?: number; double?: boolean }): Stroke[] {
+  const rand = random(seed);
+  const y = double ? h * 0.32 : h * 0.5;
+  const tilt = (rand() - 0.3) * 2.2;
+  const first = handLine([2, y + tilt / 2], [w - 2, y - tilt / 2 - 1], rand, { bow: 0.006, tremor: 0.5 });
+  const out: Stroke[] = [{ d: toPath(first), pen: 1 }];
+  if (double) out.push({ d: toPath(handLine([w * (0.05 + rand() * 0.04), y + 4.6], [w * (0.86 + rand() * 0.08), y + 3.8 - tilt / 3], rand, { bow: 0.008, tremor: 0.5 })), pen: 1 });
+  return out;
+}
+
+/** A line struck through a w × h box, a little above the middle and rising slightly. Accent pen. */
+export function inkStrike({ w, h, seed = 1 }: { w: number; h: number; seed?: number }): Stroke[] {
+  const rand = random(seed);
+  return [{ d: toPath(handLine([1, h * 0.6], [w - 1, h * (0.46 + rand() * 0.06)], rand, { bow: 0.01, tremor: 0.45 })), pen: 1 }];
+}
+
+/**
+ * A loop round a w × h box, as a hand circles a word: an ellipse touching the
+ * box, a little more than one turn, its end passing outside its start.
+ * Accent pen.
+ */
+export function inkLoop({ w, h, seed = 1, turns = 1.1 }: { w: number; h: number; seed?: number; turns?: number }): Stroke[] {
+  const rand = random(seed);
+  const pts = handCircle(w / 2, h / 2, w / 2 - 3, rand, { turns, wobble: 0.03, ry: h / 2 - 3 });
+  // A circling hand leans: tilt the ellipse a degree or two.
+  const tilt = (rand() - 0.5) * 0.06;
+  const c = Math.cos(tilt), s = Math.sin(tilt);
+  return [{ d: toPath(pts.map(([x, y]): Pt => [w / 2 + (x - w / 2) * c - (y - h / 2) * s, h / 2 + (x - w / 2) * s + (y - h / 2) * c])), pen: 1 }];
+}
+
+/**
+ * A box round a w × h area as a hand rules one: four strokes, clockwise from
+ * the top, each running a little past the corner so they cross there. Accent
+ * pen.
+ */
+export function inkBox({ w, h, seed = 1, over = 4 }: { w: number; h: number; seed?: number; over?: number }): Stroke[] {
+  const rand = random(seed);
+  const o = () => over * (0.4 + rand() * 0.8);
+  const j = () => (rand() - 0.5) * 2.4;
+  const m = over;
+  const sides: [Pt, Pt][] = [
+    [[m - o(), m + j()], [w - m + o(), m + j()]],
+    [[w - m + j(), m - o()], [w - m + j(), h - m + o()]],
+    [[w - m + o(), h - m + j()], [m - o(), h - m + j()]],
+    [[m + j(), h - m + o()], [m + j(), m - o()]],
+  ];
+  return sides.map(([a, b]) => ({ d: toPath(handLine(a, b, rand, { bow: 0.02, tremor: 0.5 })), pen: 1 }));
+}
+
+/** A rule across a w × h box, as a hand draws it; `reverse` draws it right to left. */
+export function ruledLine({ w, h = 12, seed = 1, reverse = false }: { w: number; h?: number; seed?: number; reverse?: boolean }): Stroke[] {
+  const rand = random(seed);
+  const a: Pt = [1.5, h / 2 + (rand() - 0.5) * 0.8], b: Pt = [w - 1.5, h / 2 + (rand() - 0.5) * 0.8];
+  return [{ d: toPath(reverse ? handLine(b, a, rand, { bow: 0.0015, tremor: 0.35 }) : handLine(a, b, rand, { bow: 0.0015, tremor: 0.35 })), pen: 0 }];
+}
+
+/** A wavy line across a w × h box, its swing rising and falling a little along the way. */
+export function inkWave({ w, h = 12, seed = 1, period = 22 }: { w: number; h?: number; seed?: number; period?: number }): Stroke[] {
+  const noise = noise2(seed);
+  const amp = h * 0.3;
+  const pts: Pt[] = [];
+  for (let x = 2; x <= w - 2; x += 1.5) {
+    const k = 1 + 0.5 * noise(x / 140, 0.5);
+    pts.push([x, h / 2 + Math.sin(((x - 2) / period) * Math.PI * 2) * amp * k]);
+  }
+  return [{ d: toPath(pts), pen: 0 }];
+}
+
+/** A dotted line across a w × h box: a dot every `gap`, each a short touch of the pen, left to right. */
+export function inkDots({ w, h = 12, seed = 1, gap = 9 }: { w: number; h?: number; seed?: number; gap?: number }): Stroke[] {
+  const rand = random(seed);
+  const n = Math.max(1, Math.floor((w - 4) / gap));
+  const x0 = (w - (n - 1) * gap) / 2;
+  return Array.from({ length: n }, (_, i): Stroke => {
+    const x = x0 + i * gap + (rand() - 0.5) * gap * 0.12;
+    const y = h / 2 + (rand() - 0.5) * 0.8;
+    return { d: `M${f(x - 0.5)} ${f(y)}L${f(x + 0.5)} ${f(y + (rand() - 0.5) * 0.4)}`, pen: 0 };
+  });
+}
+
+/** Crop marks at the corners of a w × h box, `inset` in from its edges: an L at each, clockwise from the top left. */
+export function cropMarks({ w, h, seed = 1, len = 16, inset = 2 }: { w: number; h: number; seed?: number; len?: number; inset?: number }): Stroke[] {
+  const rand = random(seed);
+  const j = () => (rand() - 0.5) * 0.9;
+  const corners: [number, number, number, number][] = [[inset, inset, 1, 1], [w - inset, inset, -1, 1], [w - inset, h - inset, -1, -1], [inset, h - inset, 1, -1]];
+  return corners.map(([x, y, sx, sy], i): Stroke => {
+    const arm = len * (0.9 + rand() * 0.2);
+    // Each L is drawn from the end of one arm round the corner to the end of the other, clockwise.
+    const a: Pt = i % 2 ? [x, y + sy * arm] : [x + sx * arm, y];
+    const b: Pt = i % 2 ? [x + sx * arm, y] : [x, y + sy * arm];
+    return { d: toPath([[a[0] + j(), a[1] + j()], [x + j(), y + j()], [b[0] + j(), b[1] + j()]]), pen: 0 };
+  });
+}
+
+/**
+ * The rings of a rubber stamp in a size × size box: `circle` is two rings
+ * close together round the rim and one inside, leaving a band for a line of
+ * text; `seal` swaps the outer ring for a scalloped edge and dots the band's
+ * inner side.
+ */
+export function stampRings({ size, seed = 1, kind = 'circle' }: { size: number; seed?: number; kind?: 'circle' | 'seal' }): Stroke[] {
+  const rand = random(seed);
+  const c = size / 2;
+  const out: Stroke[] = [];
+  if (kind === 'seal') {
+    const teeth = 28;
+    const R = size * 0.485;
+    const n = teeth * 12;
+    const a0 = rand() * Math.PI * 2;
+    out.push({
+      d: toPath(Array.from({ length: n + 1 }, (_, i): Pt => {
+        const a = a0 + (i / n) * Math.PI * 2;
+        const r = R * (0.93 + 0.07 * Math.abs(Math.cos((a * teeth) / 2))) * (1 + (rand() - 0.5) * 0.004);
+        return [c + Math.cos(a) * r, c + Math.sin(a) * r];
+      })),
+      pen: 0,
+    });
+    out.push({ d: toPath(handCircle(c, c, size * 0.405, rand)), pen: 0 });
+  } else {
+    out.push({ d: toPath(handCircle(c, c, size * 0.47, rand)), pen: 0 });
+    out.push({ d: toPath(handCircle(c, c, size * 0.445, rand, { turns: 1.02 })), pen: 0 });
+  }
+  out.push({ d: toPath(handCircle(c, c, size * 0.315, rand, { turns: 1.03 })), pen: 0 });
+  if (kind === 'seal') {
+    for (let i = 0; i < 48; i++) {
+      const a = (i / 48) * Math.PI * 2;
+      const r = size * 0.29;
+      out.push({ d: `M${f(c + Math.cos(a) * r)} ${f(c + Math.sin(a) * r)}L${f(c + Math.cos(a + 0.012) * r)} ${f(c + Math.sin(a + 0.012) * r)}`, pen: 0 });
+    }
+  }
+  return out;
+}
+
+/**
+ * A progress dial in a size × size box: a ring the pen goes round once in
+ * ink, a tick at each quarter, then a band of three arcs in the accent pen
+ * from the top, clockwise, out to `share` (0 to 1), and a short cross-stroke
+ * where it stops.
+ */
+export function dial({ size, seed = 1, share = 0.7 }: { size: number; seed?: number; share?: number }): Stroke[] {
+  const rand = random(seed);
+  const c = size / 2;
+  const R = size * 0.45;
+  const s = Math.max(0, Math.min(1, share));
+  const out: Stroke[] = [{ d: toPath(handCircle(c, c, R, rand, { turns: 1.02, wobble: 0.008 })), pen: 0 }];
+  for (let q = 0; q < 4; q++) {
+    const a = -Math.PI / 2 + (q * Math.PI) / 2;
+    out.push({ d: toPath([[c + Math.cos(a) * (R + 3), c + Math.sin(a) * (R + 3)], [c + Math.cos(a) * (R + 8), c + Math.sin(a) * (R + 8)]]), pen: 0 });
+  }
+  if (s > 0) {
+    const a0 = -Math.PI / 2, a1 = a0 + Math.PI * 2 * s;
+    for (const k of [0.86, 0.81, 0.76]) out.push({ d: toPath(ring(c, c, R * k + (rand() - 0.5) * 0.6, Math.max(6, Math.round(90 * s)), a0, a1)), pen: 1 });
+    out.push({ d: toPath([[c + Math.cos(a1) * R * 0.7, c + Math.sin(a1) * R * 0.7], [c + Math.cos(a1) * R * 0.92, c + Math.sin(a1) * R * 0.92]]), pen: 0 });
+  }
+  return out;
+}
+
+/** The kinds of arrow inkArrow draws. */
+export type ArrowKind = 'straight' | 'curved' | 'looped';
+
+/**
+ * A hand-drawn arrow in a w × h box, from `from` to `to` (each a point as a
+ * share of the box, 0 to 1): `straight` with a slight bow, `curved` bending
+ * `bend` of its length to one side (negative for the other), `looped` with a
+ * loop the pen throws half way. The head is one stroke, barb to tip to barb.
+ * Paced (see paced()), so give it a stagger of 1.
+ */
+export function inkArrow({
+  w, h, kind = 'curved', from = [0.06, 0.3], to = [0.92, 0.72], bend = 0.3, seed = 1, head = 12, step = 8,
+}: { w: number; h: number; kind?: ArrowKind; from?: [number, number]; to?: [number, number]; bend?: number; seed?: number; head?: number; step?: number }): Stroke[] {
+  const rand = random(seed);
+  const a: Pt = [from[0] * w, from[1] * h], b: Pt = [to[0] * w, to[1] * h];
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+  const ux = (b[0] - a[0]) / len, uy = (b[1] - a[1]) / len;
+  const nx = -uy, ny = ux;
+  const k = kind === 'straight' ? 0.04 * Math.sign(bend || 1) : bend;
+  const n = Math.max(24, Math.round(len / 2));
+  const p = rand() * 6;
+  const loopR = Math.min(len * 0.12, 24);
+  const shaft: Pt[] = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    // A quadratic bow, the control point `k` of the length to the side.
+    let x = a[0] + (b[0] - a[0]) * t + nx * k * len * 2 * t * (1 - t);
+    let y = a[1] + (b[1] - a[1]) * t + ny * k * len * 2 * t * (1 - t);
+    if (kind === 'looped') {
+      // One turn round a circle between t = 0.3 and 0.7, on the bend's outer
+      // side: forward at both ends (so the line runs on without a corner) and
+      // backward over the top, faster than the line moves on, so it crosses itself.
+      const e = Math.max(0, Math.min(1, (t - 0.3) / 0.4));
+      const side = k >= 0 ? -1 : 1;
+      const back = Math.sin(e * Math.PI * 2) * loopR;
+      const out = (1 - Math.cos(e * Math.PI * 2)) * loopR * side;
+      x += ux * back + nx * out;
+      y += uy * back + ny * out;
+    }
+    const tr = 0.5 * Math.sin(Math.PI * t) * Math.sin(t * 9 + p);
+    shaft.push([x + nx * tr, y + ny * tr]);
+  }
+  // The head points along the shaft's last few points.
+  const [tx, ty] = shaft[shaft.length - 1];
+  const [qx, qy] = shaft[Math.max(0, shaft.length - 5)];
+  const dl = Math.hypot(tx - qx, ty - qy) || 1;
+  const dx = (tx - qx) / dl, dy = (ty - qy) / dl;
+  const barb = (sign: number): Pt => {
+    const ang = (0.47 + (rand() - 0.5) * 0.08) * sign;
+    const L = head * (0.9 + rand() * 0.2);
+    return [tx - (dx * Math.cos(ang) - dy * Math.sin(ang)) * L, ty - (dx * Math.sin(ang) + dy * Math.cos(ang)) * L];
+  };
+  const b1 = barb(1), b2 = barb(-1);
+  const headLine: Pt[] = [...handLine(b1, [tx, ty], rand, { bow: 0.04, tremor: 0.2, step: 2 }), ...handLine([tx, ty], b2, rand, { bow: -0.04, tremor: 0.2, step: 2 }).slice(1)];
+  return paced([{ pts: shaft, pen: 1 }, { pts: headLine, pen: 1 }], step);
+}
