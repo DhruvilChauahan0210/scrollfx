@@ -62,7 +62,6 @@ export function Sheet({ slug, name, family, no, total, rev, install, heading, in
   };
   const Title = heading;
   const View = current?.ex.Component;
-  const many = details.length > 4;
 
   return (
     <Frame id={slug} label={`Sheet ${no} of ${total}: ${name}`}>
@@ -85,7 +84,7 @@ export function Sheet({ slug, name, family, no, total, rev, install, heading, in
             <p className="drafting px-4 text-muted-foreground sm:px-6 lg:px-0">
               Details <span className="normal-case tracking-normal">· the variants, drawn small; click one to draw it above</span>
             </p>
-            <ul className={`flex snap-x scroll-px-4 gap-6 overflow-x-auto px-4 pb-1 sm:scroll-px-6 sm:px-6 lg:flex-wrap lg:overflow-visible lg:px-0 ${many ? 'lg:gap-x-[18px] lg:gap-y-6' : 'lg:gap-x-8'}`}>
+            <ul className="flex snap-x scroll-px-4 gap-6 overflow-x-auto px-4 pb-1 sm:scroll-px-6 sm:px-6 lg:flex-wrap lg:gap-x-7 lg:gap-y-7 lg:overflow-visible lg:px-0">
               {details.map((d, i) => (
                 <li key={d.example} className="shrink-0 snap-start">
                   <DetailView
@@ -93,8 +92,7 @@ export function Sheet({ slug, name, family, no, total, rev, install, heading, in
                     letter={LETTERS[i]}
                     no={no}
                     shape={spec.shape}
-                    scale={many ? spec.scale + 1 : spec.scale}
-                    small={many}
+                    scale={spec.scale}
                     accent={accent}
                     active={i === shown}
                     onSelect={() => replot({ shown: i })}
@@ -152,8 +150,10 @@ function DetailMark({ letter, no, active }: { letter: string; no: string; active
   );
 }
 
-function DetailView({ detail, letter, no, shape, scale, small, accent, active, onSelect }: { detail: Detail & { ex: Example }; letter: string; no: string; shape: 'circle' | 'box'; scale: number; small: boolean; accent: string; active: boolean; onSelect: () => void }) {
-  const W = small ? 118 : shape === 'circle' ? 164 : 184;
+function DetailView({ detail, letter, no, shape, scale, accent, active, onSelect }: { detail: Detail & { ex: Example }; letter: string; no: string; shape: 'circle' | 'box'; scale: number; accent: string; active: boolean; onSelect: () => void }) {
+  const W = shape === 'circle' ? 164 : 184;
+  // The prop is code: it never breaks. Set on one line, a little smaller if it is long (a mono letter is 0.6 em).
+  const propSize = Math.min(11, Math.floor((W / (detail.prop.length * 0.6)) * 10) / 10);
   const H = shape === 'circle' ? W : Math.round(W * 0.68);
   const Ex = detail.ex.Component;
   return (
@@ -183,7 +183,7 @@ function DetailView({ detail, letter, no, shape, scale, small, accent, active, o
           Scale 1:{scale}
         </span>
       </span>
-      <span className={`mt-1.5 block break-all font-mono leading-snug text-foreground/90 ${small ? 'text-[9.5px]' : 'text-[11px]'}`}>{detail.prop}</span>
+      <span className="mt-1.5 block whitespace-nowrap font-mono leading-snug text-foreground/90" style={{ fontSize: propSize }}>{detail.prop}</span>
     </button>
   );
 }

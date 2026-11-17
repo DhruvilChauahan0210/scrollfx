@@ -104,12 +104,21 @@ export function DrawingField({
         const r = line === undefined ? el.getBoundingClientRect() : el.getClientRects()[line];
         return r ? rel(r) : null;
       };
-      const wide = parseFloat(getComputedStyle(fieldEl).paddingLeft) > 90;
       const w = Math.round(fr.width), h = Math.round(fr.height);
       const strokes: Stroke[] = [];
+      const wide = parseFloat(getComputedStyle(fieldEl).paddingLeft) > 90;
       const anchors = callouts.map((co): Pt | null => {
-        const b = boxOf(co.in, co.line);
-        return b && b.w + b.h > 0 ? [b.l + co.at[0] * b.w, b.t + co.at[1] * b.h] : null;
+        const at = !wide && co.phone ? co.phone : co;
+        const b = boxOf(at.in ?? co.in, at.line ?? co.line);
+        return b && b.w + b.h > 0 ? [b.l + at.at[0] * b.w, b.t + at.at[1] * b.h] : null;
+      });
+      const vias = callouts.map((co, i): Pt[] => {
+        const a = anchors[i];
+        if (!a || !co.via) return [];
+        return co.via.flatMap((v) => {
+          const b = boxOf(v.in, v.line);
+          return b ? [[b.l + v.at[0] * b.w, v.at[1] === 'anchor' ? a[1] : b.t + v.at[1] * b.h] as Pt] : [];
+        });
       });
       const dimBoxes = dimensions.map((d) => boxOf(d.in));
       const labels: (Placed | null)[] = callouts.map(() => null);
@@ -148,7 +157,7 @@ export function DrawingField({
         });
         // Then the labels, stacked down each margin near their anchors' heights.
         for (const side of ['left', 'right'] as const) {
-          const items = callouts.flatMap((co, i) => (co.side === side && anchors[i] ? [{ i, want: anchors[i]![1], h: labelEls.current[i]?.offsetHeight || 16 }] : []));
+          const items = callouts.flatMap((co, i) => (co.side === side && anchors[i] ? [{ i, want: (vias[i][0] ?? anchors[i]!)[1], h: labelEls.current[i]?.offsetHeight || 16 }] : []));
           const ys = stack(items, h);
           const edge = side === 'left' ? c.l - 26 - taken.left : c.r + 26 + taken.right;
           for (const { i } of items) {
@@ -157,25 +166,54 @@ export function DrawingField({
             labels[i] = { x, y, side };
             const s = side === 'left' ? 1 : -1;
             const p0: Pt = [x + s * 6, y], p1: Pt = [x + s * 16, y];
-            const pts: Pt[] = Math.abs(a[1] - y) < 1.5 || s * (a[0] - p1[0]) < 4 ? [p0, a] : [p0, p1, a];
+            const via = vias[i];
+            const pts: Pt[] = via.length ? [p0, p1, ...via, a] : Math.abs(a[1] - y) < 1.5 || s * (a[0] - p1[0]) < 4 ? [p0, a] : [p0, p1, a];
             strokes.push({ d: line(pts), width: 0.75 });
             terminate(pts[pts.length - 2], a, callouts[i].end);
           }
         }
       } else {
-        // Balloons: each a little way out from its part, away from the drawing's middle.
+        // Balloons: each by its part, but never on words. Every line of text in
+        // the drawing is an obstacle; a balloon goes to the nearest place clear
+        // of them and of the other balloons (the gutters either side of the
+        // drawing included), preferring a leader that crosses no text.
+        const texts: Box[] = [];
+        const walker = document.createTreeWalker(viewEl, NodeFilter.SHOW_TEXT);
+        const range = document.createRange();
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+          if (!n.textContent?.trim() || n.parentElement?.closest('.sr-only')) continue;
+          range.selectNodeContents(n);
+          for (const r of range.getClientRects()) if (r.width && r.height) texts.push(rel(r));
+        }
+        // Words drawn rather than set (a signature) count as words too.
+        for (const el of viewEl.querySelectorAll('[role=img]')) texts.push(rel(el.getBoundingClientRect()));
+        const r = 8.5, pad = 2;
+        const hitsText = ([x, y]: Pt, rad: number) => texts.some((t) => x + rad > t.l - pad && x - rad < t.r + pad && y + rad > t.t - pad && y - rad < t.b + pad);
+        const crossings = (a: Pt, b: Pt) => {
+          const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 3));
+          const crossed = new Set<number>();
+          for (let k = 2; k <= n; k++) {
+            const x = a[0] + ((b[0] - a[0]) * k) / n, y = a[1] + ((b[1] - a[1]) * k) / n;
+            texts.forEach((t, j) => { if (x > t.l && x < t.r && y > t.t && y < t.b && !(a[0] >= t.l && a[0] <= t.r && a[1] >= t.t && a[1] <= t.b)) crossed.add(j); });
+          }
+          return crossed.size;
+        };
         const mid: Pt = [(c.l + c.r) / 2, (c.t + c.b) / 2];
         anchors.forEach((a, i) => {
           if (!a) return;
-          let vx = a[0] - mid[0], vy = a[1] - mid[1];
-          const n = Math.hypot(vx, vy);
-          if (n < 1) { vx = 0.7; vy = -0.7; } else { vx /= n; vy /= n; }
-          const r = 8.5;
-          const place = (d: number): Pt => [Math.min(w - r - 2, Math.max(r + 2, a[0] + vx * d)), Math.min(h - r - 2, Math.max(r + 2, a[1] + vy * d))];
-          // Further out along the same line until it clears the balloons already set down.
-          let b = place(30);
-          for (let d = 42; d < 120 && balloons.some((o) => o && Math.hypot(o[0] - b[0], o[1] - b[1]) < r * 2 + 4); d += 12) b = place(d);
-          if (balloons.some((o) => o && Math.hypot(o[0] - b[0], o[1] - b[1]) < r * 2 + 4)) b = [b[0] - (r * 2 + 6), b[1]];
+          const cands: Pt[] = [];
+          for (const d of [26, 34, 44, 56, 70, 86, 104, 126]) for (let k = 0; k < 24; k++) cands.push([a[0] + Math.cos((k / 24) * Math.PI * 2) * d, a[1] + Math.sin((k / 24) * Math.PI * 2) * d]);
+          for (let dy = -48; dy <= 48; dy += 12) cands.push([c.l / 2, a[1] + dy], [(c.r + w) / 2, a[1] + dy]);
+          let best: Pt | null = null, score = Infinity;
+          for (const b of cands) {
+            if (b[0] < r + 2 || b[0] > w - r - 2 || b[1] < r + 2 || b[1] > h - r - 2) continue;
+            if (hitsText(b, r) || balloons.some((o) => o && Math.hypot(o[0] - b[0], o[1] - b[1]) < r * 2 + 4)) continue;
+            // Near is good; outward from the drawing's middle is better; across words is worst.
+            const out = (b[0] - a[0]) * (a[0] - mid[0]) + (b[1] - a[1]) * (a[1] - mid[1]) > 0 ? 0 : 8;
+            const sc = Math.hypot(b[0] - a[0], b[1] - a[1]) + out + crossings(a, b) * 80;
+            if (sc < score) { score = sc; best = b; }
+          }
+          const b: Pt = best ?? [Math.min(w - r - 2, Math.max(r + 2, a[0] + 30)), Math.min(h - r - 2, Math.max(r + 2, a[1] - 30))];
           const ex = b[0] - a[0], ey = b[1] - a[1], en = Math.hypot(ex, ey) || 1;
           const edge: Pt = [b[0] - (ex / en) * r, b[1] - (ey / en) * r];
           strokes.push({ d: line([edge, a]), width: 0.75 });
@@ -222,7 +260,7 @@ export function DrawingField({
 
   return (
     <div>
-      <div ref={field} className="relative px-4 pb-12 pt-10 sm:px-8 lg:px-[9.5rem] lg:pb-16 lg:pt-14">
+      <div ref={field} className="relative px-8 pb-12 pt-10 sm:px-10 lg:px-[9.5rem] lg:pb-16 lg:pt-14">
         <div ref={view} className={`mx-auto ${viewClass}`}>{children}</div>
 
         {/* The leaders, dimensions and balloons: strokes only. */}

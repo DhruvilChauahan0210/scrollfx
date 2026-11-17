@@ -8,7 +8,19 @@ export const sheet: SheetSpec = {
       example: 'default',
       prop: 'variant="area"',
       callouts: [
-        { prop: 'variant', note: 'area', in: '[role=img]', at: [0.45, 0.85], side: 'left', end: 'dot' },
+        // Round the first card, not across its figure: under it, up the gap beside it, then in to the hatching.
+        {
+          prop: 'variant',
+          note: 'area',
+          in: '.grid > div:first-child [role=img]',
+          at: [0.9, 0.8],
+          side: 'left',
+          end: 'dot',
+          via: [
+            { in: '.grid > div:first-child', at: [1.035, 1.2] },
+            { in: '.grid > div:first-child', at: [1.035, 'anchor'] },
+          ],
+        },
         { prop: 'color', note: 'line, dot', in: '.grid > div:last-child [role=img]', at: [0.97, 0.88], side: 'right' },
       ],
     },

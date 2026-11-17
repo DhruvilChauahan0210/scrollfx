@@ -22,6 +22,15 @@ export interface Callout {
   side: 'left' | 'right';
   /** An arrowhead on an edge or a line; a dot on a surface. */
   end?: 'arrow' | 'dot';
+  /**
+   * Points the leader turns at on its way (wide sheets), to go round what is
+   * between the label and the part: each a fraction of a box like the anchor,
+   * its y `'anchor'` to level with the anchor. The label sits level with the
+   * first.
+   */
+  via?: { in?: string; line?: number; at: [number, number | 'anchor'] }[];
+  /** A different anchor on a phone, where the callout is a balloon beside the drawing rather than a label in a margin. */
+  phone?: { in?: string; line?: number; at: [number, number] };
 }
 
 /** A dimension: the size a prop sets, measured off a box with extension lines and end ticks. */

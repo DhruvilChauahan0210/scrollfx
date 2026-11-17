@@ -12,8 +12,9 @@ export const sheet: SheetSpec = {
       example: 'default',
       prop: 'variant="underline"',
       callouts: [
-        { prop: 'children', note: 'the words', in: words, line: 0, at: [0.62, 0.3], side: 'right', end: 'dot' },
-        { prop: 'variant', note: 'underline', in: words, line: 0, at: [0.82, 1.06], side: 'right' },
+        // Over the line to the words, and along the line's end to the underline: neither leader crosses a word.
+        { prop: 'children', note: 'the words', in: words, line: 0, at: [0.55, 0.2], side: 'right', end: 'dot', via: [{ in: words, line: 0, at: [0.55, -0.55] }], phone: { at: [1.02, 0.45] } },
+        { prop: 'variant', note: 'underline', in: words, line: 0, at: [1.005, 1.08], side: 'right' },
       ],
     },
     { example: 'double-underline', prop: 'variant="double-underline"', callouts: [{ prop: 'variant', note: 'double-underline', in: words, at: [0.8, 1.2], side: 'right' }] },
