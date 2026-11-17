@@ -1,12 +1,13 @@
 import { ChartArea } from '@/registry/ui/chart-area';
+import type { Pen } from './types';
 
-function Single() {
-  return <ChartArea format={{ maximumFractionDigits: 0, minimumFractionDigits: 0 }} label="Events a day, millions, January to December" />;
+function Single(pen: Pen) {
+  return <ChartArea {...pen} format={{ maximumFractionDigits: 0, minimumFractionDigits: 0 }} label="Events a day, millions, January to December" />;
 }
 
-function Stacked() {
+function Stacked(pen: Pen) {
   return (
-    <ChartArea
+    <ChartArea {...pen}
       data={[
         { month: 'Jan', api: 420, web: 310, mobile: 180 },
         { month: 'Feb', api: 460, web: 340, mobile: 200 },

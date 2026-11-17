@@ -19,7 +19,7 @@ import { useMemo } from 'react';
 import 'svg-scroll-draw/no-flash.css';
 import {
   ACCENT, DataTable, Legend, PHASE, PenLayers, hatchMarks, marker, niceTicks, num, seriesOf, toPath, useSize,
-  type ChartConfig, type Datum, type Mark, type Pen, type Pt,
+  type ChartTrigger, type ChartConfig, type Datum, type Mark, type Pen, type Pt,
 } from '@/lib/chart';
 
 export interface ChartRadarProps {
@@ -39,6 +39,10 @@ export interface ChartRadarProps {
   accent?: string;
   /** What the chart shows, for screen readers (it captions the data table). */
   label?: string;
+  /** `scroll`: inked as it rises, done at mid-screen. `view`: played once as it comes into view. */
+  trigger?: ChartTrigger;
+  /** With `view`, how long the chart takes, in ms. */
+  duration?: number;
   className?: string;
 }
 
@@ -60,6 +64,8 @@ export function ChartRadar({
   legend,
   accent = ACCENT,
   label = 'Radar chart',
+  trigger = 'scroll',
+  duration = 1800,
   className = '',
 }: ChartRadarProps) {
   const series = seriesOf(data, index, config, accent);
@@ -104,8 +110,8 @@ export function ChartRadar({
       <DataTable caption={label} head={[index, ...series.map((s) => s.label)]} rows={data.map((d) => [String(d[index]), ...series.map((s) => num(d[s.key]))])} />
       <div aria-hidden>
         <div className="px-16 py-7">
-          <div ref={ref} className="relative aspect-square w-full">
-            {size && pens ? <PenLayers size={size} pens={pens} /> : null}
+          <div ref={ref} data-slot="plot" className="relative aspect-square w-full">
+            {size && pens ? <PenLayers size={size} pens={pens} trigger={trigger} duration={duration} /> : null}
             {data.map((d, i) => {
               const sx = Math.sin(angle(i)), sy = -Math.cos(angle(i));
               const tx = sx > 0.3 ? '0%' : sx < -0.3 ? '-100%' : '-50%';

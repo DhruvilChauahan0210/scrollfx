@@ -1,12 +1,13 @@
 import { ChartRadar } from '@/registry/ui/chart-radar';
+import type { Pen } from './types';
 
-function Single() {
-  return <ChartRadar label="Scores by skill, out of 100" />;
+function Single(pen: Pen) {
+  return <ChartRadar {...pen} label="Scores by skill, out of 100" />;
 }
 
-function Compare() {
+function Compare(pen: Pen) {
   return (
-    <ChartRadar
+    <ChartRadar {...pen}
       data={[
         { metric: 'Speed', v1: 62, v2: 88 },
         { metric: 'Size', v1: 80, v2: 70 },

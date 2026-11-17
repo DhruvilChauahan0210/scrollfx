@@ -96,3 +96,67 @@
 .still :is(path, polyline, line, polygon, rect, circle, ellipse) {
   stroke-dashoffset: 0 !important;
 }
+
+/* ── The drawing office: every component on a sheet ──────────────────────────
+   A sheet is drawing paper: the site's card in light, and in dark a blueprint,
+   light lines on deep blue. Everything inside reads the shadcn tokens, so the
+   components on a sheet take its paper and ink with them. */
+.sheet {
+  --paper: var(--card);
+  --line: color-mix(in oklab, var(--foreground) 78%, transparent);
+  --hair: color-mix(in oklab, var(--foreground) 22%, transparent);
+  --faint: color-mix(in oklab, var(--foreground) 10%, transparent);
+  background: var(--paper);
+  color: var(--foreground);
+}
+.dark .sheet {
+  --card: #10264a;
+  --background: #10264a;
+  --popover: #10264a;
+  --foreground: #e3ecf8;
+  --card-foreground: #e3ecf8;
+  --muted: #183257;
+  --muted-foreground: #93abcd;
+  --secondary: #183257;
+  --accent: #183257;
+  --border: #2b4874;
+  --input: #2b4874;
+  --ring: #6f8cb8;
+  --primary: #e3ecf8;
+  --primary-foreground: #10264a;
+  --paper: #10264a;
+  /* A blueprint's paper is never flat: a faint grain, and a cooler edge. */
+  background-image: var(--grain), radial-gradient(120% 90% at 50% 40%, #142c55 0%, #0f2446 70%, #0c1f3e 100%);
+}
+.sheet ::selection { background: #e0482a; color: #f8f6f1; }
+
+/* Drafting labels: mono small caps, set wide. */
+.drafting { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; line-height: 1.3; }
+
+/* The zone strips between the frame's two lines: numbers along the top and
+   bottom, letters down the sides, a tick at every boundary and a short one
+   half way. */
+.sheet-zones { position: absolute; display: flex; pointer-events: none; }
+.sheet-zones > span { position: relative; flex: 1; display: grid; place-items: center; }
+.sheet-zones > span + span::before { content: ''; position: absolute; background: var(--line); }
+.sheet-zones > span::after { content: ''; position: absolute; background: var(--hair); }
+.sheet-zones[data-axis='x'] > span + span::before { left: 0; top: 0; bottom: 0; width: 1px; }
+.sheet-zones[data-axis='x'] > span::after { left: 50%; width: 1px; height: 4px; }
+.sheet-zones[data-edge='top'] > span::after { bottom: 0; }
+.sheet-zones[data-edge='bottom'] > span::after { top: 0; }
+.sheet-zones[data-axis='y'] { flex-direction: column; }
+.sheet-zones[data-axis='y'] > span + span::before { top: 0; left: 0; right: 0; height: 1px; }
+.sheet-zones[data-axis='y'] > span::after { top: 50%; height: 1px; width: 4px; }
+.sheet-zones[data-edge='left'] > span::after { right: 0; }
+.sheet-zones[data-edge='right'] > span::after { left: 0; }
+
+/* Ruled tables in drafting style: schedules, the parts list, the register. */
+.schedule { width: 100%; border-collapse: collapse; }
+.schedule th { font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.16em; font-size: 9.5px; color: var(--muted-foreground); text-align: left; padding: 7px 10px 6px; border-bottom: 1px solid var(--line); }
+.schedule td { padding: 7px 10px; border-top: 1px solid var(--hair); vertical-align: top; }
+.schedule tr:first-child td { border-top: 0; }
+.schedule th + th, .schedule td + td { border-left: 1px solid var(--hair); }
+
+/* A detail is the example at reduced scale: laid out at full size, then
+   shrunk, as a drawing's detail is drawn to a stated scale. */
+.detail-scaled { position: absolute; left: 0; top: 0; transform-origin: 0 0; display: grid; place-items: center; }

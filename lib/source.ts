@@ -14,32 +14,55 @@ const parse = (path: string) => ts.createSourceFile(path, readFileSync(path, 'ut
 /** Imports as they read once installed: components land in components/scrollfx/. */
 const installed = (text: string) => text.replaceAll('@/registry/ui/', '@/components/scrollfx/');
 
+/** The site's pen plumbing taken out of an example: what a reader writes has none. */
+const unpen = (code: string) =>
+  code
+    .replace(/\(pen(?::\s*Pen)?\)/g, '()')
+    .replace(/\s*\{\.\.\.pen\}/g, '')
+    .replace(/\s+\w+=\{pen\.\w+\}/g, '');
+
+const pascal = (words: string) => words.replace(/[^A-Za-z0-9 -]/g, '').split(/[\s-]+/).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join('');
+
 /**
- * Each example's code by its name: the imports it uses and its function. An
- * example is an entry `{ name: '...', Component: Fn }` in the file's
- * `examples` array, and Fn a function declared in the same file.
+ * Each example's code by its name: the imports it uses, the helpers and
+ * constants from its file it uses, and its function. An example is an entry
+ * `{ name: '...', Component: Fn }` in the file's `examples` array, Fn a
+ * function declared in the same file or written inline.
  */
 export function exampleSources(slug: string): Record<string, string> {
   const path = join(ROOT, 'registry/examples', `${slug}.tsx`);
   if (!existsSync(path)) return {};
   const sf = parse(path);
   const functions = new Map<string, string>();
+  const constants = new Map<string, string>();
   const imports: ts.ImportDeclaration[] = [];
   const entries: [string, string][] = [];
   for (const st of sf.statements) {
     if (ts.isFunctionDeclaration(st) && st.name) functions.set(st.name.text, st.getText(sf).replace(/^export\s+/, ''));
     if (ts.isVariableStatement(st)) {
       for (const d of st.declarationList.declarations) {
-        if (ts.isIdentifier(d.name) && d.initializer && ts.isArrowFunction(d.initializer)) functions.set(d.name.text, st.getText(sf).replace(/^export\s+/, ''));
-        if (ts.isIdentifier(d.name) && d.name.text === 'examples' && d.initializer && ts.isArrayLiteralExpression(d.initializer)) {
+        if (!ts.isIdentifier(d.name) || !d.initializer) continue;
+        if (ts.isArrowFunction(d.initializer)) functions.set(d.name.text, st.getText(sf).replace(/^export\s+/, ''));
+        else if (d.name.text !== 'examples') constants.set(d.name.text, st.getText(sf).replace(/^export\s+/, ''));
+        if (d.name.text === 'examples' && ts.isArrayLiteralExpression(d.initializer)) {
           for (const el of d.initializer.elements) {
             if (!ts.isObjectLiteralExpression(el)) continue;
-            let name = '', fn = '';
+            let name = '', title = '', fn = '';
             for (const p of el.properties) {
               if (!ts.isPropertyAssignment(p) && !ts.isShorthandPropertyAssignment(p)) continue;
               const key = p.name.getText(sf);
               if (key === 'name' && ts.isPropertyAssignment(p) && ts.isStringLiteralLike(p.initializer)) name = p.initializer.text;
-              if (key === 'Component') fn = ts.isPropertyAssignment(p) ? p.initializer.getText(sf) : 'Component';
+              if (key === 'title' && ts.isPropertyAssignment(p) && ts.isStringLiteralLike(p.initializer)) title = p.initializer.text;
+              if (key !== 'Component') continue;
+              if (ts.isPropertyAssignment(p) && ts.isArrowFunction(p.initializer)) {
+                // Written inline: as the function a reader would declare.
+                const body = p.initializer.body;
+                const jsx = ts.isParenthesizedExpression(body) ? body.expression.getText(sf) : body.getText(sf);
+                const fnName = `${pascal(title || name)}Example`;
+                const indented = jsx.split('\n').map((l, i) => (i ? l.replace(/^ {4}/, '') : l)).join('\n');
+                functions.set(`inline:${name}`, `function ${fnName}() {\n  return (\n    ${indented.replace(/\n/g, '\n  ')}\n  );\n}`);
+                fn = `inline:${name}`;
+              } else fn = ts.isPropertyAssignment(p) ? p.initializer.getText(sf) : 'Component';
             }
             if (name && fn) entries.push([name, fn]);
           }
@@ -50,22 +73,34 @@ export function exampleSources(slug: string): Record<string, string> {
   }
   const out: Record<string, string> = {};
   for (const [name, fn] of entries) {
-    const body = functions.get(fn);
-    if (!body) continue;
-    const used = (id: string) => new RegExp(`\\b${id}\\b`).test(body);
+    const main = functions.get(fn);
+    if (!main) continue;
+    const mentions = (code: string, id: string) => new RegExp(`\\b${id}\\b`).test(code);
+    // The file's own helpers and constants it uses, those they use in turn, in file order.
+    const local = [...functions.entries(), ...constants.entries()].filter(([id]) => id !== fn && !id.startsWith('inline:'));
+    const needed = new Set<string>();
+    let grew = true;
+    while (grew) {
+      grew = false;
+      const text = [main, ...[...needed].map((id) => local.find(([l]) => l === id)![1])].join('\n');
+      for (const [id] of local) if (!needed.has(id) && mentions(text, id)) { needed.add(id); grew = true; }
+    }
+    const helpers = local.filter(([id]) => needed.has(id)).map(([, code]) => code);
+    const body = unpen([...helpers, `export ${main}`].join('\n\n'));
     const lines = imports.flatMap((imp) => {
       const from = imp.moduleSpecifier.getText(sf);
       const clause = imp.importClause;
       if (!clause) return [];
+      if (/^['"]\.\/types['"]$/.test(from)) return [];
       if (/^['"]react['"]$/.test(from) && clause.isTypeOnly) return [];
       const names: string[] = [];
-      if (clause.name && used(clause.name.text)) names.push(clause.name.text);
-      const named = clause.namedBindings && ts.isNamedImports(clause.namedBindings) ? clause.namedBindings.elements.filter((e) => used(e.name.text)).map((e) => e.getText(sf)) : [];
+      if (clause.name && mentions(body, clause.name.text)) names.push(clause.name.text);
+      const named = clause.namedBindings && ts.isNamedImports(clause.namedBindings) ? clause.namedBindings.elements.filter((e) => mentions(body, e.name.text)).map((e) => e.getText(sf)) : [];
       if (!names.length && !named.length) return [];
       const parts = [...names, ...(named.length ? [`{ ${named.join(', ')} }`] : [])];
       return [`import ${clause.isTypeOnly ? 'type ' : ''}${parts.join(', ')} from ${from};`];
     });
-    out[name] = installed(`${lines.join('\n')}\n\nexport ${body}\n`).replace(/^\n+/, '');
+    out[name] = installed(`${lines.join('\n')}\n\n${body}\n`).replace(/^\n+/, '');
   }
   return out;
 }

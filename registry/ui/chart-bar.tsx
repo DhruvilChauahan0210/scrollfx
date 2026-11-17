@@ -21,7 +21,7 @@ import { useMemo } from 'react';
 import 'svg-scroll-draw/no-flash.css';
 import {
   ACCENT, DataTable, Legend, PHASE, PenLayers, XLabels, YLabels, formatter, gutter, hatchMarks, linear, niceTicks, num, rect, seriesOf, toPath, useSize,
-  type ChartConfig, type Datum, type Mark, type Pen,
+  type ChartTrigger, type ChartConfig, type Datum, type Mark, type Pen,
 } from '@/lib/chart';
 
 export interface ChartBarProps {
@@ -45,6 +45,10 @@ export interface ChartBarProps {
   accent?: string;
   /** What the chart shows, for screen readers (it captions the data table). */
   label?: string;
+  /** `scroll`: inked as it rises, done at mid-screen. `view`: played once as it comes into view. */
+  trigger?: ChartTrigger;
+  /** With `view`, how long the chart takes, in ms. */
+  duration?: number;
   className?: string;
 }
 
@@ -64,6 +68,8 @@ export function ChartBar({
   legend,
   accent = ACCENT,
   label = 'Bar chart',
+  trigger = 'scroll',
+  duration = 1800,
   className = '',
 }: ChartBarProps) {
   const series = seriesOf(data, index, config, accent);
@@ -128,8 +134,8 @@ export function ChartBar({
       <div aria-hidden>
         <div className="flex">
           <YLabels ticks={across ? categories : valueTicks} />
-          <div ref={ref} className="relative min-w-0 flex-1" style={{ height: plotHeight }}>
-            {size && pens ? <PenLayers size={size} pens={pens} /> : null}
+          <div ref={ref} data-slot="plot" className="relative min-w-0 flex-1" style={{ height: plotHeight }}>
+            {size && pens ? <PenLayers size={size} pens={pens} trigger={trigger} duration={duration} /> : null}
           </div>
         </div>
         <XLabels ticks={across ? valueTicks : categories} offset={gutter((across ? categories : valueTicks).map((t) => t.label))} />

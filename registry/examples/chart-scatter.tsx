@@ -1,12 +1,13 @@
 import { ChartScatter } from '@/registry/ui/chart-scatter';
+import type { Pen } from './types';
 
-function Groups() {
-  return <ChartScatter label="Hours saved against seats, by plan" />;
+function Groups(pen: Pen) {
+  return <ChartScatter {...pen} label="Hours saved against seats, by plan" />;
 }
 
-function Trend() {
+function Trend(pen: Pen) {
   return (
-    <ChartScatter
+    <ChartScatter {...pen}
       data={[
         { temp: 14, sales: 215 }, { temp: 16, sales: 325 }, { temp: 12, sales: 185 }, { temp: 19, sales: 412 },
         { temp: 21, sales: 522 }, { temp: 18, sales: 445 }, { temp: 23, sales: 544 }, { temp: 22, sales: 614 },

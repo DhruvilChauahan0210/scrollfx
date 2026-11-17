@@ -1,12 +1,13 @@
 import { ChartLine } from '@/registry/ui/chart-line';
+import type { Pen } from './types';
 
-function Single() {
-  return <ChartLine label="Visitors a month, January to December" />;
+function Single(pen: Pen) {
+  return <ChartLine {...pen} label="Visitors a month, January to December" />;
 }
 
-function MultiSeries() {
+function MultiSeries(pen: Pen) {
   return (
-    <ChartLine
+    <ChartLine {...pen}
       data={[
         { month: 'January', desktop: 186, mobile: 80 },
         { month: 'February', desktop: 305, mobile: 200 },
@@ -22,9 +23,9 @@ function MultiSeries() {
   );
 }
 
-function Stepped() {
+function Stepped(pen: Pen) {
   return (
-    <ChartLine
+    <ChartLine {...pen}
       data={[
         { week: 'W1', seats: 12 }, { week: 'W2', seats: 12 }, { week: 'W3', seats: 18 }, { week: 'W4', seats: 18 },
         { week: 'W5', seats: 25 }, { week: 'W6', seats: 31 }, { week: 'W7', seats: 31 }, { week: 'W8', seats: 40 },

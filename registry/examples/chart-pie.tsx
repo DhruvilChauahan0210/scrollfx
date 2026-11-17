@@ -1,12 +1,13 @@
 import { ChartPie } from '@/registry/ui/chart-pie';
+import type { Pen } from './types';
 
-function Pie() {
-  return <ChartPie label="Visitors by browser" />;
+function Pie(pen: Pen) {
+  return <ChartPie {...pen} label="Visitors by browser" />;
 }
 
-function Donut() {
+function Donut(pen: Pen) {
   return (
-    <ChartPie
+    <ChartPie {...pen}
       data={[
         { plan: 'starter', seats: 1240 },
         { plan: 'team', seats: 860 },

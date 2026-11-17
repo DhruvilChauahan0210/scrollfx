@@ -20,7 +20,7 @@ import { useMemo } from 'react';
 import 'svg-scroll-draw/no-flash.css';
 import {
   ACCENT, DataTable, Legend, PenLayers, arc, formatter, hatchMarks, num, toPath, useSize, wedge,
-  type ChartConfig, type Datum, type Hatch, type Mark, type Pen, type Series,
+  type ChartTrigger, type ChartConfig, type Datum, type Hatch, type Mark, type Pen, type Series,
 } from '@/lib/chart';
 
 export interface ChartPieProps {
@@ -46,6 +46,10 @@ export interface ChartPieProps {
   accent?: string;
   /** What the chart shows, for screen readers (it captions the data table). */
   label?: string;
+  /** `scroll`: inked as it rises, done at mid-screen. `view`: played once as it comes into view. */
+  trigger?: ChartTrigger;
+  /** With `view`, how long the chart takes, in ms. */
+  duration?: number;
   className?: string;
 }
 
@@ -81,6 +85,8 @@ export function ChartPie({
   legend = true,
   accent = ACCENT,
   label = 'Pie chart',
+  trigger = 'scroll',
+  duration = 1800,
   className = '',
 }: ChartPieProps) {
   const total = data.reduce((m, d) => m + Math.max(0, num(d[valueKey])), 0) || 1;
@@ -130,8 +136,8 @@ export function ChartPie({
       <DataTable caption={label} head={['Name', 'Value', 'Share']} rows={wedges.map((wd) => [wd.label, wd.value, pct(wd.value)])} />
       <div aria-hidden>
         <div className="px-9 py-6">
-          <div ref={ref} className="relative aspect-square w-full">
-            {size && pens ? <PenLayers size={size} pens={pens} /> : null}
+          <div ref={ref} data-slot="plot" className="relative aspect-square w-full">
+            {size && pens ? <PenLayers size={size} pens={pens} trigger={trigger} duration={duration} /> : null}
             {labels &&
               wedges.map((wd) => {
                 const mid = (wd.a0 + wd.a1) / 2, sx = Math.sin(mid), sy = -Math.cos(mid);

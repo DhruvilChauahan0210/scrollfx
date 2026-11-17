@@ -137,10 +137,14 @@ npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-f
 
 ## Components — charts
 
-Smaller pieces than the plates, to set inside your own pages: [scrollfx-ui.vercel.app/components](https://scrollfx-ui.vercel.app/components).
+Smaller pieces than the plates, to set inside your own pages. The site shows them as a set of engineering drawings,
+[scrollfx-ui.vercel.app/components](https://scrollfx-ui.vercel.app/components): each component is a sheet, plotted
+live, with its props called out round it, its variants as details in the margin (click one and the pen draws it
+again), a schedule of its props, its parts list and a title block with the install line.
 Each takes its data as props (series from a `config`, as shadcn's chart does), keeps its labels and a data table for
 screen readers in the server HTML, and is inked in pen by pen as it scrolls in: the axes, then the hatching, then the
-lines in the accent, the last pen lifting as it reaches the middle of the screen. React only for now.
+lines in the accent, the last pen lifting as it reaches the middle of the screen. `trigger="view"` plays it once as it
+comes into view instead, over `duration` ms. React only for now.
 
 | Component | Variants | Install |
 |---|---|---|
@@ -205,7 +209,7 @@ The CLI puts each in `components/scrollfx/` and installs `lib/plotter.ts` and `l
 npm install
 npm run dev     # http://localhost:4400
 npm run build   # the shadcn registry (public/r) and the site
-npm run check   # every block and every component page, scrolled in Chromium
+npm run check   # every block and every component sheet, scrolled in Chromium
 npm run check:vue     # every Vue block, compiled and scrolled in Chromium
 npm run check:svelte  # every Svelte block, the same way
 npm run readme:images  # the README's screenshots and GIF, from the live site (needs ffmpeg)
@@ -218,9 +222,12 @@ Generators live in `lib/plotter.ts`, published as the `plotter` registry item th
 
 A component is a file in `registry/ui/` (a `registry:ui` item in `registry.json`, installed to
 `components/scrollfx/<name>.tsx`), its examples in `registry/examples/<name>.tsx` (listed in
-`registry/examples/index.ts`), and a family library such as `lib/chart.ts` if it shares one. Its page,
-`/components/<name>`, is built from those: every example live with its code, the props read from its
-`<Name>Props` interface, and its source.
+`registry/examples/index.ts`), a family library such as `lib/chart.ts` if it shares one, and its drawing sheet in
+`registry/sheets/<name>.ts` (listed in `registry/sheets/index.ts`): the callouts and dimensions drawn round it, each
+naming a prop and anchored to a fraction of a box in the drawing, and which examples are its details. Its sheet,
+on `/components` with all the others and on its own at `/components/<name>`, is built from those: the first
+example drawn large, every example as a detail, the usage of each, the props schedule read from its `<Name>Props`
+interface, the parts list from `registry.json`, and its source.
 
 ## License
 

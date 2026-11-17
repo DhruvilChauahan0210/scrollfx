@@ -20,7 +20,7 @@ import { useMemo } from 'react';
 import 'svg-scroll-draw/no-flash.css';
 import {
   ACCENT, DataTable, Legend, PHASE, PenLayers, XLabels, YLabels, curvePath, curvePoints, formatter, gutter, hatchMarks, linear, niceTicks, num, seriesOf, toPath, useSize,
-  type ChartConfig, type Curve, type Datum, type Hatch, type Mark, type Pen, type Pt,
+  type ChartTrigger, type ChartConfig, type Curve, type Datum, type Hatch, type Mark, type Pen, type Pt,
 } from '@/lib/chart';
 
 export interface ChartAreaProps {
@@ -44,6 +44,10 @@ export interface ChartAreaProps {
   accent?: string;
   /** What the chart shows, for screen readers (it captions the data table). */
   label?: string;
+  /** `scroll`: inked as it rises, done at mid-screen. `view`: played once as it comes into view. */
+  trigger?: ChartTrigger;
+  /** With `view`, how long the chart takes, in ms. */
+  duration?: number;
   className?: string;
 }
 
@@ -72,6 +76,8 @@ export function ChartArea({
   legend,
   accent = ACCENT,
   label = 'Area chart',
+  trigger = 'scroll',
+  duration = 1800,
   className = '',
 }: ChartAreaProps) {
   const series = seriesOf(data, index, config, accent).map((s, i) => ({ ...s, hatch: AREA_HATCHES[i % AREA_HATCHES.length] }));
@@ -118,8 +124,8 @@ export function ChartArea({
       <div aria-hidden>
         <div className="flex">
           <YLabels ticks={ticks.map((t) => ({ label: fmt(t), at: (t - lo) / (hi - lo) }))} />
-          <div ref={ref} className="relative min-w-0 flex-1" style={{ height }}>
-            {size && pens ? <PenLayers size={size} pens={pens} /> : null}
+          <div ref={ref} data-slot="plot" className="relative min-w-0 flex-1" style={{ height }}>
+            {size && pens ? <PenLayers size={size} pens={pens} trigger={trigger} duration={duration} /> : null}
           </div>
         </div>
         <XLabels ticks={data.map((d, i) => ({ label: String(d[index]), at: xAt(i) }))} offset={gutter(ticks.map(fmt))} />

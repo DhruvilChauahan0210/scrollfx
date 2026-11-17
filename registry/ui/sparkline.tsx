@@ -16,7 +16,7 @@
 
 import { useMemo } from 'react';
 import 'svg-scroll-draw/no-flash.css';
-import { ACCENT, PenLayers, circle, curvePath, curvePoints, hatchMarks, linear, useSize, type Curve, type Mark, type Pen, type Pt } from '@/lib/chart';
+import { ACCENT, PenLayers, circle, curvePath, curvePoints, hatchMarks, linear, useSize, type ChartTrigger, type Curve, type Mark, type Pen, type Pt } from '@/lib/chart';
 
 export interface SparklineProps {
   /** The values, left to right. */
@@ -31,12 +31,16 @@ export interface SparklineProps {
   color?: string;
   /** What it shows, for screen readers. Defaults to the first and last values. */
   label?: string;
+  /** `scroll`: inked as it rises, done at mid-screen. `view`: played once as it comes into view. */
+  trigger?: ChartTrigger;
+  /** With `view`, how long the line takes, in ms. */
+  duration?: number;
   className?: string;
 }
 
 const SAMPLE = [12, 14, 13, 17, 16, 21, 19, 24, 23, 28, 27, 31];
 
-export function Sparkline({ data = SAMPLE, variant = 'line', curve = 'smooth', dot = true, color = ACCENT, label, className = 'h-8 w-28' }: SparklineProps) {
+export function Sparkline({ data = SAMPLE, variant = 'line', curve = 'smooth', dot = true, color = ACCENT, label, trigger = 'scroll', duration = 1200, className = 'h-8 w-28' }: SparklineProps) {
   const [ref, size] = useSize<HTMLSpanElement>();
   const lo = Math.min(...data), hi = Math.max(...data);
 
@@ -66,7 +70,7 @@ export function Sparkline({ data = SAMPLE, variant = 'line', curve = 'smooth', d
       aria-label={label ?? `Trend from ${data[0]} to ${data[data.length - 1]}, ${data.length} values`}
       className={`relative inline-block align-middle ${className}`}
     >
-      {size && pens ? <PenLayers size={size} pens={pens} /> : null}
+      {size && pens ? <PenLayers size={size} pens={pens} trigger={trigger} duration={duration} /> : null}
     </span>
   );
 }

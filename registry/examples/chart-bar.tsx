@@ -1,4 +1,5 @@
 import { ChartBar } from '@/registry/ui/chart-bar';
+import type { Pen } from './types';
 
 const QUARTERS = [
   { quarter: 'Q1', new: 120, returning: 210 },
@@ -7,13 +8,13 @@ const QUARTERS = [
   { quarter: 'Q4', new: 230, returning: 330 },
 ];
 
-function Vertical() {
-  return <ChartBar label="Orders a month, January to June" />;
+function Vertical(pen: Pen) {
+  return <ChartBar {...pen} label="Orders a month, January to June" />;
 }
 
-function Horizontal() {
+function Horizontal(pen: Pen) {
   return (
-    <ChartBar
+    <ChartBar {...pen}
       data={[
         { lang: 'TypeScript', repos: 412 },
         { lang: 'Python', repos: 356 },
@@ -29,9 +30,9 @@ function Horizontal() {
   );
 }
 
-function Grouped() {
+function Grouped(pen: Pen) {
   return (
-    <ChartBar
+    <ChartBar {...pen}
       data={QUARTERS}
       index="quarter"
       config={{ new: { label: 'New' }, returning: { label: 'Returning' } }}
@@ -40,9 +41,9 @@ function Grouped() {
   );
 }
 
-function Stacked() {
+function Stacked(pen: Pen) {
   return (
-    <ChartBar
+    <ChartBar {...pen}
       data={QUARTERS}
       index="quarter"
       config={{ new: { label: 'New' }, returning: { label: 'Returning' } }}

@@ -21,7 +21,7 @@ import { useMemo } from 'react';
 import 'svg-scroll-draw/no-flash.css';
 import {
   ACCENT, DataTable, Legend, PHASE, PenLayers, XLabels, YLabels, formatter, gutter, linear, marker, niceTicks, num, seriesOf, toPath, useSize,
-  type ChartConfig, type Datum, type Mark, type Pen,
+  type ChartTrigger, type ChartConfig, type Datum, type Mark, type Pen,
 } from '@/lib/chart';
 
 export interface ChartScatterProps {
@@ -51,6 +51,10 @@ export interface ChartScatterProps {
   accent?: string;
   /** What the chart shows, for screen readers (it captions the data table). */
   label?: string;
+  /** `scroll`: inked as it rises, done at mid-screen. `view`: played once as it comes into view. */
+  trigger?: ChartTrigger;
+  /** With `view`, how long the chart takes, in ms. */
+  duration?: number;
   className?: string;
 }
 
@@ -77,6 +81,8 @@ export function ChartScatter({
   legend,
   accent = ACCENT,
   label = 'Scatter chart',
+  trigger = 'scroll',
+  duration = 1800,
   className = '',
 }: ChartScatterProps) {
   const names = group ? (config ? Object.keys(config) : [...new Set(data.map((d) => String(d[group])))]) : ['all'];
@@ -127,15 +133,15 @@ export function ChartScatter({
     <figure className={`w-full ${className}`}>
       <DataTable caption={label} head={[xLabel ?? x, yLabel ?? y, ...(group ? [group] : [])]} rows={data.map((d) => [num(d[x]), num(d[y]), ...(group ? [config?.[groupOf(d)]?.label ?? groupOf(d)] : [])])} />
       <div aria-hidden>
-        {yLabel && <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{yLabel}</p>}
+        {yLabel && <p data-slot="y-title" className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{yLabel}</p>}
         <div className="flex">
           <YLabels ticks={yTicks} />
-          <div ref={ref} className="relative min-w-0 flex-1" style={{ height }}>
-            {size && pens ? <PenLayers size={size} pens={pens} /> : null}
+          <div ref={ref} data-slot="plot" className="relative min-w-0 flex-1" style={{ height }}>
+            {size && pens ? <PenLayers size={size} pens={pens} trigger={trigger} duration={duration} /> : null}
           </div>
         </div>
         <XLabels ticks={xt.map((t) => ({ label: fmt(t), at: (t - x0) / (x1 - x0) }))} offset={gutter(yTicks.map((t) => t.label))} />
-        {xLabel && <p className="mt-3 text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{xLabel}</p>}
+        {xLabel && <p data-slot="x-title" className="mt-3 text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{xLabel}</p>}
         {(legend ?? series.length > 1) && <Legend series={series} kind="marker" className="mt-4" />}
       </div>
     </figure>

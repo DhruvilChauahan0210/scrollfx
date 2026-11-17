@@ -6,11 +6,11 @@ export const examples: Example[] = [
     name: 'default',
     title: 'Name',
     description: 'A name in Hershey’s script, written in order at one steady speed, then underlined with a flourish.',
-    Component: () => (
+    Component: (pen) => (
       <figure className="max-w-md">
         <blockquote className="font-serif text-2xl leading-snug tracking-[-0.015em]">“We stopped animating our pages. Now the pen does it, and only when someone is reading.”</blockquote>
         <figcaption className="mt-6">
-          <InkSignature name="Ada Marlow" />
+          <InkSignature {...pen} name="Ada Marlow" />
           <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Ada Marlow · Founder, Okkara</p>
         </figcaption>
       </figure>
@@ -20,14 +20,14 @@ export const examples: Example[] = [
     name: 'in-view',
     title: 'Written on arrival',
     description: 'With trigger="view" the name is written once, over `duration` ms, as it comes into view, rather than with the scroll.',
-    Component: () => <InkSignature name="With thanks, Tom" size={48} trigger="view" duration={2400} seed={3} />,
+    Component: (pen) => <InkSignature {...pen} name="With thanks, Tom" size={48} trigger="view" duration={2400} seed={3} />,
   },
   {
     name: 'custom',
     title: 'Your own signature',
     description: 'Pass SVG path data, one string per stroke in writing order, and the viewBox they sit in.',
-    Component: () => (
-      <InkSignature
+    Component: (pen) => (
+      <InkSignature {...pen}
         name="J. Okafor"
         viewBox="0 0 300 120"
         paths={[

@@ -1,6 +1,7 @@
 import { Sparkline } from '@/registry/ui/sparkline';
+import type { Pen } from './types';
 
-function StatCards() {
+function StatCards(pen: Pen) {
   const stats = [
     { label: 'Revenue', value: '$48.2k', change: '+12%', data: [21, 24, 22, 27, 26, 31, 30, 34, 37, 36, 41, 45] },
     { label: 'Active users', value: '3,904', change: '+4%', data: [310, 330, 325, 340, 338, 352, 349, 361, 358, 372, 380, 390] },
@@ -14,7 +15,7 @@ function StatCards() {
             <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{s.label}</p>
             <div className="mt-3 flex items-end justify-between gap-3">
               <p className="font-serif text-3xl tracking-[-0.02em] tabular-nums">{s.value}</p>
-              <Sparkline data={s.data} variant="area" className="h-10 w-24" label={`${s.label}, last 12 months`} />
+              <Sparkline color={pen.accent} trigger={pen.trigger} data={s.data} variant="area" className="h-10 w-24" label={`${s.label}, last 12 months`} />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">{s.change} on last month</p>
           </div>
@@ -24,7 +25,7 @@ function StatCards() {
   );
 }
 
-function InATable() {
+function InATable(pen: Pen) {
   const rows = [
     { name: 'svg-scroll-draw', downloads: '18.4k', data: [8, 9, 11, 10, 13, 15, 14, 17, 19, 18] },
     { name: 'plotter', downloads: '6.1k', data: [7, 6, 7, 8, 7, 9, 8, 9, 10, 11] },
@@ -46,7 +47,7 @@ function InATable() {
             <td className="py-3 font-mono text-[13px]">{r.name}</td>
             <td className="py-3 text-right tabular-nums">{r.downloads}</td>
             <td className="py-3 pl-6 text-right">
-              <Sparkline data={r.data} curve="linear" label={`${r.name}, weekly downloads over ten weeks`} />
+              <Sparkline color={pen.accent} trigger={pen.trigger} data={r.data} curve="linear" label={`${r.name}, weekly downloads over ten weeks`} />
             </td>
           </tr>
         ))}

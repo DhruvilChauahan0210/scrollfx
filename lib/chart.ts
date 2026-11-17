@@ -3,7 +3,8 @@
  * chart takes one), nice ticks and scales, curves, markers, hatching for bars,
  * areas and wedges, and the pens that ink a chart in order as it scrolls in:
  * the axes first, then the hatching, then the lines in the accent colour, the
- * last pen lifting exactly as the chart reaches the middle of the screen.
+ * last pen lifting exactly as the chart reaches the middle of the screen (or,
+ * with `trigger="view"`, played once in the same order as it comes into view).
  *
  * Strokes are made in the browser at the chart's measured size, so hatching
  * keeps the same spacing at any width. Labels, ticks and the data table are
@@ -224,13 +225,31 @@ export const PHASE = {
   ink: { from: 0.8, to: 0.5 },
 } as const;
 
+/**
+ * When a chart is inked: `scroll` ties it to the scroll, the last pen lifting
+ * as the chart reaches the middle of the screen; `view` plays it once, over
+ * `duration` ms, as it comes into view, each pen in the same order and overlap
+ * it keeps on the scroll. Reduced motion shows it drawn either way.
+ */
+export type ChartTrigger = 'scroll' | 'view';
+
+// The span of the scroll the pens share (where the chart's centre sits, 1.15 to 0.5), for timing them in `view`.
+const SPAN = { from: 1.15, to: 0.5 };
+
 /** The pens, layered in order in one box: each its own svg-scroll-draw drawing. */
-export function PenLayers({ size, pens }: { size: { w: number; h: number }; pens: Pen[] }) {
+export function PenLayers({ size, pens, trigger = 'scroll', duration = 1800 }: { size: { w: number; h: number }; pens: Pen[]; trigger?: ChartTrigger; duration?: number }) {
+  const span = SPAN.from - SPAN.to;
   return h(
     Fragment,
     null,
     pens.filter((p) => p.marks.length).map((p, i) => {
       const spread = p.spread ?? 0;
+      const stagger = staggerFor(p.marks.length, spread);
+      // On arrival, each pen starts and lifts at the same share of `duration` as it does of the scroll.
+      const timing =
+        trigger === 'view'
+          ? { autoplay: true, once: true, native: false, delay: Math.max(0, ((SPAN.from - p.from) / span) * duration), duration: (((p.from - p.to) / span) * duration) / (1 + spread) }
+          : { trigger: scrollWindow(spread, { from: p.from, to: p.to }) };
       return h(
         ScrollDraw,
         {
@@ -239,11 +258,11 @@ export function PenLayers({ size, pens }: { size: { w: number; h: number }; pens
           'aria-hidden': true,
           easing: 'linear',
           progressVar: false,
-          stagger: staggerFor(p.marks.length, spread),
-          trigger: scrollWindow(spread, { from: p.from, to: p.to }),
+          stagger,
+          ...timing,
           children: h(
             'svg',
-            { viewBox: `0 0 ${size.w} ${size.h}`, className: 'block size-full overflow-visible', fill: 'none', stroke: 'currentColor', strokeLinecap: 'round', strokeLinejoin: 'round' },
+            { viewBox: `0 0 ${size.w} ${size.h}`, 'data-ink': trigger, className: 'block size-full overflow-visible', fill: 'none', stroke: 'currentColor', strokeLinecap: 'round', strokeLinejoin: 'round' },
             p.marks.map((m, j) => h('path', { key: j, d: m.d, stroke: m.color, strokeWidth: m.width ?? 1, opacity: m.opacity })),
           ),
         },
@@ -286,7 +305,7 @@ export function YLabels({ ticks }: { ticks: { label: string; at: number }[] }) {
   const width = Math.max(2, ...ticks.map((t) => t.label.length)) * 1.15 + 1;
   return h(
     'div',
-    { className: `relative shrink-0 ${LABEL} tabular-nums`, style: { width: `${width}ch` } },
+    { 'data-slot': 'y-labels', className: `relative shrink-0 ${LABEL} tabular-nums`, style: { width: `${width}ch` } },
     ticks.map((t, i) => h('span', { key: i, className: 'absolute right-[1ch] -translate-y-1/2 whitespace-nowrap leading-none', style: { top: `${((1 - t.at) * 100).toFixed(2)}%` } }, t.label)),
   );
 }
@@ -309,7 +328,7 @@ export function XLabels({ ticks, offset }: { ticks: { label: string; at: number 
   const need = ticks.length * (Math.max(...ticks.map((t) => t.label.length), 1) + 2) * 0.5;
   return h(
     'div',
-    { className: `@container relative mt-2.5 h-4 ${LABEL} tabular-nums`, style: offset ? { marginLeft: offset } : undefined },
+    { 'data-slot': 'x-labels', className: `@container relative mt-2.5 h-4 ${LABEL} tabular-nums`, style: offset ? { marginLeft: offset } : undefined },
     ticks.map((t, i) =>
       h(
         'span',
@@ -328,7 +347,7 @@ export function XLabels({ ticks, offset }: { ticks: { label: string; at: number 
 export function Legend({ series, kind, className = '' }: { series: Series[]; kind: 'line' | 'hatch' | 'marker'; className?: string }) {
   return h(
     'ul',
-    { className: `flex flex-wrap items-center gap-x-6 gap-y-2 ${LABEL} ${className}` },
+    { 'data-slot': 'legend', className: `flex flex-wrap items-center gap-x-6 gap-y-2 ${LABEL} ${className}` },
     series.map((s) =>
       h(
         'li',

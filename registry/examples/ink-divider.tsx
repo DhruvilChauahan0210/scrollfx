@@ -13,9 +13,9 @@ function Between({ children }: { children: React.ReactNode }) {
 }
 
 export const examples: Example[] = [
-  { name: 'default', title: 'Straight', description: 'One rule, as a hand draws it with a ruler: almost straight.', Component: () => <Between><InkDivider /></Between> },
-  { name: 'wavy', title: 'Wavy', description: 'A wave whose swing rises and falls a little along the way.', Component: () => <Between><InkDivider variant="wavy" seed={3} /></Between> },
-  { name: 'sketchy', title: 'Sketchy', description: 'Ruled twice, never quite on the same line: ink, then the accent pen.', Component: () => <Between><InkDivider variant="sketchy" seed={5} /></Between> },
-  { name: 'dotted', title: 'Dotted', description: 'A dot every few pixels, set down one after another, left to right.', Component: () => <Between><InkDivider variant="dotted" /></Between> },
-  { name: 'with-label', title: 'With a label', description: 'Two rules drawn outward from a label in the middle; the label is plain text.', Component: () => <Between><InkDivider variant="with-label" label="Chapter two" /></Between> },
+  { name: 'default', title: 'Straight', description: 'One rule, as a hand draws it with a ruler: almost straight.', Component: (pen) => <Between><InkDivider {...pen} /></Between> },
+  { name: 'wavy', title: 'Wavy', description: 'A wave whose swing rises and falls a little along the way.', Component: (pen) => <Between><InkDivider {...pen} variant="wavy" seed={3} /></Between> },
+  { name: 'sketchy', title: 'Sketchy', description: 'Ruled twice, never quite on the same line: ink, then the accent pen.', Component: (pen) => <Between><InkDivider {...pen} variant="sketchy" seed={5} /></Between> },
+  { name: 'dotted', title: 'Dotted', description: 'A dot every few pixels, set down one after another, left to right.', Component: (pen) => <Between><InkDivider {...pen} variant="dotted" /></Between> },
+  { name: 'with-label', title: 'With a label', description: 'Two rules drawn outward from a label in the middle; the label is plain text.', Component: (pen) => <Between><InkDivider {...pen} variant="with-label" label="Chapter two" /></Between> },
 ];
