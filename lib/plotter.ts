@@ -690,3 +690,57 @@ export function moire({ seed = 5, size = 400, rings = 18 }: { seed?: number; siz
   }
   return out;
 }
+
+/**
+ * Hatching inside any outline (or several, even-odd, so a ring leaves its hole
+ * open): parallel strokes at `angle` degrees (0 runs across, 90 up the page),
+ * `gap` apart, each kept `inset` clear of the outline so the line drawn round
+ * it stands free. Lines sit on one grid across the page, so two shapes hatched
+ * alike line up, and the pen sweeps left to right, turning at each end as a
+ * plotter does (`reverse` sweeps back the other way).
+ */
+export function hatchPolygon(
+  outline: [number, number][] | [number, number][][],
+  { angle = 45, gap = 5, inset = 0, reverse = false }: { angle?: number; gap?: number; inset?: number; reverse?: boolean } = {},
+): Stroke[] {
+  const rings = (typeof outline[0][0] === 'number' ? [outline] : outline) as Pt[][];
+  const a = (angle * Math.PI) / 180;
+  // u runs along the strokes; n across them, pointed rightward so the sweep reads left to right.
+  const u: Pt = [Math.cos(a), -Math.sin(a)];
+  let n: Pt = [Math.sin(a), Math.cos(a)];
+  if (n[0] < -1e-9 || (Math.abs(n[0]) < 1e-9 && n[1] < 0)) n = [-n[0], -n[1]];
+  if (reverse) n = [-n[0], -n[1]];
+  const dot = (p: Pt, v: Pt) => p[0] * v[0] + p[1] * v[1];
+  const all = rings.flat();
+  const s = all.map((p) => dot(p, n));
+  const lo = Math.min(...s), hi = Math.max(...s);
+  const out: Stroke[] = [];
+  let flip = false;
+  for (let c = Math.ceil(lo / gap) * gap; c <= hi; c += gap) {
+    const ts: number[] = [];
+    for (const ring of rings) {
+      for (let i = 0; i < ring.length; i++) {
+        const p = ring[i], q = ring[(i + 1) % ring.length];
+        const sp = dot(p, n), sq = dot(q, n);
+        // Half-open, so a vertex on the line counts once.
+        if ((sp <= c && sq > c) || (sq <= c && sp > c)) {
+          const k = (c - sp) / (sq - sp);
+          ts.push(dot(p, u) + k * (dot(q, u) - dot(p, u)));
+        }
+      }
+    }
+    ts.sort((x, y) => x - y);
+    const runs: [number, number][] = [];
+    for (let i = 0; i + 1 < ts.length; i += 2) {
+      const t0 = ts[i] + inset, t1 = ts[i + 1] - inset;
+      if (t1 - t0 > 0.8) runs.push([t0, t1]);
+    }
+    if (flip) runs.reverse();
+    for (const [t0, t1] of runs) {
+      const [ta, tb] = flip ? [t1, t0] : [t0, t1];
+      out.push({ d: toPath([[c * n[0] + ta * u[0], c * n[1] + ta * u[1]], [c * n[0] + tb * u[0], c * n[1] + tb * u[1]]]), pen: 0 });
+    }
+    if (runs.length) flip = !flip;
+  }
+  return out;
+}

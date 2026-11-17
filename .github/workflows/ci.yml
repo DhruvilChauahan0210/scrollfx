@@ -41,9 +41,10 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       # Every block scrolled to the end with no console errors or warnings,
-      # every page loads clean, and every drawing on the home page finishes as
-      # it reaches the middle of the screen, at desktop and phone sizes.
-      - name: Every block, in a real browser
+      # every page loads clean, and every drawing on the home page and on each
+      # component's page finishes as it reaches the middle of the screen, at
+      # desktop and phone sizes.
+      - name: Every block and component, in a real browser
         timeout-minutes: 10
         run: npm run check
 

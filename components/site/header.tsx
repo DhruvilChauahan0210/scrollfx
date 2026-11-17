@@ -18,6 +18,7 @@ export function Header() {
         </Link>
         <nav className="hidden items-center gap-7 uppercase tracking-[0.16em] text-muted-foreground sm:flex">
           <Link href="/#plates" className="hover:text-foreground">Plates</Link>
+          <Link href="/components" className="hover:text-foreground">Components</Link>
           <a href={`${LIB}/docs`} className="hover:text-foreground">Library</a>
         </nav>
         <div className="ml-auto flex items-center gap-1">
@@ -47,7 +48,7 @@ export function Footer() {
         </>
       }
       columns={[
-        { title: 'Folio', links: [{ label: 'Plates', href: '/#plates' }, { label: 'Registry', href: '/r/registry.json' }, { label: 'Source', href: REPO }] },
+        { title: 'Folio', links: [{ label: 'Plates', href: '/#plates' }, { label: 'Components', href: '/components' }, { label: 'Registry', href: '/r/registry.json' }, { label: 'Source', href: REPO }] },
         { title: 'Library', links: [{ label: 'svg-scroll-draw', href: LIB }, { label: 'Docs', href: `${LIB}/docs` }, { label: 'npm', href: 'https://www.npmjs.com/package/svg-scroll-draw' }] },
         { title: 'Colophon', links: [{ label: 'Set in Fraunces', href: 'https://fonts.google.com/specimen/Fraunces' }, { label: 'and Geist', href: 'https://vercel.com/font' }, { label: 'MIT licence', href: `${REPO}/blob/main/LICENSE` }] },
       ]}

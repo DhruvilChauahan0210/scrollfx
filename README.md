@@ -135,6 +135,37 @@ npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-f
 | XV | **[Harmonograph call to action](https://scrollfx-ui.vercel.app/blocks/cta-harmonograph)** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/cta-harmonograph.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/cta-harmonograph.json` |
 | XVI | **[Plotted footer](https://scrollfx-ui.vercel.app/blocks/footer-plotted)** | A horizon of ridgelines plotted back to front, hidden lines removed, above the link columns. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/footer-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/footer-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/footer-plotted.json` |
 
+## Components
+
+Smaller pieces than the plates, to set inside your own pages: [scrollfx-ui.vercel.app/components](https://scrollfx-ui.vercel.app/components).
+Each takes its data as props (series from a `config`, as shadcn's chart does), keeps its labels and a data table for
+screen readers in the server HTML, and is inked in pen by pen as it scrolls in: the axes, then the hatching, then the
+lines in the accent, the last pen lifting as it reaches the middle of the screen. React only for now.
+
+| Component | Variants | Install |
+|---|---|---|
+| **[Line chart](https://scrollfx-ui.vercel.app/components/chart-line)** | single, multi-series, stepped (`curve`, `markers`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-line.json` |
+| **[Area chart](https://scrollfx-ui.vercel.app/components/chart-area)** | single, stacked (`stacked`); each band its own hatch | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-area.json` |
+| **[Bar chart](https://scrollfx-ui.vercel.app/components/chart-bar)** | vertical, horizontal, grouped, stacked (`orientation`, `stacked`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-bar.json` |
+| **[Pie chart](https://scrollfx-ui.vercel.app/components/chart-pie)** | pie, donut (`variant`); wedges shaded by hatching | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-pie.json` |
+| **[Radar chart](https://scrollfx-ui.vercel.app/components/chart-radar)** | one or more series, polygon or round grid (`grid`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-radar.json` |
+| **[Scatter chart](https://scrollfx-ui.vercel.app/components/chart-scatter)** | groups as marker shapes, optional trend line (`group`, `trend`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-scatter.json` |
+| **[Sparkline](https://scrollfx-ui.vercel.app/components/sparkline)** | line or hatched area, end dot (`variant`, `dot`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/sparkline.json` |
+
+```tsx
+import { ChartBar } from '@/components/scrollfx/chart-bar';
+
+<ChartBar
+  data={[{ quarter: 'Q1', new: 120, returning: 210 }, { quarter: 'Q2', new: 180, returning: 240 }]}
+  index="quarter"
+  config={{ new: { label: 'New' }, returning: { label: 'Returning' } }}
+  stacked
+/>
+```
+
+The CLI adds the component to `components/scrollfx/`, with `lib/chart.ts` (scales, ticks, curves, hatching and
+the pens the charts share) and `lib/plotter.ts`.
+
 ## What every block does
 
 - **Takes props.** Copy, data, plans, releases, people, the seed and the accent colour are props with defaults. The
@@ -155,7 +186,7 @@ npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-f
 npm install
 npm run dev     # http://localhost:4400
 npm run build   # the shadcn registry (public/r) and the site
-npm run check   # every block, scrolled in Chromium
+npm run check   # every block and every component page, scrolled in Chromium
 npm run check:vue     # every Vue block, compiled and scrolled in Chromium
 npm run check:svelte  # every Svelte block, the same way
 npm run readme:images  # the README's screenshots and GIF, from the live site (needs ffmpeg)
@@ -165,6 +196,12 @@ A block is a file in `registry/blocks/`, an entry in `registry.json`, and a line
 Svelte versions are `registry/vue/<name>.vue` and `registry/svelte/<name>.svelte`, published to `public/r/vue/` and
 `public/r/svelte/` by `npm run registry`.
 Generators live in `lib/plotter.ts`, published as the `plotter` registry item that every block depends on.
+
+A component is a file in `registry/ui/` (a `registry:ui` item in `registry.json`, installed to
+`components/scrollfx/<name>.tsx`), its examples in `registry/examples/<name>.tsx` (listed in
+`registry/examples/index.ts`), and a family library such as `lib/chart.ts` if it shares one. Its page,
+`/components/<name>`, is built from those: every example live with its code, the props read from its
+`<Name>Props` interface, and its source.
 
 ## License
 

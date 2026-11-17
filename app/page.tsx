@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Header, Footer } from '@/components/site/header';
 import { BLOCKS } from '@/lib/blocks';
+import { COMPONENTS, FAMILIES } from '@/lib/components';
 import { installCommand } from '@/lib/site';
 import { PREVIEWS } from '@/registry/previews';
 import { HeroFlowField } from '@/registry/blocks/hero-flow-field';
@@ -28,6 +29,22 @@ export default function Home() {
           aside={installCommand('hero-flow-field')}
         />
         <PlateLine n={0} slug="hero-flow-field" name="The hero above" />
+
+        {/* The components: smaller pieces than the plates, on their own pages. */}
+        <div className="mx-auto mt-16 max-w-7xl px-6 sm:px-10">
+          <Link
+            href="/components"
+            className="group flex flex-wrap items-baseline gap-x-6 gap-y-2 rounded-[3px] border bg-card px-6 py-5 transition-colors hover:border-ring"
+          >
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Components</span>
+            <span className="font-serif text-xl tracking-[-0.01em]">
+              Smaller pieces to set in your own pages: {FAMILIES.map((f) => f.name.toLowerCase()).join(' and ')}, {COMPONENTS.length} in all.
+            </span>
+            <span className="ml-auto whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition-colors group-hover:text-foreground">
+              Browse <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+            </span>
+          </Link>
+        </div>
 
         <div id="plates" className="scroll-mt-16">
           {rest.map((b, i) => {
