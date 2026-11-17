@@ -40,62 +40,78 @@ npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-f
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://scrollfx-ui.vercel.app/blocks/hatch-highlight"><img src="docs/plates/hatch-highlight.jpg" alt="Hatched highlight" /></a>
-      <br /><sub><b>Pl. II · Hatched highlight</b></sub>
+      <a href="https://scrollfx-ui.vercel.app/blocks/logos-plotted"><img src="docs/plates/logos-plotted.jpg" alt="Plotted logo cloud" /></a>
+      <br /><sub><b>Pl. II · Plotted logo cloud</b></sub>
     </td>
     <td width="50%" valign="top">
-      <a href="https://scrollfx-ui.vercel.app/blocks/plotted-chart"><img src="docs/plates/plotted-chart.jpg" alt="Plotted chart" /></a>
-      <br /><sub><b>Pl. III · Plotted chart</b></sub>
+      <a href="https://scrollfx-ui.vercel.app/blocks/hatch-highlight"><img src="docs/plates/hatch-highlight.jpg" alt="Hatched highlight" /></a>
+      <br /><sub><b>Pl. III · Hatched highlight</b></sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
+      <a href="https://scrollfx-ui.vercel.app/blocks/plotted-chart"><img src="docs/plates/plotted-chart.jpg" alt="Plotted chart" /></a>
+      <br /><sub><b>Pl. IV · Plotted chart</b></sub>
+    </td>
+    <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/feature-plates"><img src="docs/plates/feature-plates.jpg" alt="Feature plates" /></a>
-      <br /><sub><b>Pl. IV · Feature plates</b></sub>
+      <br /><sub><b>Pl. V · Feature plates</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://scrollfx-ui.vercel.app/blocks/bento-plotted"><img src="docs/plates/bento-plotted.jpg" alt="Plotted bento grid" /></a>
+      <br /><sub><b>Pl. VI · Plotted bento grid</b></sub>
     </td>
     <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/steps-route"><img src="docs/plates/steps-route.jpg" alt="Steps on a route" /></a>
-      <br /><sub><b>Pl. V · Steps on a route</b></sub>
+      <br /><sub><b>Pl. VII · Steps on a route</b></sub>
     </td>
   </tr>
   <tr>
+    <td width="50%" valign="top">
+      <a href="https://scrollfx-ui.vercel.app/blocks/stats-plotted"><img src="docs/plates/stats-plotted.jpg" alt="Plotted stats" /></a>
+      <br /><sub><b>Pl. VIII · Plotted stats</b></sub>
+    </td>
     <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/changelog-plotted"><img src="docs/plates/changelog-plotted.jpg" alt="Plotted changelog" /></a>
-      <br /><sub><b>Pl. VI · Plotted changelog</b></sub>
+      <br /><sub><b>Pl. IX · Plotted changelog</b></sub>
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/pricing-plotted"><img src="docs/plates/pricing-plotted.jpg" alt="Plotted pricing" /></a>
-      <br /><sub><b>Pl. VII · Plotted pricing</b></sub>
+      <br /><sub><b>Pl. X · Plotted pricing</b></sub>
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/testimonials-plotted"><img src="docs/plates/testimonials-plotted.jpg" alt="Plotted testimonials" /></a>
-      <br /><sub><b>Pl. VIII · Plotted testimonials</b></sub>
+      <br /><sub><b>Pl. XI · Plotted testimonials</b></sub>
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/team-plotted"><img src="docs/plates/team-plotted.jpg" alt="Team with fingerprints" /></a>
-      <br /><sub><b>Pl. IX · Team with fingerprints</b></sub>
+      <br /><sub><b>Pl. XII · Team with fingerprints</b></sub>
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/faq-plotted"><img src="docs/plates/faq-plotted.jpg" alt="Plotted FAQ" /></a>
-      <br /><sub><b>Pl. X · Plotted FAQ</b></sub>
-    </td>
-    <td width="50%" valign="top">
-      <a href="https://scrollfx-ui.vercel.app/blocks/newsletter-plotted"><img src="docs/plates/newsletter-plotted.jpg" alt="Starburst sign-up" /></a>
-      <br /><sub><b>Pl. XI · Starburst sign-up</b></sub>
+      <br /><sub><b>Pl. XIII · Plotted FAQ</b></sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://scrollfx-ui.vercel.app/blocks/cta-harmonograph"><img src="docs/plates/cta-harmonograph.jpg" alt="Harmonograph call to action" /></a>
-      <br /><sub><b>Pl. XII · Harmonograph call to action</b></sub>
+      <a href="https://scrollfx-ui.vercel.app/blocks/newsletter-plotted"><img src="docs/plates/newsletter-plotted.jpg" alt="Starburst sign-up" /></a>
+      <br /><sub><b>Pl. XIV · Starburst sign-up</b></sub>
     </td>
     <td width="50%" valign="top">
+      <a href="https://scrollfx-ui.vercel.app/blocks/cta-harmonograph"><img src="docs/plates/cta-harmonograph.jpg" alt="Harmonograph call to action" /></a>
+      <br /><sub><b>Pl. XV · Harmonograph call to action</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="https://scrollfx-ui.vercel.app/blocks/footer-plotted"><img src="docs/plates/footer-plotted.jpg" alt="Plotted footer" /></a>
-      <br /><sub><b>Pl. XIII · Plotted footer</b></sub>
+      <br /><sub><b>Pl. XVI · Plotted footer</b></sub>
     </td>
   </tr>
 </table>
@@ -103,18 +119,21 @@ npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-f
 | Plate | Block | What the pen draws | React | Vue | Svelte |
 |---|---|---|---|---|---|
 | I | **[Hero, flow field](https://scrollfx-ui.vercel.app/blocks/hero-flow-field)** | A round flow field, plotted top to bottom on arrival, with a live stroke count. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hero-flow-field.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/hero-flow-field.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hero-flow-field.json` |
-| II | **[Hatched highlight](https://scrollfx-ui.vercel.app/blocks/hatch-highlight)** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hatch-highlight.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/hatch-highlight.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hatch-highlight.json` |
-| III | **[Plotted chart](https://scrollfx-ui.vercel.app/blocks/plotted-chart)** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/plotted-chart.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/plotted-chart.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/plotted-chart.json` |
-| IV | **[Feature plates](https://scrollfx-ui.vercel.app/blocks/feature-plates)** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/feature-plates.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/feature-plates.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/feature-plates.json` |
-| V | **[Steps on a route](https://scrollfx-ui.vercel.app/blocks/steps-route)** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/steps-route.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/steps-route.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/steps-route.json` |
-| VI | **[Plotted changelog](https://scrollfx-ui.vercel.app/blocks/changelog-plotted)** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/changelog-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/changelog-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/changelog-plotted.json` |
-| VII | **[Plotted pricing](https://scrollfx-ui.vercel.app/blocks/pricing-plotted)** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/pricing-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/pricing-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/pricing-plotted.json` |
-| VIII | **[Plotted testimonials](https://scrollfx-ui.vercel.app/blocks/testimonials-plotted)** | Quotes on sheets, each stamped with a spiral seeded from the person's name, wound from the rim inward. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/testimonials-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/testimonials-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/testimonials-plotted.json` |
-| IX | **[Team with fingerprints](https://scrollfx-ui.vercel.app/blocks/team-plotted)** | People on sheets, each over a fingerprint seeded from their name, drawn ring by ring from the core outward. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/team-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/team-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/team-plotted.json` |
-| X | **[Plotted FAQ](https://scrollfx-ui.vercel.app/blocks/faq-plotted)** | Questions that open in place, beside a Lissajous knot the pen traces four times over. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/faq-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/faq-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/faq-plotted.json` |
-| XI | **[Starburst sign-up](https://scrollfx-ui.vercel.app/blocks/newsletter-plotted)** | A plain HTML sign-up form beside a starburst the pen sweeps round clockwise, ray by ray. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/newsletter-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/newsletter-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/newsletter-plotted.json` |
-| XII | **[Harmonograph call to action](https://scrollfx-ui.vercel.app/blocks/cta-harmonograph)** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/cta-harmonograph.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/cta-harmonograph.json` |
-| XIII | **[Plotted footer](https://scrollfx-ui.vercel.app/blocks/footer-plotted)** | A horizon of ridgelines plotted back to front, hidden lines removed, above the link columns. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/footer-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/footer-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/footer-plotted.json` |
+| II | **[Plotted logo cloud](https://scrollfx-ui.vercel.app/blocks/logos-plotted)** | Two rules drawn across the page, ink then accent, and a simple mark beside each name, plotted line by line. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/logos-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/logos-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/logos-plotted.json` |
+| III | **[Hatched highlight](https://scrollfx-ui.vercel.app/blocks/hatch-highlight)** | Diagonal hatching over the key phrases of a statement, as they are read. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/hatch-highlight.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/hatch-highlight.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/hatch-highlight.json` |
+| IV | **[Plotted chart](https://scrollfx-ui.vercel.app/blocks/plotted-chart)** | The area under a curve, hatched in from left to right, and the curve over it; the figures count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/plotted-chart.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/plotted-chart.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/plotted-chart.json` |
+| V | **[Feature plates](https://scrollfx-ui.vercel.app/blocks/feature-plates)** | A topographic map, a wireframe globe and a tunnel of turning squares, one per feature. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/feature-plates.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/feature-plates.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/feature-plates.json` |
+| VI | **[Plotted bento grid](https://scrollfx-ui.vercel.app/blocks/bento-plotted)** | A card each: a moiré of two ring sets, a Lissajous knot, a rosette, ridgelines and a globe. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/bento-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/bento-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/bento-plotted.json` |
+| VII | **[Steps on a route](https://scrollfx-ui.vercel.app/blocks/steps-route)** | Numbered stops a pen rings in turn, joined by a wandering line that ends on a cross. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/steps-route.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/steps-route.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/steps-route.json` |
+| VIII | **[Plotted stats](https://scrollfx-ui.vercel.app/blocks/stats-plotted)** | A gauge under each figure, ticked clockwise, with an accent band out to its share; the figures count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/stats-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/stats-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/stats-plotted.json` |
+| IX | **[Plotted changelog](https://scrollfx-ui.vercel.app/blocks/changelog-plotted)** | A rail that inks down as you read, and a rosette per release, seeded from its version. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/changelog-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/changelog-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/changelog-plotted.json` |
+| X | **[Plotted pricing](https://scrollfx-ui.vercel.app/blocks/pricing-plotted)** | Marks that grow denser with the plan, and a frame the pen goes round twice. Prices count up. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/pricing-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/pricing-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/pricing-plotted.json` |
+| XI | **[Plotted testimonials](https://scrollfx-ui.vercel.app/blocks/testimonials-plotted)** | Quotes on sheets, each stamped with a spiral seeded from the person's name, wound from the rim inward. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/testimonials-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/testimonials-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/testimonials-plotted.json` |
+| XII | **[Team with fingerprints](https://scrollfx-ui.vercel.app/blocks/team-plotted)** | People on sheets, each over a fingerprint seeded from their name, drawn ring by ring from the core outward. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/team-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/team-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/team-plotted.json` |
+| XIII | **[Plotted FAQ](https://scrollfx-ui.vercel.app/blocks/faq-plotted)** | Questions that open in place, beside a Lissajous knot the pen traces four times over. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/faq-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/faq-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/faq-plotted.json` |
+| XIV | **[Starburst sign-up](https://scrollfx-ui.vercel.app/blocks/newsletter-plotted)** | A plain HTML sign-up form beside a starburst the pen sweeps round clockwise, ray by ray. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/newsletter-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/newsletter-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/newsletter-plotted.json` |
+| XV | **[Harmonograph call to action](https://scrollfx-ui.vercel.app/blocks/cta-harmonograph)** | One unbroken line, the trace of two pendulums, spiralling in beside the closing call to action. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/cta-harmonograph.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/cta-harmonograph.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/cta-harmonograph.json` |
+| XVI | **[Plotted footer](https://scrollfx-ui.vercel.app/blocks/footer-plotted)** | A horizon of ridgelines plotted back to front, hidden lines removed, above the link columns. | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/footer-plotted.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/footer-plotted.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/footer-plotted.json` |
 
 ## What every block does
 

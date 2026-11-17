@@ -35,7 +35,10 @@ const require = createRequire(join(ROOT, 'package.json'));
 const { build } = require('esbuild');
 const { compile } = await import('@tailwindcss/node');
 
-const files = readdirSync(DIR).filter((f) => f.endsWith(EXT)).sort();
+// ONLY=pricing node scripts/check-frameworks.mjs svelte checks the blocks whose names start with it.
+const files = readdirSync(DIR).filter((f) => f.endsWith(EXT) && f.startsWith(process.env.ONLY ?? '')).sort();
+// A block that has not finished in this long fails, rather than hanging the run.
+const BLOCK_MS = 120_000;
 const ON_ARRIVAL = new Set(['hero-flow-field', 'footer-plotted']);
 
 /**
@@ -106,6 +109,18 @@ for (const file of files) {
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(m.text().slice(0, 200)); });
+  let timer;
+  const late = new Promise((ok) => { timer = setTimeout(() => ok('timeout'), BLOCK_MS); });
+  const result = await Promise.race([run(name, file, js, page, errors), late]);
+  clearTimeout(timer);
+  if (result === 'timeout') {
+    check(false, `${name}: did not finish within ${BLOCK_MS / 1000} s`);
+    console.log(`✗ ${name}  timed out`);
+  }
+  await page.close().catch(() => {});
+}
+
+async function run(name, file, js, page, errors) {
   await page.goto(origin);
   await page.addStyleTag({ content: await css(file) });
   await page.addScriptTag({ content: js });
@@ -162,7 +177,7 @@ for (const file of files) {
   check(!short.length, `${name}: ${short.length} of ${engines.length} engines never finished`);
   check(errors.length === 0, `${name}: errors: ${errors.join(' | ')}`);
   console.log(`${failures.some((f) => f.startsWith(name + ':')) ? '✗' : '✓'} ${name}  ${engines.length} engines`);
-  await page.close();
+  return 'done';
 }
 
 await browser.close();

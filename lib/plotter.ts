@@ -563,3 +563,130 @@ export function starburst(seed: number, size = 400, { rays = 144, every = 12 } =
   }
   return out;
 }
+
+const ring = (cx: number, cy: number, r: number, n = 64, from = 0, to = Math.PI * 2): Pt[] =>
+  Array.from({ length: n + 1 }, (_, k): Pt => {
+    const a = from + ((to - from) * k) / n;
+    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+  });
+
+/**
+ * A gauge in a size × size box, the way a plotter draws an instrument face:
+ * ticks round three quarters of a circle, clockwise from the lower left, every
+ * fifth one long; a band of three arcs in the accent pen out to `share` (0 to
+ * 1) of the way round; and a needle pointing at it. The seed nudges each tick,
+ * so no two faces are quite alike.
+ */
+export function gauge({ seed = 1, size = 100, share = 0.7, ticks = 41 }: { seed?: number; size?: number; share?: number; ticks?: number } = {}): Stroke[] {
+  const rand = random(seed);
+  const c = size / 2;
+  const R = size * 0.46;
+  const a0 = Math.PI * 0.75;
+  const sweep = Math.PI * 1.5;
+  const s = Math.max(0, Math.min(1, share));
+  const out: Stroke[] = [];
+  for (let i = 0; i < ticks; i++) {
+    const a = a0 + (sweep * i) / (ticks - 1) + (rand() - 0.5) * 0.012;
+    const len = size * (i % 5 === 0 ? 0.12 : 0.06) * (0.92 + rand() * 0.16);
+    out.push({ d: toPath([[c + Math.cos(a) * R, c + Math.sin(a) * R], [c + Math.cos(a) * (R - len), c + Math.sin(a) * (R - len)]]), pen: 0 });
+  }
+  if (s > 0) {
+    for (const k of [0.7, 0.66, 0.62]) out.push({ d: toPath(ring(c, c, R * k, Math.max(4, Math.round(60 * s)), a0, a0 + sweep * s)), pen: 1 });
+  }
+  const an = a0 + sweep * s;
+  out.push({ d: toPath([[c, c], [c + Math.cos(an) * R * 0.5, c + Math.sin(an) * R * 0.5]]), pen: 0 });
+  out.push({ d: toPath(ring(c, c, size * 0.03, 16)), pen: 0 });
+  return out;
+}
+
+/** The kinds of mark logoMark draws. */
+export type MarkKind = 'rings' | 'disc' | 'delta' | 'wave' | 'grid' | 'burst';
+
+/**
+ * A simple generic mark in a size × size box, for a placeholder logo: rings,
+ * a hatched disc, nested triangles, waves, a ruled square or a burst of rays.
+ * The seed nudges every line a little, as a pen would.
+ */
+export function logoMark(kind: MarkKind, size = 40, seed = 1): Stroke[] {
+  const rand = random(seed);
+  const j = () => (rand() - 0.5) * size * 0.012;
+  const c = size / 2;
+  const R = size * 0.45;
+  const line = (pts: Pt[]): Stroke => ({ d: toPath(pts.map(([x, y]): Pt => [x + j(), y + j()])), pen: 0 });
+  switch (kind) {
+    case 'rings':
+      return [1, 0.74, 0.48, 0.22].map((k) => ({ d: toPath(ring(c, c, R * k, 48)), pen: 0 }));
+    case 'disc': {
+      const out: Stroke[] = [{ d: toPath(ring(c, c, R, 56)), pen: 0 }];
+      // Hatching at 45°, clipped to the circle.
+      const q = Math.SQRT1_2;
+      for (let o = -R + size * 0.08; o < R; o += size * 0.08) {
+        const h = Math.sqrt(R * R - o * o) * 0.94;
+        out.push(line([[c + (o - h) * q, c + (o + h) * q], [c + (o + h) * q, c + (o - h) * q]]));
+      }
+      return out;
+    }
+    case 'delta':
+      return [1, 0.66, 0.33].map((k) =>
+        line([0, 1, 2, 3].map((i): Pt => {
+          const a = -Math.PI / 2 + (i * Math.PI * 2) / 3;
+          return [c + Math.cos(a) * R * k, c + size * 0.06 + Math.sin(a) * R * k];
+        })),
+      );
+    case 'wave':
+      return [0.3, 0.43, 0.56, 0.69].map((y) => line(Array.from({ length: 25 }, (_, i): Pt => [size * 0.08 + (i / 24) * size * 0.84, size * y + Math.sin((i / 24) * Math.PI * 3) * size * 0.08])));
+    case 'grid': {
+      const a = size * 0.1, b = size * 0.9;
+      const out: Stroke[] = [line([[a, a], [b, a], [b, b], [a, b], [a, a]])];
+      for (const t of [0.3, 0.5, 0.7]) {
+        const p = a + (b - a) * t;
+        out.push(line([[p, a], [p, b]]));
+        out.push(line([[a, p], [b, p]]));
+      }
+      return out;
+    }
+    case 'burst':
+      return Array.from({ length: 12 }, (_, i) => {
+        const a = -Math.PI / 2 + (i * Math.PI * 2) / 12;
+        const r0 = R * 0.28, r1 = R * (i % 3 === 0 ? 1 : 0.72);
+        return line([[c + Math.cos(a) * r0, c + Math.sin(a) * r0], [c + Math.cos(a) * r1, c + Math.sin(a) * r1]]);
+      });
+  }
+}
+
+/**
+ * A rule a pen draws across a w × h box, twice, never quite on the same line:
+ * the first pass in ink, the second in the accent pen.
+ */
+export function sketchLine({ w, h = 12, seed = 1, wobble = 1 }: { w: number; h?: number; seed?: number; wobble?: number }): Stroke[] {
+  const rand = random(seed);
+  const pass = (dy: number, pen: 0 | 1): Stroke => {
+    const n = 16;
+    return { d: toPath(Array.from({ length: n + 1 }, (_, i): Pt => [1 + ((w - 2) * i) / n, h / 2 + dy + (rand() - 0.5) * wobble * 2])), pen };
+  };
+  return [pass(-1.2, 0), pass(1.2, 1)];
+}
+
+/**
+ * A moiré in a size × size box: two sets of concentric rings, their centres a
+ * little apart, so where they cross the paper fills with interference
+ * fringes. The rings are drawn from the middle outward, one from each set in
+ * turn; the accent pen takes one ring of the second set.
+ */
+export function moire({ seed = 5, size = 400, rings = 18 }: { seed?: number; size?: number; rings?: number } = {}): Stroke[] {
+  const rand = random(seed);
+  const d = size * (0.05 + rand() * 0.03);
+  const tilt = rand() * Math.PI * 2;
+  const R = size * 0.4;
+  const a: Pt = [size / 2 - Math.cos(tilt) * d, size / 2 - Math.sin(tilt) * d];
+  const b: Pt = [size / 2 + Math.cos(tilt) * d, size / 2 + Math.sin(tilt) * d];
+  const accent = Math.floor(rings * 0.7);
+  const out: Stroke[] = [];
+  for (let i = 1; i <= rings; i++) {
+    const r = (R * i) / rings;
+    const n = Math.max(24, Math.round(r * 0.9));
+    out.push({ d: toPath(ring(a[0], a[1], r, n)), pen: 0 });
+    out.push({ d: toPath(ring(b[0], b[1], r, n)), pen: i === accent ? 1 : 0 });
+  }
+  return out;
+}

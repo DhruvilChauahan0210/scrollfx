@@ -7,7 +7,7 @@
       "name": "plotter",
       "type": "registry:lib",
       "title": "Plotter",
-      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, harmonographs, spirals, Lissajous knots, ridgelines, routes, hatching) and scrollWindow(), the trigger that finishes a drawing as it reaches the middle of the screen. Every scrollfx block draws with it.",
+      "description": "Seeded line-drawing generators (flow fields, contours, globes, tunnels, rosettes, harmonographs, spirals, Lissajous knots, ridgelines, routes, hatching, fingerprints, starbursts, gauges, moirés, logo marks and sketched rules) and scrollWindow(), the trigger that finishes a drawing as it reaches the middle of the screen. Every scrollfx block draws with it.",
       "files": [
         {
           "path": "lib/plotter.ts",
@@ -34,6 +34,28 @@
       ],
       "meta": {
         "motion": "Watch it arrive: the pen plots the print, top to bottom.",
+        "tall": false
+      }
+    },
+    {
+      "name": "logos-plotted",
+      "type": "registry:block",
+      "title": "Plotted logo cloud",
+      "description": "A logo cloud between two rules a pen draws across the page, each name beside a simple mark it plots line by line: rings, a hatched disc, triangles, waves, a ruled square, a burst.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/logos-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: the rules are drawn across and each mark is plotted.",
         "tall": false
       }
     },
@@ -104,6 +126,28 @@
       }
     },
     {
+      "name": "bento-plotted",
+      "type": "registry:block",
+      "title": "Plotted bento grid",
+      "description": "A bento grid of cards in mixed sizes, each with a drawing of its own: a moiré of two ring sets, a Lissajous knot, a rosette, ridgelines and a globe.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/bento-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll down: each card's drawing is plotted as it arrives.",
+        "tall": true
+      }
+    },
+    {
       "name": "steps-route",
       "type": "registry:block",
       "title": "Steps on a route",
@@ -122,6 +166,28 @@
       ],
       "meta": {
         "motion": "Scroll to it: the pen rings each stop and travels on.",
+        "tall": false
+      }
+    },
+    {
+      "name": "stats-plotted",
+      "type": "registry:block",
+      "title": "Plotted stats",
+      "description": "Figures that count up, each over a gauge a pen plots tick by tick, with an accent band out to the figure's share of the dial and a needle pointing at it.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/stats-plotted.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "meta": {
+        "motion": "Scroll to it: the gauges are plotted and the figures count up.",
         "tall": false
       }
     },

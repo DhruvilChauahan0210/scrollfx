@@ -12,6 +12,9 @@ import { FaqPlotted } from './blocks/faq-plotted';
 import { FooterPlotted } from './blocks/footer-plotted';
 import { TeamPlotted } from './blocks/team-plotted';
 import { NewsletterPlotted } from './blocks/newsletter-plotted';
+import { LogosPlotted } from './blocks/logos-plotted';
+import { BentoPlotted } from './blocks/bento-plotted';
+import { StatsPlotted } from './blocks/stats-plotted';
 
 /** Each block with its default props, as the previews render it. */
 export const PREVIEWS: Record<string, ComponentType> = {
@@ -28,4 +31,7 @@ export const PREVIEWS: Record<string, ComponentType> = {
   'team-plotted': TeamPlotted,
   'newsletter-plotted': NewsletterPlotted,
   'footer-plotted': FooterPlotted,
+  'logos-plotted': LogosPlotted,
+  'bento-plotted': BentoPlotted,
+  'stats-plotted': StatsPlotted,
 };

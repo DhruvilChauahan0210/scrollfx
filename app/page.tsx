@@ -5,7 +5,7 @@ import { installCommand } from '@/lib/site';
 import { PREVIEWS } from '@/registry/previews';
 import { HeroFlowField } from '@/registry/blocks/hero-flow-field';
 
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'];
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'];
 
 /**
  * The home page is a folio: the sections themselves, live and full width, one
