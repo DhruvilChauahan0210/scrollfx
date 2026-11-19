@@ -8,7 +8,7 @@
  * your own signature as SVG paths.
  *
  * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx
- * Needs: react, svg-scroll-draw, lib/plotter and lib/ink (installed with it).
+ * Needs: react, svg-scroll-draw, lib/plotter, lib/ink-core and lib/ink (installed with it).
  * Styling: Tailwind CSS. The ink is `currentColor` unless you pass `color`.
  *
  * The name is in the server HTML (as the drawing's accessible name) and the
@@ -18,8 +18,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import 'svg-scroll-draw/no-flash.css';
-import { paced, random, type Line, type Point, type Stroke } from '@/lib/plotter';
-import { script, useInk, type InkTrigger } from '@/lib/ink';
+import { type Stroke } from '@/lib/plotter';
+import { signatureLayout, signatureStrokes } from '@/lib/ink-core';
+import { useInk, type InkTrigger } from '@/lib/ink';
 
 export interface InkSignatureProps {
   /** The name to write. Letters outside ASCII lose their accents; others are left out. */
@@ -51,22 +52,6 @@ export interface InkSignatureProps {
   className?: string;
 }
 
-/** A swash under the writing: in from below the first letters, a long shallow curve, and a lift at the end. */
-function swash(w: number, baseline: number, size: number, seed: number): Point[] {
-  const rand = random(seed);
-  const x0 = w * (0.04 + rand() * 0.06), x1 = w * (0.97 + rand() * 0.02);
-  const y = baseline + size * 0.16;
-  const sag = size * (0.07 + rand() * 0.05);
-  const pts: Point[] = [];
-  const n = Math.max(30, Math.round((x1 - x0) / 3));
-  for (let i = 0; i <= n; i++) {
-    const t = i / n;
-    // Down into the stroke, a long sag, then up and away at the end.
-    pts.push([x0 + (x1 - x0) * t, y + sag * Math.sin(Math.PI * t * 0.92) - size * 0.12 * t ** 6 + (1 - t) ** 8 * -size * 0.06]);
-  }
-  return pts;
-}
-
 export function InkSignature({
   name = 'Ada Marlow',
   size = 56,
@@ -84,18 +69,12 @@ export function InkSignature({
 }: InkSignatureProps) {
   const ref = useRef<SVGSVGElement>(null);
   // Laid out on the server as well, so the box is the right size from the first paint.
-  const laid = useMemo(() => script(name, { size, slant, pad: Math.ceil(strokeWidth * 2) }), [name, size, slant, strokeWidth]);
-  const extra = flourish && !paths ? Math.round(size * 0.32) : 0;
-  const box = paths ? viewBox ?? '0 0 300 120' : `0 0 ${laid.w} ${laid.h + extra}`;
-  const [, , bw, bh] = box.split(/[\s,]+/).map(Number);
+  const { laid, box, w: bw, h: bh } = useMemo(() => signatureLayout({ name, size, slant, strokeWidth, flourish, paths, viewBox }), [name, size, slant, strokeWidth, flourish, paths, viewBox]);
 
   const [strokes, setStrokes] = useState<Stroke[] | null>(null);
   useEffect(() => {
-    if (paths) return setStrokes(paths.map((d) => ({ d, pen: 0 })));
     // Even pieces, one after another: the pen writes at one speed.
-    const lines: Line[] = laid.lines.map((pts) => ({ pts, pen: 0 }));
-    if (flourish) lines.push({ pts: swash(laid.w, laid.baseline, size, seed), pen: 1 });
-    setStrokes(paced(lines, Math.max(4, size / 9)));
+    setStrokes(signatureStrokes({ laid, flourish, size, seed, paths }));
   }, [paths, laid, flourish, size, seed]);
 
   const n = strokes?.length ?? 0;

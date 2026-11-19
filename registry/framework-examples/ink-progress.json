@@ -1,0 +1,8 @@
+{
+  "variants": [
+    {"name": "default", "props": {"value": 64, "label": "Storage used"}},
+    {"name": "ring", "props": {"variant": "ring", "value": 72, "label": "Onboarding"}},
+    {"name": "gauge", "props": {"variant": "gauge", "value": 38, "label": "CPU", "size": 144}},
+    {"name": "view", "props": {"value": 64, "label": "Storage used", "trigger": "view"}}
+  ]
+}

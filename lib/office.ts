@@ -41,6 +41,9 @@ const FILE_NOTE: Record<string, string> = {
   'chart.ts': 'The pens, labels, key and data table, in React',
   'chart-vue.ts': 'The pens, labels, key and data table, in Vue',
   'chart-parts.svelte': 'The pens, labels, key and data table, as Svelte snippets',
+  'ink-core.ts': 'The marks, their layout, the script font and the draw and size actions, shared by React, Vue and Svelte',
+  'ink.ts': 'The draw and size hooks, in React',
+  'ink-vue.ts': 'The draw and size directives, in Vue',
 };
 const noteFor = (lib: string, path: string) => FILE_NOTE[path.replace(/^.*\//, '')] ?? LIB_NOTE[lib] ?? 'Shared library';
 

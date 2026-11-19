@@ -7,7 +7,7 @@
  * first; `corner-marks` sets crop marks at the corners, as on a proof.
  *
  * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx
- * Needs: react, svg-scroll-draw, lib/plotter and lib/ink (installed with it).
+ * Needs: react, svg-scroll-draw, lib/plotter, lib/ink-core and lib/ink (installed with it).
  * Styling: Tailwind CSS. The frame draws on the box's edge: give the box its
  * own padding (and a `bg-card` if it should read as a sheet).
  *
@@ -18,7 +18,7 @@
 
 import { useRef, type ReactNode } from 'react';
 import 'svg-scroll-draw/no-flash.css';
-import { cropMarks, sketchRect, type Stroke } from '@/lib/plotter';
+import { FRAME_BLEED as BLEED, frameStrokes } from '@/lib/ink-core';
 import { useInk, useSize, type InkTrigger } from '@/lib/ink';
 
 export type InkFrameVariant = 'rect' | 'rounded' | 'double' | 'corner-marks';
@@ -39,29 +39,6 @@ export interface InkFrameProps {
   className?: string;
 }
 
-/** How far the drawing reaches past the box on each side, so strokes on its edge are not cut. */
-const BLEED = 10;
-
-type Placed = Stroke & { at: number };
-
-function strokesFor(variant: InkFrameVariant, w: number, h: number, seed: number): Placed[] {
-  // Each frame is drawn in its own box, moved `at` px in from the drawing's corner.
-  const place = (s: Stroke[], at: number) => s.map((k) => ({ ...k, at }));
-  switch (variant) {
-    case 'rect':
-      return place(sketchRect({ w: w + 4, h: h + 4, seed, wobble: 1.3, r: 3 }), BLEED - 2);
-    case 'rounded':
-      return place(sketchRect({ w: w + 4, h: h + 4, seed, wobble: 1.3, r: 16 }), BLEED - 2);
-    case 'double':
-      return [
-        ...place(sketchRect({ w: w + 4, h: h + 4, seed, wobble: 1.2, r: 3 }).slice(0, 1), BLEED - 2),
-        ...place(sketchRect({ w: w - 10, h: h - 10, seed: seed + 5, wobble: 0.9, r: 2 }).slice(0, 1).map((k) => ({ ...k, pen: 1 as const })), BLEED + 5),
-      ];
-    case 'corner-marks':
-      return place(cropMarks({ w: w + 2 * BLEED, h: h + 2 * BLEED, seed, len: Math.min(22, Math.max(10, Math.min(w, h) * 0.08)), inset: 2 }), 0);
-  }
-}
-
 export function InkFrame({
   children,
   variant = 'rect',
@@ -76,7 +53,7 @@ export function InkFrame({
   const box = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
   const size = useSize(box);
-  const strokes = size ? strokesFor(variant, size.w, size.h, seed) : null;
+  const strokes = size ? frameStrokes(variant, size.w, size.h, seed) : null;
   const n = strokes?.length ?? 0;
   // The second pass follows the first; crop marks go down one corner after another.
   useInk(svg, { paths: n, spread: n > 1 ? 0.5 : 0, trigger, duration, version: size && `${size.w}x${size.h}` });

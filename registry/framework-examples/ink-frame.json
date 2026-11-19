@@ -1,0 +1,9 @@
+{
+  "variants": [
+    {"name": "default", "props": {"className": "max-w-md p-8"}, "text": "For teams that ship weekly."},
+    {"name": "rounded", "props": {"variant": "rounded", "seed": 4, "className": "max-w-md p-8"}, "text": "Seeded, so it never jumps."},
+    {"name": "double", "props": {"variant": "double", "seed": 7, "className": "max-w-md bg-card p-10 text-center"}, "text": "Okkara Labs"},
+    {"name": "corner-marks", "props": {"variant": "corner-marks", "className": "p-3"}, "text": "Your image here"},
+    {"name": "view", "props": {"trigger": "view"}, "text": "For teams that ship weekly."}
+  ]
+}

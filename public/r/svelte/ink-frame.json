@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+  "name": "ink-frame",
+  "type": "registry:ui",
+  "title": "Ink frame",
+  "description": "A border a pen draws round any children: rect or rounded (twice round, ink then accent), double, or crop marks at the corners.",
+  "dependencies": [
+    "svg-scroll-draw@^2.29.0"
+  ],
+  "registryDependencies": [
+    "https://scrollfx-ui.vercel.app/r/svelte/plotter.json",
+    "https://scrollfx-ui.vercel.app/r/svelte/ink.json"
+  ],
+  "files": [
+    {
+      "content": "<script lang=\"ts\" module>\n  /**\n   * ink-frame — a border a pen draws round anything: a card, a figure, an\n   * image, a quote. `rect` and `rounded` go round twice, ink then accent, never\n   * quite on the same line; `double` draws a second, finer frame inside the\n   * first; `corner-marks` sets crop marks at the corners, as on a proof.\n   *\n   * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx\n   * Needs: svelte 5, svg-scroll-draw, $lib/plotter and $lib/ink-core (installed with it).\n   * Styling: Tailwind CSS. The frame draws on the box's edge: give the box its\n   * own padding (and a `bg-card` if it should read as a sheet).\n   *\n   * What it frames (its children) is in the server HTML; the frame is made in\n   * the browser at the size it finds, and made again when that changes.\n   * Reduced motion shows it drawn.\n   */\n  import type { Snippet } from 'svelte';\n\n  export interface InkFrameProps {\n    children?: Snippet;\n    variant?: 'rect' | 'rounded' | 'double' | 'corner-marks';\n    /** The ink's colour. */\n    color?: string;\n    /** The accent pen's colour (the second pass, the inner frame). */\n    accent?: string;\n    strokeWidth?: number;\n    seed?: number;\n    /** `scroll`: drawn as it rises, done at mid-screen. `view`: played once as it comes into view. */\n    trigger?: 'scroll' | 'view';\n    /** With `view`, the drawing's length in ms. */\n    duration?: number;\n    className?: string;\n  }\n</script>\n\n<script lang=\"ts\">\n  import 'svg-scroll-draw/no-flash.css';\n  import { FRAME_BLEED as BLEED, frameStrokes, ink, sized } from '$lib/ink-core';\n\n  let {\n    children,\n    variant = 'rect',\n    color = 'currentColor',\n    accent = '#e0482a',\n    strokeWidth = 1.1,\n    seed = 1,\n    trigger = 'scroll',\n    duration = 1400,\n    className = '',\n  }: InkFrameProps = $props();\n\n  let size = $state.raw<{ w: number; h: number } | null>(null);\n  const strokes = $derived(size ? frameStrokes(variant, size.w, size.h, seed) : null);\n  const n = $derived(strokes?.length ?? 0);\n</script>\n\n<div use:sized={(s) => (size = s)} class=\"relative {className}\">\n  {@render children?.()}\n  {#if size && strokes}\n    {#key `${size.w}x${size.h}`}\n      <!-- The second pass follows the first; crop marks go down one corner after another. -->\n      <svg\n        use:ink={{ paths: n, spread: n > 1 ? 0.5 : 0, trigger, duration, version: `${size.w}x${size.h}` }}\n        data-scroll-draw-pending=\"\"\n        data-ink={trigger}\n        aria-hidden=\"true\"\n        width={size.w + 2 * BLEED}\n        height={size.h + 2 * BLEED}\n        viewBox=\"0 0 {size.w + 2 * BLEED} {size.h + 2 * BLEED}\"\n        class=\"pointer-events-none absolute overflow-visible\"\n        style:left=\"{-BLEED}px\"\n        style:top=\"{-BLEED}px\"\n        fill=\"none\"\n        stroke={color}\n        stroke-width={strokeWidth}\n        stroke-linecap=\"round\"\n        stroke-linejoin=\"round\"\n      >\n        {#each strokes as s, i (i)}\n          <path d={s.d} transform={s.at ? `translate(${s.at} ${s.at})` : undefined} stroke={s.pen ? accent : undefined} stroke-width={s.pen && variant === 'double' ? strokeWidth * 0.8 : undefined} />\n        {/each}\n      </svg>\n    {/key}\n  {/if}\n</div>\n",
+      "type": "registry:component",
+      "target": "scrollfx/InkFrame.svelte"
+    }
+  ]
+}

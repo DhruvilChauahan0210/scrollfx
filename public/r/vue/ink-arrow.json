@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "ink-arrow",
+  "type": "registry:ui",
+  "title": "Ink arrow",
+  "description": "A hand-drawn arrow pointing at something: nearly straight, curved, or looped, with a head made in one stroke.",
+  "dependencies": [
+    "svg-scroll-draw@^2.29.0"
+  ],
+  "registryDependencies": [
+    "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+    "https://scrollfx-ui.vercel.app/r/vue/ink.json"
+  ],
+  "files": [
+    {
+      "path": "registry/vue/ink-arrow.vue",
+      "content": "<script setup lang=\"ts\">\n/**\n * ink-arrow — an arrow drawn by hand to point at something: nearly straight,\n * curved to one side, or with a loop thrown half way, ending in a head made\n * in one stroke. The pen goes at one speed, shaft first, then the head.\n *\n * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx\n * Needs: vue 3, svg-scroll-draw, lib/plotter, lib/ink-core and lib/ink-vue (installed with it).\n * Styling: Tailwind CSS. Place it with `className` (absolute, in a flex row,\n * beside a note); `from` and `to` set where it starts and ends in its box.\n *\n * The arrow is made in the browser and hidden from assistive tech: say in\n * text what it points at. Reduced motion shows it drawn.\n */\nimport { computed, onMounted, ref } from 'vue';\nimport 'svg-scroll-draw/no-flash.css';\nimport { inkArrow } from '@/lib/plotter';\nimport { vInk } from '@/lib/ink-vue';\n\nexport interface InkArrowProps {\n  variant?: 'straight' | 'curved' | 'looped';\n  /** The box the arrow is drawn in, in px. */\n  width?: number;\n  height?: number;\n  /** Where the arrow starts, as a share of the box (0 to 1 across, 0 to 1 down). */\n  from?: [number, number];\n  /** Where its head is, likewise. */\n  to?: [number, number];\n  /** How far a curved or looped arrow bends to one side, as a share of its length; negative bends it the other way. */\n  bend?: number;\n  /** The length of the head's barbs, in px. */\n  head?: number;\n  /** The pen's colour: the accent, unless you pass `currentColor` for ink. */\n  accent?: string;\n  strokeWidth?: number;\n  seed?: number;\n  /** `scroll`: drawn as it rises, done at mid-screen. `view`: played once as it comes into view. */\n  trigger?: 'scroll' | 'view';\n  /** With `view`, how long the arrow takes, in ms. */\n  duration?: number;\n  className?: string;\n}\n\nconst props = withDefaults(defineProps<InkArrowProps>(), {\n  variant: 'curved',\n  width: 160,\n  height: 96,\n  from: () => [0.06, 0.3],\n  to: () => [0.92, 0.74],\n  bend: 0.3,\n  head: 12,\n  accent: '#e0482a',\n  strokeWidth: 1.6,\n  seed: 1,\n  trigger: 'scroll',\n  duration: 1100,\n  className: '',\n});\n\n// Made in the browser, once mounted.\nconst mounted = ref(false);\nonMounted(() => (mounted.value = true));\nconst strokes = computed(() =>\n  mounted.value\n    ? inkArrow({ w: props.width, h: props.height, kind: props.variant, from: [props.from[0], props.from[1]], to: [props.to[0], props.to[1]], bend: props.bend, seed: props.seed, head: props.head })\n    : null,\n);\n// One piece after another: the pen keeps one speed down the shaft and round the head.\nconst n = computed(() => strokes.value?.length ?? 0);\n</script>\n\n<template>\n  <svg\n    :key=\"strokes ? strokes.length + strokes[0]?.d : 'empty'\"\n    v-ink=\"{ paths: n, spread: Math.max(0, n - 1), trigger, duration, version: strokes }\"\n    data-scroll-draw-pending=\"\"\n    :data-ink=\"trigger\"\n    aria-hidden=\"true\"\n    :width=\"width\"\n    :height=\"height\"\n    :viewBox=\"`0 0 ${width} ${height}`\"\n    :class=\"`pointer-events-none shrink-0 overflow-visible ${className}`\"\n    fill=\"none\"\n    :stroke=\"accent\"\n    :stroke-width=\"strokeWidth\"\n    stroke-linecap=\"round\"\n    stroke-linejoin=\"round\"\n  >\n    <path v-for=\"(s, i) in strokes ?? []\" :key=\"i\" :d=\"s.d\" />\n  </svg>\n</template>\n",
+      "type": "registry:component",
+      "target": "components/scrollfx/InkArrow.vue"
+    }
+  ]
+}

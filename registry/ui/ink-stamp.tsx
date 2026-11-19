@@ -7,7 +7,7 @@
  * lands.
  *
  * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx
- * Needs: react, svg-scroll-draw, lib/plotter and lib/ink (installed with it).
+ * Needs: react, svg-scroll-draw, lib/plotter, lib/ink-core and lib/ink (installed with it).
  * Styling: Tailwind CSS. The whole stamp is in the one `accent` colour, as a
  * stamp is in one ink.
  *
@@ -18,7 +18,8 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import 'svg-scroll-draw/no-flash.css';
-import { seedOf, sketchRect, stampRings, type Stroke } from '@/lib/plotter';
+import { seedOf, stampRings, type Stroke } from '@/lib/plotter';
+import { stampFrame, stampLayout } from '@/lib/ink-core';
 import { useInk, useSize, type InkTrigger } from '@/lib/ink';
 
 export type InkStampVariant = 'circle' | 'rectangle' | 'seal';
@@ -79,7 +80,7 @@ export function InkStamp({
 
   // Ruled twice round the edge, then once more, finer, inside.
   const frame = useMemo(
-    () => (variant === 'rectangle' && measured ? [...sketchRect({ w: measured.w, h: measured.h, seed: s, wobble: 1, r: 3 }), shift(sketchRect({ w: measured.w - 10, h: measured.h - 10, seed: s + 3, wobble: 0.7, r: 2 })[0], 5)] : null),
+    () => (variant === 'rectangle' && measured ? stampFrame(measured.w, measured.h, s) : null),
     [variant, measured, s],
   );
 
@@ -93,13 +94,8 @@ export function InkStamp({
     );
   }
 
-  // The rim's text sits in the band between the outer rings and the inner one.
-  const r = size * (variant === 'seal' ? 0.36 : 0.38);
-  const rimFont = Math.max(7, size * (variant === 'seal' ? 0.056 : 0.066));
-  // The words fit inside the inner ring: a monospaced letter here is about 0.8 em wide with its tracking.
-  const longest = typeof children === 'string' ? Math.max(...children.split(/\s+/).map((w) => w.length)) : 6;
-  const wordFont = Math.max(9, Math.min(size * 0.1, (size * 0.48) / (longest * 0.8)));
-  const circle = `M${size / 2 - r} ${size / 2}a${r} ${r} 0 1 1 ${r * 2} 0a${r} ${r} 0 1 1 ${-r * 2} 0`;
+  // The rim's text sits in the band between the outer rings and the inner one; the words fit inside the inner ring.
+  const { rimFont, wordFont, circle, rimLength } = stampLayout(variant, size, typeof children === 'string' ? children : undefined);
   return (
     <span className={`relative inline-grid shrink-0 place-items-center ${className}`} style={{ width: size, height: size, rotate: `${rotate}deg`, color: accent }}>
       {rim && (
@@ -108,7 +104,7 @@ export function InkStamp({
             <path id={`${id}-rim`} d={circle} />
           </defs>
           <text fill="currentColor" className="font-mono uppercase" style={{ fontSize: rimFont, letterSpacing: '0.12em' }} dominantBaseline="central">
-            <textPath href={`#${id}-rim`} textLength={Math.PI * 2 * r - size * 0.04} lengthAdjust="spacing">{rim}</textPath>
+            <textPath href={`#${id}-rim`} textLength={rimLength} lengthAdjust="spacing">{rim}</textPath>
           </text>
         </svg>
       )}
@@ -120,9 +116,6 @@ export function InkStamp({
     </span>
   );
 }
-
-/** A stroke moved `by` px right and down (its numbers are x y pairs). */
-const shift = (k: Stroke, by: number): Stroke => ({ ...k, d: k.d.replace(/(-?[\d.]+) (-?[\d.]+)/g, (_, x, y) => `${(+x + by).toFixed(1)} ${(+y + by).toFixed(1)}`) });
 
 function RectFrame(props: { strokes: Stroke[]; w: number; h: number; accent: string; strokeWidth: number; trigger: InkTrigger; duration: number }) {
   return <Strokes {...props} spread={0.6} />;

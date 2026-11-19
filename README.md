@@ -193,19 +193,33 @@ data table) and `lib/plotter.ts`. Svelte components land in `$lib/components/scr
 Smaller pieces than the plates, for any page: marks a pen makes on and around your own content. Each takes
 `accent` (and most `color`, ink by default), `strokeWidth`, `seed`, and `trigger`: `scroll` (the default,
 finishing as it reaches the middle of the screen) or `view` (played once as it comes into view). Variants are a
-`variant` prop. React for now.
+`variant` prop. Every ink piece ships in React, Vue 3 and Svelte 5, with the same props (camelCase in all three),
+the same variants and the same drawing, stroke for stroke.
 
-| Component | Variants | Install |
-|---|---|---|
-| **Ink highlight** — a mark on words in running text, one per line when they wrap | `underline` `double-underline` `circle` `box` `strike` `hatch-fill` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-highlight.json` |
-| **Ink divider** — a rule drawn across the page | `straight` `wavy` `sketchy` `dotted` `with-label` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-divider.json` |
-| **Ink frame** — a border drawn round any children | `rect` `rounded` `double` `corner-marks` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-frame.json` |
-| **Ink progress** — a value plotted as it is reached | `bar` `ring` `gauge` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-progress.json` |
-| **Ink stamp** — a plotted stamp round a word or two | `circle` `rectangle` `seal` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-stamp.json` |
-| **Ink signature** — a name written stroke by stroke in Hershey's script, or your own paths | name, or `paths` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-signature.json` |
-| **Ink arrow** — a hand-drawn arrow pointing at something | `straight` `curved` `looped` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-arrow.json` |
+| Component | Variants | React | Vue | Svelte |
+|---|---|---|---|---|
+| **Ink highlight** — a mark on words in running text, one per line when they wrap | `underline` `double-underline` `circle` `box` `strike` `hatch-fill` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-highlight.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-highlight.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-highlight.json` |
+| **Ink divider** — a rule drawn across the page | `straight` `wavy` `sketchy` `dotted` `with-label` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-divider.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-divider.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-divider.json` |
+| **Ink frame** — a border drawn round any children | `rect` `rounded` `double` `corner-marks` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-frame.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-frame.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-frame.json` |
+| **Ink progress** — a value plotted as it is reached | `bar` `ring` `gauge` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-progress.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-progress.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-progress.json` |
+| **Ink stamp** — a plotted stamp round a word or two | `circle` `rectangle` `seal` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-stamp.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-stamp.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-stamp.json` |
+| **Ink signature** — a name written stroke by stroke in Hershey's script, or your own paths | name, or `paths` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-signature.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-signature.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-signature.json` |
+| **Ink arrow** — a hand-drawn arrow pointing at something | `straight` `curved` `looped` | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/ink-arrow.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/ink-arrow.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/ink-arrow.json` |
 
-The CLI puts each in `components/scrollfx/` and installs `lib/plotter.ts` and `lib/ink.ts` beside it.
+```vue
+<script setup lang="ts">
+import InkHighlight from '@/components/scrollfx/InkHighlight.vue';
+</script>
+
+<template>
+  <p>Most sections <InkHighlight variant="circle">sit still</InkHighlight>.</p>
+</template>
+```
+
+The CLI puts each in `components/scrollfx/` and installs `lib/ink-core.ts` (the strokes each piece draws, the pen
+that draws them and Hershey's script, the same file in all three frameworks), the framework's own part beside it
+(`lib/ink.ts` for React, `lib/ink-vue.ts` for Vue: the pen's hooks or directives; Svelte uses `$lib/ink-core.ts`'s
+actions as they are) and `lib/plotter.ts`. Svelte components land in `$lib/components/scrollfx/`.
 
 ## What every block does
 
