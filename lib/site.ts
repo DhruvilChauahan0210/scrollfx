@@ -5,3 +5,6 @@ export const LIB = 'https://svg-scroll-draw.vercel.app';
 export const installCommand = (slug: string) => `npx shadcn@latest add ${SITE_URL}/r/${slug}.json`;
 export const vueInstallCommand = (slug: string) => `npx shadcn-vue@latest add ${SITE_URL}/r/vue/${slug}.json`;
 export const svelteInstallCommand = (slug: string) => `npx shadcn-svelte@latest add ${SITE_URL}/r/svelte/${slug}.json`;
+
+/** The install line for a block or component in each framework's CLI. */
+export const installCommands = (slug: string) => ({ react: installCommand(slug), vue: vueInstallCommand(slug), svelte: svelteInstallCommand(slug) });

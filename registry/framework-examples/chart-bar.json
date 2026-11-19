@@ -1,0 +1,35 @@
+{
+  "variants": [
+    { "name": "default", "props": { "label": "Orders a month, January to June" } },
+    {
+      "name": "horizontal",
+      "props": {
+        "data": [{ "lang": "TypeScript", "repos": 412 }, { "lang": "Python", "repos": 356 }, { "lang": "Go", "repos": 198 }, { "lang": "Rust", "repos": 164 }, { "lang": "Ruby", "repos": 88 }],
+        "index": "lang",
+        "config": { "repos": { "label": "Repositories" } },
+        "orientation": "horizontal",
+        "label": "Repositories by language"
+      }
+    },
+    {
+      "name": "grouped",
+      "props": {
+        "data": [{ "quarter": "Q1", "new": 120, "returning": 210 }, { "quarter": "Q2", "new": 180, "returning": 240 }, { "quarter": "Q3", "new": 160, "returning": 300 }, { "quarter": "Q4", "new": 230, "returning": 330 }],
+        "index": "quarter",
+        "config": { "new": { "label": "New" }, "returning": { "label": "Returning" } },
+        "label": "New and returning customers by quarter"
+      }
+    },
+    {
+      "name": "stacked",
+      "props": {
+        "data": [{ "quarter": "Q1", "new": 120, "returning": 210 }, { "quarter": "Q2", "new": 180, "returning": 240 }, { "quarter": "Q3", "new": 160, "returning": 300 }, { "quarter": "Q4", "new": 230, "returning": 330 }],
+        "index": "quarter",
+        "config": { "new": { "label": "New" }, "returning": { "label": "Returning" } },
+        "stacked": true,
+        "label": "Customers by quarter, new stacked on returning"
+      }
+    },
+    { "name": "view", "props": { "trigger": "view", "accent": "#2a6fdb" } }
+  ]
+}

@@ -2,12 +2,14 @@
 
 import { useState, type ReactNode } from 'react';
 import { CopyButton } from '@/components/site/copy-button';
+import { FRAMEWORK_LABEL, type Framework } from '@/lib/frameworks';
 import { EXAMPLES, type Example } from '@/registry/examples';
 import { SHEETS } from '@/registry/sheets';
 import type { Detail } from '@/registry/sheets/types';
 import { DrawingField } from './drawing-field';
 import { Frame } from './frame';
 import { PENS } from './pens';
+import { setFramework, useFramework } from './framework';
 
 const LETTERS = 'ABCDEFGHIJ';
 
@@ -19,7 +21,10 @@ export interface SheetProps {
   no: string;
   total: string;
   rev: string;
-  install: string;
+  /** The install line in each framework the component ships in. */
+  installs: Partial<Record<Framework, string>>;
+  /** The frameworks it ships in, React first. */
+  frameworks: Framework[];
   /** The title is the page's h1 on its own page, an h2 in the set. */
   heading: 'h1' | 'h2';
   /** How the drawing is first made: with the scroll (in the set) or on arrival (on its own page). */
@@ -29,7 +34,7 @@ export interface SheetProps {
   /** Per variant (by example name): its own note and its usage. */
   variantNotes: Record<string, ReactNode>;
   schedule: ReactNode;
-  /** The source, or a link to it. */
+  /** The source, or a link to it. What differs by framework is marked `data-fw`; the picked one shows. */
   source: ReactNode;
   parts: ReactNode;
 }
@@ -41,7 +46,7 @@ export interface SheetProps {
  * sheet's controls (the view shown, the pen loaded, a re-plot) as rows of the
  * block itself.
  */
-export function Sheet({ slug, name, family, no, total, rev, install, heading, initial, notes, variantNotes, schedule, source, parts }: SheetProps) {
+export function Sheet({ slug, name, family, no, total, rev, installs, frameworks, heading, initial, notes, variantNotes, schedule, source, parts }: SheetProps) {
   const spec = SHEETS[slug];
   const examples = EXAMPLES[slug] ?? [];
   const details: (Detail & { ex: Example })[] = spec.details.flatMap((d) => {
@@ -62,9 +67,12 @@ export function Sheet({ slug, name, family, no, total, rev, install, heading, in
   };
   const Title = heading;
   const View = current?.ex.Component;
+  // The reader's framework, where this component ships in it; React otherwise.
+  const picked = useFramework();
+  const fw = frameworks.includes(picked) ? picked : 'react';
 
   return (
-    <Frame id={slug} label={`Sheet ${no} of ${total}: ${name}`}>
+    <Frame id={slug} label={`Sheet ${no} of ${total}: ${name}`} framework={fw}>
       {/* One grid: on a phone the drawing, its details, the title block, then the rest; on a wide sheet
           the drawing and a band of details across, the schedule under them, and the notes beside the
           parts list and the title block in the corner. */}
@@ -125,7 +133,9 @@ export function Sheet({ slug, name, family, no, total, rev, install, heading, in
             no={no}
             total={total}
             rev={rev}
-            install={install}
+            install={installs[fw] ?? installs.react ?? ''}
+            frameworks={frameworks}
+            fw={fw}
             details={details}
             shown={shown}
             pen={pen}
@@ -192,9 +202,10 @@ const cell = 'border-[var(--hair)] px-3 py-2';
 const cap = 'drafting block text-[8.5px] tracking-[0.18em] text-muted-foreground';
 
 function TitleBlock({
-  Title, name, family, slug, no, total, rev, install, details, shown, pen, onShow, onPen, onReplot,
+  Title, name, family, slug, no, total, rev, install, frameworks, fw, details, shown, pen, onShow, onPen, onReplot,
 }: {
   Title: 'h1' | 'h2'; name: string; family: string; slug: string; no: string; total: string; rev: string; install: string;
+  frameworks: Framework[]; fw: Framework;
   details: (Detail & { ex: Example })[]; shown: number; pen: number;
   onShow: (i: number) => void; onPen: (i: number) => void; onReplot: () => void;
 }) {
@@ -265,9 +276,27 @@ function TitleBlock({
         </span>
       </div>
 
-      {/* Install. */}
+      {/* Install: in the framework picked (one choice for every sheet), with that framework's CLI. */}
       <div className={`${cell} relative border-b pr-11`}>
-        <span className={cap}>Install</span>
+        <span className="flex items-center justify-between gap-3">
+          <span className={cap}>Install</span>
+          {frameworks.length > 1 && (
+            <span role="radiogroup" aria-label="Framework" className="-my-1 flex items-center gap-1">
+              {frameworks.map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  role="radio"
+                  aria-checked={f === fw}
+                  onClick={() => setFramework(f)}
+                  className={`border px-1.5 py-[3px] font-mono text-[10px] uppercase leading-none tracking-[0.12em] transition-colors ${f === fw ? 'border-foreground bg-foreground text-[var(--paper)]' : 'border-[var(--hair)] text-muted-foreground hover:border-[var(--line)] hover:text-foreground'}`}
+                >
+                  {FRAMEWORK_LABEL[f]}
+                </button>
+              ))}
+            </span>
+          )}
+        </span>
         <code className="mt-1.5 block font-mono text-[11px] leading-[1.55]">
           <span className="text-muted-foreground">{cmd}</span>
           <br />

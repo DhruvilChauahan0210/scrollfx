@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import ts from 'typescript';
+import { FRAMEWORKS, type Framework } from './frameworks';
 
 /**
  * Reading a component's own files for its docs page, at build time: the code
@@ -159,5 +160,61 @@ export function componentApi(slug: string): { exportName: string | null; props: 
   return { exportName, props };
 }
 
+const pascalName = (slug: string) => slug.replace(/(^|-)([a-z])/g, (_, __, c: string) => c.toUpperCase());
+const frameworkFile = (slug: string, fw: Exclude<Framework, 'react'>) => join(ROOT, 'registry', fw, `${slug}.${fw}`);
+
+/** The frameworks a component ships in: React, then Vue and Svelte where their files exist. */
+export const frameworksOf = (slug: string): Framework[] => FRAMEWORKS.filter((fw) => fw === 'react' || existsSync(frameworkFile(slug, fw)));
+
 /** The component's own source, as installed. */
-export const componentSource = (slug: string) => installed(readFileSync(join(ROOT, 'registry/ui', `${slug}.tsx`), 'utf8'));
+export const componentSource = (slug: string, fw: Framework = 'react') =>
+  fw === 'react' ? installed(readFileSync(join(ROOT, 'registry/ui', `${slug}.tsx`), 'utf8')) : readFileSync(frameworkFile(slug, fw), 'utf8');
+
+/** Where the CLI puts the component in a project. */
+export const sourcePath = (slug: string, fw: Framework = 'react') =>
+  fw === 'react' ? `components/scrollfx/${slug}.tsx` : fw === 'vue' ? `components/scrollfx/${pascalName(slug)}.vue` : `$lib/components/scrollfx/${pascalName(slug)}.svelte`;
+
+/** A value as a reader would write it in code: single-quoted strings, bare keys, one line when it fits. */
+function literal(v: unknown, indent: string): string {
+  const inner = indent + '  ';
+  if (typeof v === 'string') return `'${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+  if (Array.isArray(v)) {
+    const items = v.map((x) => literal(x, inner));
+    const flat = `[${items.join(', ')}]`;
+    return flat.length <= 72 && !flat.includes('\n') ? flat : `[\n${items.map((x) => inner + x).join(',\n')},\n${indent}]`;
+  }
+  if (v && typeof v === 'object') {
+    const items = Object.entries(v).map(([k, x]) => `${/^[A-Za-z_$][\w$]*$/.test(k) ? k : `'${k}'`}: ${literal(x, inner)}`);
+    const flat = `{ ${items.join(', ')} }`;
+    return flat.length <= 72 && !flat.includes('\n') ? flat : `{\n${items.map((x) => inner + x).join(',\n')},\n${indent}}`;
+  }
+  return String(v);
+}
+
+/**
+ * Each variant's usage in Vue or Svelte, by example name, from the props the
+ * framework check mounts it with (registry/framework-examples/<name>.json).
+ */
+export function frameworkUsage(slug: string, fw: Exclude<Framework, 'react'>): Record<string, string> {
+  const path = join(ROOT, 'registry/framework-examples', `${slug}.json`);
+  if (!existsSync(path) || !existsSync(frameworkFile(slug, fw))) return {};
+  const name = pascalName(slug);
+  const variants = JSON.parse(readFileSync(path, 'utf8')).variants as { name: string; props?: Record<string, unknown>; text?: string }[];
+  const out: Record<string, string> = {};
+  for (const v of variants) {
+    const pad = fw === 'vue' ? '    ' : '  ';
+    const attrs = Object.entries(v.props ?? {}).map(([k, x]) => {
+      if (x === true) return k;
+      if (typeof x === 'string') return `${k}="${x.replace(/"/g, '&quot;')}"`;
+      const code = literal(x, pad);
+      return fw === 'vue' ? `:${k}="${code.replace(/"/g, '&quot;')}"` : `${k}={${code}}`;
+    });
+    const at = fw === 'vue' ? '  ' : '';
+    const open = attrs.length ? `${at}<${name}\n${attrs.map((a) => pad + a).join('\n')}` : `${at}<${name}`;
+    const tag = v.text ? `${open}${attrs.length ? `\n${at}` : ''}>${v.text}</${name}>` : `${open}${attrs.length ? `\n${at}` : ' '}/>`;
+    out[v.name] = fw === 'vue'
+      ? `<script setup lang="ts">\nimport ${name} from '@/components/scrollfx/${name}.vue';\n</script>\n\n<template>\n${tag}\n</template>\n`
+      : `<script lang="ts">\n  import ${name} from '$lib/components/scrollfx/${name}.svelte';\n</script>\n\n${tag}\n`;
+  }
+  return out;
+}

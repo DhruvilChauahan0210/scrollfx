@@ -9,7 +9,7 @@ import { REV, sheetNo } from '@/lib/office';
 
 export const metadata: Metadata = {
   title: 'Components',
-  description: 'Plotted components for React and Tailwind: line, area, bar, pie, radar and scatter charts, sparklines and more, each inked in by a pen as the reader scrolls. Installed one at a time with the shadcn CLI.',
+  description: 'Plotted components for Tailwind: line, area, bar, pie, radar and scatter charts (in React, Vue and Svelte), sparklines and more, each inked in by a pen as the reader scrolls. Installed one at a time with the shadcn CLI for your framework.',
 };
 
 const REGISTER = COMPONENTS.map((c, i) => ({ slug: c.slug, no: sheetNo(i + 1), name: c.name, family: c.family }));

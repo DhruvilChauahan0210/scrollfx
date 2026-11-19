@@ -1,0 +1,18 @@
+{
+  "variants": [
+    { "name": "default", "props": { "label": "Visitors by browser" } },
+    {
+      "name": "donut",
+      "props": {
+        "data": [{ "plan": "starter", "seats": 1240 }, { "plan": "team", "seats": 860 }, { "plan": "business", "seats": 410 }, { "plan": "enterprise", "seats": 190 }],
+        "nameKey": "plan",
+        "valueKey": "seats",
+        "config": { "starter": { "label": "Starter" }, "team": { "label": "Team" }, "business": { "label": "Business" }, "enterprise": { "label": "Enterprise" } },
+        "variant": "donut",
+        "totalLabel": "Seats",
+        "label": "Seats by plan"
+      }
+    },
+    { "name": "view", "props": { "trigger": "view", "variant": "donut", "labels": false } }
+  ]
+}

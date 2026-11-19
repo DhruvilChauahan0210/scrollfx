@@ -16,6 +16,28 @@
       ]
     },
     {
+      "name": "chart",
+      "type": "registry:lib",
+      "title": "Charts",
+      "description": "What the scrollfx charts share: series from a config, nice ticks and scales, monotone curves, markers, hatching for bars, areas and wedges, and the pens that ink a chart in order (axes, hatching, then the lines) as it reaches the middle of the screen.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json"
+      ],
+      "files": [
+        {
+          "path": "lib/chart-core.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/chart-vue.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "hero-flow-field",
       "type": "registry:block",
       "title": "Hero, flow field",
@@ -316,6 +338,146 @@
           "path": "registry/vue/footer-plotted.vue",
           "type": "registry:component",
           "target": "components/scrollfx/FooterPlotted.vue"
+        }
+      ]
+    },
+    {
+      "name": "chart-line",
+      "type": "registry:ui",
+      "title": "Line chart",
+      "description": "A line chart a pen plots as you scroll: gridlines, then each series left to right, the first in the accent, then a marker on every point. One series or several; smooth, straight or stepped.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/chart-line.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/ChartLine.vue"
+        }
+      ]
+    },
+    {
+      "name": "chart-area",
+      "type": "registry:ui",
+      "title": "Area chart",
+      "description": "An area chart hatched in stroke by stroke under its curve, then the curve drawn over it in the accent. One series, or several stacked, each with its own hatch.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/chart-area.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/ChartArea.vue"
+        }
+      ]
+    },
+    {
+      "name": "chart-bar",
+      "type": "registry:ui",
+      "title": "Bar chart",
+      "description": "Hatched bars, outlined by the pen as you scroll. Vertical or horizontal, one series, grouped side by side, or stacked.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/chart-bar.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/ChartBar.vue"
+        }
+      ]
+    },
+    {
+      "name": "chart-pie",
+      "type": "registry:ui",
+      "title": "Pie chart",
+      "description": "A pie or donut whose wedges are shaded by hatching of different angles and densities, the way a plotter shades without colour, then outlined.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/chart-pie.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/ChartPie.vue"
+        }
+      ]
+    },
+    {
+      "name": "chart-radar",
+      "type": "registry:ui",
+      "title": "Radar chart",
+      "description": "A radar chart: rings and spokes, then each series' shape hatched in and outlined, the first in the accent.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/chart-radar.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/ChartRadar.vue"
+        }
+      ]
+    },
+    {
+      "name": "chart-scatter",
+      "type": "registry:ui",
+      "title": "Scatter chart",
+      "description": "Points plotted left to right as small marks, one shape per series, with an optional fitted trend line drawn last.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/chart-scatter.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/ChartScatter.vue"
+        }
+      ]
+    },
+    {
+      "name": "sparkline",
+      "type": "registry:ui",
+      "title": "Sparkline",
+      "description": "A tiny inline line for tables and stat cards, drawn as it reaches the middle of the screen, with an optional hatched area and an end dot.",
+      "dependencies": [
+        "svg-scroll-draw@^2.29.0"
+      ],
+      "registryDependencies": [
+        "https://scrollfx-ui.vercel.app/r/vue/plotter.json",
+        "https://scrollfx-ui.vercel.app/r/vue/chart.json"
+      ],
+      "files": [
+        {
+          "path": "registry/vue/sparkline.vue",
+          "type": "registry:component",
+          "target": "components/scrollfx/Sparkline.vue"
         }
       ]
     }

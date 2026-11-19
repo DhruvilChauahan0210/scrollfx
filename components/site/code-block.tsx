@@ -2,7 +2,7 @@ import { CopyButton } from './copy-button';
 import { highlight } from '@/lib/highlight';
 
 /** Highlighted code on a card, with a copy button, as the block pages show it. */
-export async function CodeBlock({ code, lang = 'tsx', className = '' }: { code: string; lang?: 'tsx' | 'bash'; className?: string }) {
+export async function CodeBlock({ code, lang = 'tsx', className = '' }: { code: string; lang?: 'tsx' | 'vue' | 'svelte' | 'bash'; className?: string }) {
   const html = await highlight(code, lang);
   return (
     <div className={`relative overflow-hidden rounded-[3px] border bg-card ${className}`}>

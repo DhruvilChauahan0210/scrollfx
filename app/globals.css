@@ -157,6 +157,13 @@
 .schedule tr:first-child td { border-top: 0; }
 .schedule th + th, .schedule td + td { border-left: 1px solid var(--hair); }
 
+/* What a sheet says per framework (usage, source, parts), each marked data-fw:
+   only the framework picked on the sheet shows. */
+[data-fw] { display: none; }
+[data-framework='react'] [data-fw='react'],
+[data-framework='vue'] [data-fw='vue'],
+[data-framework='svelte'] [data-fw='svelte'] { display: contents; }
+
 /* A detail is the example at reduced scale: laid out at full size, then
    shrunk, as a drawing's detail is drawn to a stated scale. */
 .detail-scaled { position: absolute; left: 0; top: 0; transform-origin: 0 0; display: grid; place-items: center; }

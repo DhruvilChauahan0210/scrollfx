@@ -10,9 +10,9 @@ const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
  * fold marks on the edges and crop marks just off the corners, as a printed
  * sheet comes from the plotter. Static: the pen spends itself on the drawing.
  */
-export function Frame({ id, label, children, className = '' }: { id?: string; label: string; children: ReactNode; className?: string }) {
+export function Frame({ id, label, framework, children, className = '' }: { id?: string; label: string; framework?: string; children: ReactNode; className?: string }) {
   return (
-    <article id={id} data-sheet={id} aria-label={label} className={`sheet relative scroll-mt-20 p-[26px] sm:p-[30px] shadow-[0_0_0_1px_var(--border),0_24px_48px_-28px_rgba(40,30,10,.35)] dark:shadow-[0_0_0_1px_#2b4874,0_30px_60px_-30px_rgba(0,0,0,.8)] ${className}`}>
+    <article id={id} data-sheet={id} data-framework={framework} aria-label={label} className={`sheet relative scroll-mt-20 p-[26px] sm:p-[30px] shadow-[0_0_0_1px_var(--border),0_24px_48px_-28px_rgba(40,30,10,.35)] dark:shadow-[0_0_0_1px_#2b4874,0_30px_60px_-30px_rgba(0,0,0,.8)] ${className}`}>
       <CropMarks />
       {/* Fold marks: where an A1 sheet is folded to file, a short tick on the edge. */}
       <span aria-hidden className="absolute left-1/3 top-0 h-1.5 w-px bg-[var(--line)]" />

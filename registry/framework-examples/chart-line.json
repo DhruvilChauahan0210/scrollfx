@@ -1,0 +1,33 @@
+{
+  "variants": [
+    { "name": "default", "props": { "label": "Visitors a month, January to December" } },
+    {
+      "name": "multi-series",
+      "props": {
+        "data": [
+          { "month": "January", "desktop": 186, "mobile": 80 }, { "month": "February", "desktop": 305, "mobile": 200 },
+          { "month": "March", "desktop": 237, "mobile": 120 }, { "month": "April", "desktop": 73, "mobile": 190 },
+          { "month": "May", "desktop": 209, "mobile": 130 }, { "month": "June", "desktop": 214, "mobile": 140 }
+        ],
+        "index": "month",
+        "config": { "desktop": { "label": "Desktop" }, "mobile": { "label": "Mobile" } },
+        "label": "Desktop and mobile visitors, January to June"
+      }
+    },
+    {
+      "name": "stepped",
+      "props": {
+        "data": [
+          { "week": "W1", "seats": 12 }, { "week": "W2", "seats": 12 }, { "week": "W3", "seats": 18 }, { "week": "W4", "seats": 18 },
+          { "week": "W5", "seats": 25 }, { "week": "W6", "seats": 31 }, { "week": "W7", "seats": 31 }, { "week": "W8", "seats": 40 }
+        ],
+        "index": "week",
+        "config": { "seats": { "label": "Seats" } },
+        "curve": "step",
+        "height": 200,
+        "label": "Paid seats by week"
+      }
+    },
+    { "name": "view", "props": { "trigger": "view", "markers": true, "zero": false } }
+  ]
+}

@@ -2,8 +2,9 @@ import type { ReactNode } from 'react';
 import { CodeBlock } from '@/components/site/code-block';
 import { getComponent } from '@/lib/components';
 import { REV, TOTAL, partsList, sheetNo, sheetOf } from '@/lib/office';
-import { installCommand } from '@/lib/site';
-import { componentApi, componentSource, exampleSources } from '@/lib/source';
+import { FRAMEWORK_LABEL, FRAMEWORK_LANG, type Framework } from '@/lib/frameworks';
+import { installCommands } from '@/lib/site';
+import { componentApi, componentSource, exampleSources, frameworkUsage, frameworksOf, sourcePath } from '@/lib/source';
 import { EXAMPLES } from '@/registry/examples';
 import { SHEETS } from '@/registry/sheets';
 import { Sheet } from './sheet';
@@ -29,14 +30,22 @@ const code = (s: string) => s.split(/(`[^`]+`)/g).map((part, i) => (part.startsW
  * One component's sheet, assembled on the server: its notes, the usage of
  * each variant, the schedule of its props and its parts list, handed to the
  * sheet with the drawing. The source follows it on the component's own page.
+ * What differs by framework (the usage, the source, the parts list) is
+ * rendered for each framework the component ships in, each marked
+ * `data-fw`; the sheet shows the reader's pick (React on the server).
  */
 export async function SheetFor({ slug, heading, initial, source }: { slug: string; heading: 'h1' | 'h2'; initial: 'scroll' | 'view'; source: 'fold' | 'link' }) {
   const c = getComponent(slug)!;
   const spec = SHEETS[slug];
   const examples = EXAMPLES[slug] ?? [];
-  const usage = exampleSources(slug);
+  const frameworks = frameworksOf(slug);
+  const usage: Record<Framework, Record<string, string>> = {
+    react: exampleSources(slug),
+    vue: frameworks.includes('vue') ? frameworkUsage(slug, 'vue') : {},
+    svelte: frameworks.includes('svelte') ? frameworkUsage(slug, 'svelte') : {},
+  };
   const { props } = componentApi(slug);
-  const parts = partsList(slug);
+  const installs = installCommands(slug);
   const no = sheetNo(sheetOf(slug));
   const general = [
     c.description,
@@ -58,10 +67,14 @@ export async function SheetFor({ slug, heading, initial, source }: { slug: strin
         <Note n={general.length + 1}>
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Detail {letter}, {ex.title}.</span> {code(ex.description ?? '')}
         </Note>
-        {usage[d.example] && (
+        {usage.react[d.example] && (
           <Note n={general.length + 2}>
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Usage, as drawn:</span>
-            <pre className="mt-2 max-h-[22rem] overflow-auto border border-[var(--hair)] px-4 py-3 font-mono text-[11.5px] leading-[1.6] text-foreground/90">{usage[d.example]}</pre>
+            {frameworks.map((fw) => (
+              <div key={fw} data-fw={fw}>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Usage{fw === 'react' ? '' : ` in ${FRAMEWORK_LABEL[fw]}`}, as drawn:</span>
+                <pre className="mt-2 max-h-[22rem] overflow-auto border border-[var(--hair)] px-4 py-3 font-mono text-[11.5px] leading-[1.6] text-foreground/90">{usage[fw][d.example] ?? usage.react[d.example]}</pre>
+              </div>
+            ))}
           </Note>
         )}
       </ol>
@@ -111,9 +124,18 @@ export async function SheetFor({ slug, heading, initial, source }: { slug: strin
               <span className="group-open:hidden">+</span>
               <span className="hidden group-open:inline">−</span>
             </span>
-            View source <span className="normal-case tracking-normal">· components/scrollfx/{slug}.tsx</span>
+            View source{' '}
+            {frameworks.map((fw) => (
+              <span key={fw} data-fw={fw}>
+                <span className="normal-case tracking-normal">· {sourcePath(slug, fw)}</span>
+              </span>
+            ))}
           </summary>
-          <CodeBlock code={componentSource(slug)} className="mt-4" />
+          {frameworks.map((fw) => (
+            <div key={fw} data-fw={fw}>
+              <CodeBlock code={componentSource(slug, fw)} lang={FRAMEWORK_LANG[fw]} className="mt-4" />
+            </div>
+          ))}
         </details>
       ) : (
         <a href={`/components/${slug}#source`} className="drafting group mt-8 inline-flex items-center gap-3 text-muted-foreground hover:text-foreground">
@@ -125,8 +147,10 @@ export async function SheetFor({ slug, heading, initial, source }: { slug: strin
     </>
   );
 
-  const partsTable = (
-    <section>
+  const partsTable = frameworks.map((fw) => {
+    const parts = partsList(slug, fw);
+    return (
+    <section key={fw} data-fw={fw}>
       <h3 className="drafting px-3 pb-1 pt-3 text-muted-foreground">Parts list</h3>
       <table className="schedule text-[12px]">
         <thead>
@@ -148,7 +172,8 @@ export async function SheetFor({ slug, heading, initial, source }: { slug: strin
         </tbody>
       </table>
     </section>
-  );
+    );
+  });
 
   return (
     <Sheet
@@ -158,7 +183,8 @@ export async function SheetFor({ slug, heading, initial, source }: { slug: strin
       no={no}
       total={sheetNo(TOTAL)}
       rev={REV}
-      install={installCommand(slug)}
+      installs={Object.fromEntries(frameworks.map((fw) => [fw, installs[fw]])) as Partial<Record<Framework, string>>}
+      frameworks={frameworks}
       heading={heading}
       initial={initial}
       notes={notes}

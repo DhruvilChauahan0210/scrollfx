@@ -144,17 +144,18 @@ again), a schedule of its props, its parts list and a title block with the insta
 Each takes its data as props (series from a `config`, as shadcn's chart does), keeps its labels and a data table for
 screen readers in the server HTML, and is inked in pen by pen as it scrolls in: the axes, then the hatching, then the
 lines in the accent, the last pen lifting as it reaches the middle of the screen. `trigger="view"` plays it once as it
-comes into view instead, over `duration` ms. React only for now.
+comes into view instead, over `duration` ms. Every chart ships in React, Vue 3 and Svelte 5, with the same props
+(camelCase in all three), the same variants and the same drawing, stroke for stroke.
 
-| Component | Variants | Install |
-|---|---|---|
-| **[Line chart](https://scrollfx-ui.vercel.app/components/chart-line)** | single, multi-series, stepped (`curve`, `markers`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-line.json` |
-| **[Area chart](https://scrollfx-ui.vercel.app/components/chart-area)** | single, stacked (`stacked`); each band its own hatch | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-area.json` |
-| **[Bar chart](https://scrollfx-ui.vercel.app/components/chart-bar)** | vertical, horizontal, grouped, stacked (`orientation`, `stacked`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-bar.json` |
-| **[Pie chart](https://scrollfx-ui.vercel.app/components/chart-pie)** | pie, donut (`variant`); wedges shaded by hatching | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-pie.json` |
-| **[Radar chart](https://scrollfx-ui.vercel.app/components/chart-radar)** | one or more series, polygon or round grid (`grid`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-radar.json` |
-| **[Scatter chart](https://scrollfx-ui.vercel.app/components/chart-scatter)** | groups as marker shapes, optional trend line (`group`, `trend`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-scatter.json` |
-| **[Sparkline](https://scrollfx-ui.vercel.app/components/sparkline)** | line or hatched area, end dot (`variant`, `dot`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/sparkline.json` |
+| Component | Variants | React | Vue | Svelte |
+|---|---|---|---|---|
+| **[Line chart](https://scrollfx-ui.vercel.app/components/chart-line)** | single, multi-series, stepped (`curve`, `markers`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-line.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/chart-line.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/chart-line.json` |
+| **[Area chart](https://scrollfx-ui.vercel.app/components/chart-area)** | single, stacked (`stacked`); each band its own hatch | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-area.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/chart-area.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/chart-area.json` |
+| **[Bar chart](https://scrollfx-ui.vercel.app/components/chart-bar)** | vertical, horizontal, grouped, stacked (`orientation`, `stacked`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-bar.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/chart-bar.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/chart-bar.json` |
+| **[Pie chart](https://scrollfx-ui.vercel.app/components/chart-pie)** | pie, donut (`variant`); wedges shaded by hatching | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-pie.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/chart-pie.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/chart-pie.json` |
+| **[Radar chart](https://scrollfx-ui.vercel.app/components/chart-radar)** | one or more series, polygon or round grid (`grid`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-radar.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/chart-radar.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/chart-radar.json` |
+| **[Scatter chart](https://scrollfx-ui.vercel.app/components/chart-scatter)** | groups as marker shapes, optional trend line (`group`, `trend`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/chart-scatter.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/chart-scatter.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/chart-scatter.json` |
+| **[Sparkline](https://scrollfx-ui.vercel.app/components/sparkline)** | line or hatched area, end dot (`variant`, `dot`) | `npx shadcn@latest add https://scrollfx-ui.vercel.app/r/sparkline.json` | `npx shadcn-vue@latest add https://scrollfx-ui.vercel.app/r/vue/sparkline.json` | `npx shadcn-svelte@latest add https://scrollfx-ui.vercel.app/r/svelte/sparkline.json` |
 
 ```tsx
 import { ChartBar } from '@/components/scrollfx/chart-bar';
@@ -167,8 +168,25 @@ import { ChartBar } from '@/components/scrollfx/chart-bar';
 />
 ```
 
-The CLI adds the component to `components/scrollfx/`, with `lib/chart.ts` (scales, ticks, curves, hatching and
-the pens the charts share) and `lib/plotter.ts`.
+```vue
+<script setup lang="ts">
+import ChartBar from '@/components/scrollfx/ChartBar.vue';
+</script>
+
+<template>
+  <ChartBar
+    :data="[{ quarter: 'Q1', new: 120, returning: 210 }, { quarter: 'Q2', new: 180, returning: 240 }]"
+    index="quarter"
+    :config="{ new: { label: 'New' }, returning: { label: 'Returning' } }"
+    stacked
+  />
+</template>
+```
+
+The CLI adds the component to `components/scrollfx/`, with `lib/chart-core.ts` (scales, ticks, curves, hatching and
+when each pen works, the same file in all three frameworks), the framework's own parts beside it (`lib/chart.ts`
+for React, `lib/chart-vue.ts` for Vue, `$lib/chart-parts.svelte` for Svelte: the pens, the labels, the key and the
+data table) and `lib/plotter.ts`. Svelte components land in `$lib/components/scrollfx/`.
 
 ## Components — ink
 
@@ -210,8 +228,8 @@ npm install
 npm run dev     # http://localhost:4400
 npm run build   # the shadcn registry (public/r) and the site
 npm run check   # every block and every component sheet, scrolled in Chromium
-npm run check:vue     # every Vue block, compiled and scrolled in Chromium
-npm run check:svelte  # every Svelte block, the same way
+npm run check:vue     # every Vue block and component (each variant), compiled and scrolled in Chromium
+npm run check:svelte  # every Svelte block and component, the same way
 npm run readme:images  # the README's screenshots and GIF, from the live site (needs ffmpeg)
 ```
 
@@ -228,6 +246,17 @@ naming a prop and anchored to a fraction of a box in the drawing, and which exam
 on `/components` with all the others and on its own at `/components/<name>`, is built from those: the first
 example drawn large, every example as a detail, the usage of each, the props schedule read from its `<Name>Props`
 interface, the parts list from `registry.json`, and its source.
+
+A component's Vue and Svelte versions are `registry/vue/<name>.vue` and `registry/svelte/<name>.svelte`, with the
+same props, defaults and drawing as the React one. What a family shares belongs to no framework where it can:
+`lib/<family>-core.ts` (`lib/chart-core.ts`), which `lib/<family>.ts` re-exports for React; each framework's own
+helpers sit in `registry/vue/lib/<family>-*` and `registry/svelte/lib/<family>-*` (`chart-vue.ts`,
+`chart-parts.svelte`). `npm run registry` publishes them, with the components, to `public/r/vue/` and
+`public/r/svelte/`. The variants the Vue and Svelte checks mount, and the usage the sheet shows in each framework,
+are in `registry/framework-examples/<name>.json`: `{ "variants": [{ "name": "default", "props": {} }, …] }`, a
+variant named as its React example, its props as JSON (`"text"` fills the default slot or `children`; a variant
+with `"trigger": "view"` is checked for finishing on arrival). Each sheet lets the reader pick React, Vue or Svelte
+for its install line, usage, source and parts list.
 
 ## License
 

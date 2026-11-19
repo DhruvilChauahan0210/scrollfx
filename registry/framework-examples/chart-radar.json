@@ -1,0 +1,20 @@
+{
+  "variants": [
+    { "name": "default", "props": { "label": "Scores by skill, out of 100" } },
+    {
+      "name": "compare",
+      "props": {
+        "data": [
+          { "metric": "Speed", "v1": 62, "v2": 88 }, { "metric": "Size", "v1": 80, "v2": 70 }, { "metric": "Docs", "v1": 55, "v2": 84 },
+          { "metric": "Types", "v1": 70, "v2": 92 }, { "metric": "Tests", "v1": 48, "v2": 76 }
+        ],
+        "index": "metric",
+        "config": { "v2": { "label": "Version 2" }, "v1": { "label": "Version 1" } },
+        "max": 100,
+        "grid": "circle",
+        "label": "Version 1 and version 2 compared on five measures, out of 100"
+      }
+    },
+    { "name": "view", "props": { "trigger": "view", "grid": "circle" } }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "variants": [
+    { "name": "default", "props": { "data": [21, 24, 22, 27, 26, 31, 30, 34, 37, 36, 41, 45], "variant": "area", "className": "h-10 w-24", "label": "Revenue, last 12 months" } },
+    { "name": "table", "props": { "data": [8, 9, 11, 10, 13, 15, 14, 17, 19, 18], "curve": "linear", "label": "svg-scroll-draw, weekly downloads over ten weeks" } },
+    { "name": "no-dot", "props": { "dot": false, "curve": "step" } },
+    { "name": "view", "props": { "trigger": "view", "variant": "area" } }
+  ]
+}

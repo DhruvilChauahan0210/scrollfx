@@ -28,6 +28,10 @@
       ],
       "files": [
         {
+          "path": "lib/chart-core.ts",
+          "type": "registry:lib"
+        },
+        {
           "path": "lib/chart.ts",
           "type": "registry:lib"
         }
