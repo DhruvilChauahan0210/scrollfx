@@ -1,0 +1,12 @@
+{
+  "variants": [
+    {"name": "default", "props": {}, "text": "marked up as you read"},
+    {"name": "double-underline", "props": {"variant": "double-underline"}, "text": "only if the tests pass"},
+    {"name": "circle", "props": {"variant": "circle", "seed": 4}, "text": "Studio"},
+    {"name": "box", "props": {"variant": "box", "seed": 3}, "text": "the rows behind it"},
+    {"name": "strike", "props": {"variant": "strike"}, "text": "$24"},
+    {"name": "hatch-fill", "props": {"variant": "hatch-fill"}, "text": "the words stay in the HTML"},
+    {"name": "wrapping", "props": {"variant": "underline", "seed": 9, "className": "text-foreground"}, "text": "a phrase that breaks over two or three lines in a narrow column"},
+    {"name": "view", "props": {"trigger": "view"}, "text": "marked up as you read"}
+  ]
+}

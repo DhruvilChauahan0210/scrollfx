@@ -1,0 +1,10 @@
+{
+  "variants": [
+    {"name": "default", "props": {}},
+    {"name": "wavy", "props": {"variant": "wavy", "seed": 3}},
+    {"name": "sketchy", "props": {"variant": "sketchy", "seed": 5}},
+    {"name": "dotted", "props": {"variant": "dotted"}},
+    {"name": "with-label", "props": {"variant": "with-label", "label": "Chapter two"}},
+    {"name": "view", "props": {"trigger": "view"}}
+  ]
+}

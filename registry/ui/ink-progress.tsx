@@ -7,7 +7,7 @@
  * needle on it.
  *
  * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx
- * Needs: react, svg-scroll-draw, lib/plotter and lib/ink (installed with it).
+ * Needs: react, svg-scroll-draw, lib/plotter, lib/ink-core and lib/ink (installed with it).
  * Styling: Tailwind CSS with shadcn/ui tokens; figures in `font-serif`.
  *
  * The label and the value are in the server HTML (role="progressbar", with
@@ -18,7 +18,8 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { ScrollCounter } from 'svg-scroll-draw/react';
 import 'svg-scroll-draw/no-flash.css';
-import { dial, gauge, hatch, scrollWindow, seedOf, sketchRect, type Stroke } from '@/lib/plotter';
+import { scrollWindow, seedOf, type Stroke } from '@/lib/plotter';
+import { BAR_H, barStrokes, progressFigure, roundStrokes } from '@/lib/ink-core';
 import { useInk, useSize, type InkTrigger } from '@/lib/ink';
 
 export type InkProgressVariant = 'bar' | 'ring' | 'gauge';
@@ -57,7 +58,7 @@ export interface InkProgressProps {
 type FigureProps = Pick<InkProgressProps, 'display' | 'prefix' | 'suffix' | 'decimals'> & { value: number; max: number; trigger: InkTrigger; className: string; style?: CSSProperties };
 
 function Figure({ value, max, display = 'percent', prefix = '', suffix, decimals = 0, trigger, className, style }: FigureProps) {
-  const f = display === 'percent' ? { value: (value / max) * 100, prefix, suffix: suffix ?? '%', decimals } : { value, prefix, suffix: suffix ?? '', decimals };
+  const f = progressFigure({ value, max, display, prefix, suffix, decimals });
   return (
     <span className={`tabular-nums ${className}`} style={style}>
       {f.prefix}
@@ -75,26 +76,6 @@ function Drawing({ strokes, w, h, view, spread, color, accent, strokeWidth, trig
       {strokes.map((s, i) => <path key={i} d={s.d} stroke={s.pen ? accent : undefined} strokeWidth={s.pen ? strokeWidth * 1.15 : undefined} />)}
     </svg>
   );
-}
-
-const BAR_H = 18;
-
-/** The bar's strokes: its outline, a scale under it, the hatching out to the value, and a mark at the value. */
-function barStrokes(w: number, share: number, seed: number): Stroke[] {
-  const out: Stroke[] = [sketchRect({ w, h: BAR_H, seed, wobble: 0.7, r: 2 })[0]];
-  for (let i = 0; i <= 10; i++) {
-    const x = 1 + ((w - 2) * i) / 10;
-    out.push({ d: `M${x.toFixed(1)} ${BAR_H + 5}L${x.toFixed(1)} ${BAR_H + (i % 5 === 0 ? 11 : 8)}`, pen: 0 });
-  }
-  const fill = Math.max(0, (w - 6) * share);
-  if (fill > 1) {
-    // hatch() draws from the box's corner; each of its strokes is `Mx yLx y`, moved in 3 px here.
-    const shift = (d: string) => d.replace(/(-?[\d.]+) (-?[\d.]+)/g, (_, x, y) => `${(+x + 3).toFixed(1)} ${(+y + 3).toFixed(1)}`);
-    for (const h of hatch({ w: fill, h: BAR_H - 6, gap: 3.4, angle: 58 })) out.push({ d: shift(h.d), pen: 1 });
-  }
-  const x = 3 + fill;
-  out.push({ d: `M${x.toFixed(1)} -4L${(x + 0.4).toFixed(1)} ${BAR_H + 4}`, pen: 0 });
-  return out;
 }
 
 export function InkProgress({
@@ -126,8 +107,7 @@ export function InkProgress({
   const barSize = useSize(bar);
   const [round, setRound] = useState<Stroke[] | null>(null);
   useEffect(() => {
-    if (variant === 'ring') setRound(dial({ size: 100, seed: s, share }));
-    else if (variant === 'gauge') setRound(gauge({ seed: s, size: 100, share }));
+    if (variant !== 'bar') setRound(roundStrokes(variant, s, share));
   }, [variant, s, share]);
 
   const strokes = useMemo(() => (variant === 'bar' && barSize && barSize.w > 10 ? barStrokes(barSize.w, share, s) : null), [variant, barSize, share, s]);

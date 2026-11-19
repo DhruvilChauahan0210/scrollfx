@@ -6,7 +6,7 @@
  * of rules drawn outward from a label in the middle.
  *
  * Built on svg-scroll-draw (MIT): https://github.com/DhruvilChauahan0210/scrollfx
- * Needs: react, svg-scroll-draw, lib/plotter and lib/ink (installed with it).
+ * Needs: react, svg-scroll-draw, lib/plotter, lib/ink-core and lib/ink (installed with it).
  * Styling: Tailwind CSS with shadcn/ui tokens; it takes the width it is given.
  *
  * The label is in the server HTML; the rules are made in the browser at the
@@ -16,7 +16,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import 'svg-scroll-draw/no-flash.css';
-import { inkDots, inkWave, ruledLine, sketchCircle, sketchLine, type Stroke } from '@/lib/plotter';
+import { sketchCircle, type Stroke } from '@/lib/plotter';
+import { DIVIDER_H as H, dividerLabelRule, dividerSpread, dividerStrokes } from '@/lib/ink-core';
 import { useInk, useSize, type InkTrigger } from '@/lib/ink';
 
 export type InkDividerVariant = 'straight' | 'wavy' | 'sketchy' | 'dotted' | 'with-label';
@@ -36,17 +37,6 @@ export interface InkDividerProps {
   /** With `view`, the drawing's length in ms. */
   duration?: number;
   className?: string;
-}
-
-const H = 16;
-
-function strokesFor(variant: Exclude<InkDividerVariant, 'with-label'>, w: number, seed: number): Stroke[] {
-  switch (variant) {
-    case 'straight': return ruledLine({ w, h: H, seed });
-    case 'wavy': return inkWave({ w, h: H, seed, period: 34 });
-    case 'sketchy': return sketchLine({ w, h: H, seed, wobble: 0.8 });
-    case 'dotted': return inkDots({ w, h: H, seed, gap: 8 });
-  }
 }
 
 /** One rule, drawn across the box it is given. */
@@ -84,11 +74,11 @@ export function InkDivider({
     // Two rules drawn outward from the label, both at once.
     return (
       <div role="separator" aria-label={label} className={`flex items-center gap-3 ${className}`}>
-        <Rule {...pen} make={(w) => ruledLine({ w, h: H, seed, reverse: true })} spread={() => 0} />
+        <Rule {...pen} make={(w) => dividerLabelRule('left', w, seed)} spread={() => 0} />
         <Dot {...pen} seed={seed + 1} />
         <span className="shrink-0 px-1 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{label}</span>
         <Dot {...pen} seed={seed + 2} />
-        <Rule {...pen} make={(w) => ruledLine({ w, h: H, seed: seed + 3 })} spread={() => 0} />
+        <Rule {...pen} make={(w) => dividerLabelRule('right', w, seed)} spread={() => 0} />
       </div>
     );
   }
@@ -96,9 +86,9 @@ export function InkDivider({
     <div role="separator" className={`flex ${className}`}>
       <Rule
         {...pen}
-        make={(w) => strokesFor(variant, w, seed)}
+        make={(w) => dividerStrokes(variant, w, seed)}
         // Dots go down one after another, left to right; the sketchy rule's second pass follows the first.
-        spread={(n) => (variant === 'dotted' ? 1 : variant === 'sketchy' ? 0.5 : 0) * (n > 1 ? 1 : 0)}
+        spread={(n) => dividerSpread(variant, n)}
         dots={variant === 'dotted'}
       />
     </div>

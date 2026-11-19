@@ -1,0 +1,8 @@
+{
+  "variants": [
+    {"name": "default", "props": {"className": "mb-2"}},
+    {"name": "straight", "props": {"variant": "straight", "width": 140, "height": 30, "from": [0.04, 0.5], "to": [0.94, 0.5], "seed": 2}},
+    {"name": "looped", "props": {"variant": "looped", "width": 200, "height": 120, "from": [0.04, 0.12], "to": [0.94, 0.86], "bend": -0.25, "seed": 5}},
+    {"name": "view", "props": {"trigger": "view"}}
+  ]
+}

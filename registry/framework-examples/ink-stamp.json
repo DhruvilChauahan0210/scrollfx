@@ -1,0 +1,8 @@
+{
+  "variants": [
+    {"name": "default", "props": {"rim": "Quality checked · Batch 07 · 2026 ·"}, "text": "Approved"},
+    {"name": "rectangle", "props": {"variant": "rectangle"}, "text": "Draft"},
+    {"name": "seal", "props": {"variant": "seal", "rim": "First edition · Plotted by hand ·", "rotate": 6, "size": 164}, "text": "Est. 2026"},
+    {"name": "view", "props": {"trigger": "view"}, "text": "Approved"}
+  ]
+}
